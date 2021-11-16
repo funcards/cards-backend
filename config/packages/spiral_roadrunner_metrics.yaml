@@ -1,0 +1,9 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+
+  Spiral\RoadRunner\Metrics\MetricsInterface:
+    class: Spiral\RoadRunner\Metrics\Metrics
+    arguments:
+      $rpc: '@goridge.rpc'

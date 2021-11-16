@@ -1,0 +1,11 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+
+  road_runner.broadcast:
+    class: Spiral\RoadRunner\Broadcast\Broadcast
+    arguments:
+      $rpc: '@goridge.rpc'
+
+  Spiral\RoadRunner\Broadcast\BroadcastInterface: '@road_runner.broadcast'

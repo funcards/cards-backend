@@ -1,0 +1,39 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+
+  Lcobucci\JWT\Signer\Ecdsa\Sha256:
+    factory: [ 'Lcobucci\JWT\Signer\Ecdsa\Sha256', 'create' ]
+  Lcobucci\JWT\Signer\Ecdsa\Sha384:
+    factory: [ 'Lcobucci\JWT\Signer\Ecdsa\Sha384', 'create' ]
+  Lcobucci\JWT\Signer\Ecdsa\Sha512:
+    factory: [ 'Lcobucci\JWT\Signer\Ecdsa\Sha512', 'create' ]
+  Lcobucci\JWT\Signer\Hmac\Sha256: ~
+  Lcobucci\JWT\Signer\Hmac\Sha384: ~
+  Lcobucci\JWT\Signer\Hmac\Sha512: ~
+  Lcobucci\JWT\Signer\Rsa\Sha256: ~
+  Lcobucci\JWT\Signer\Rsa\Sha384: ~
+  Lcobucci\JWT\Signer\Rsa\Sha512: ~
+
+  Lcobucci\Clock\Clock:
+    class: Lcobucci\Clock\SystemClock
+    factory: [ 'Lcobucci\Clock\SystemClock', 'fromUTC' ]
+
+  lcobucci.key.private:
+    class: Lcobucci\JWT\Signer\Key\InMemory
+    factory: [ 'Lcobucci\JWT\Signer\Key\InMemory', 'file' ]
+    arguments: [ '%env(JWT_PRIVATE_KEY)%', '%env(JWT_PASSPHRASE)%' ]
+
+  lcobucci.key.public:
+    class: Lcobucci\JWT\Signer\Key\InMemory
+    factory: [ 'Lcobucci\JWT\Signer\Key\InMemory', 'file' ]
+    arguments: [ '%env(JWT_PUBLIC_KEY)%', '%env(JWT_PASSPHRASE)%' ]
+
+  Lcobucci\JWT\Signer: '@Lcobucci\JWT\Signer\Rsa\Sha256'
+
+  Lcobucci\JWT\Configuration:
+    factory: [ 'Lcobucci\JWT\Configuration', 'forAsymmetricSigner' ]
+    arguments:
+      $signingKey: '@lcobucci.key.private'
+      $verificationKey: '@lcobucci.key.public'

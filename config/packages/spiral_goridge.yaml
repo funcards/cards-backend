@@ -1,0 +1,19 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+
+  goridge.relay:
+    class: Spiral\Goridge\RelayInterface
+    factory: [ 'Spiral\Goridge\Relay', 'create' ]
+    arguments: [ '@=service("road_runner.env").getRelayAddress()' ]
+
+  goridge.relay_rpc:
+    class: Spiral\Goridge\RelayInterface
+    factory: [ 'Spiral\Goridge\Relay', 'create' ]
+    arguments: [ '@=service("road_runner.env").getRPCAddress()' ]
+
+  goridge.rpc:
+    class: Spiral\Goridge\RPC\RPC
+    arguments:
+      $relay: '@goridge.relay_rpc'

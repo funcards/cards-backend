@@ -1,0 +1,12 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+
+  OpenApi\Annotations\OpenApi:
+    factory: [ 'OpenApi\Generator', 'scan' ]
+    arguments:
+      $sources: [ '%kernel.project_dir%/src' ]
+      $options:
+        logger: '@Psr\Log\LoggerInterface'
+        validate: true

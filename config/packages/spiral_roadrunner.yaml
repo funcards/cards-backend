@@ -1,0 +1,8 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+
+  road_runner.env:
+    class: Spiral\RoadRunner\Environment
+    factory: [ 'Spiral\RoadRunner\Environment', 'fromGlobals' ]

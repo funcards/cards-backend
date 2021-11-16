@@ -1,0 +1,60 @@
+doctrine:
+  dbal:
+    url: '%env(resolve:DATABASE_URL)%'
+    types:
+      user_id: FC\User\Infrastructure\Mapping\UserIdType
+      board_id: FC\Board\Infrastructure\Mapping\BoardIdType
+      member_id: FC\Board\Infrastructure\Mapping\MemberIdType
+      category_id: FC\Category\Infrastructure\Mapping\CategoryIdType
+      tag_id: FC\Tag\Infrastructure\Mapping\TagIdType
+      card_id: FC\Card\Infrastructure\Mapping\CardIdType
+
+    # IMPORTANT: You MUST configure your server version,
+    # either here or in the DATABASE_URL env var (see .env file)
+    #server_version: '13'
+  orm:
+    auto_generate_proxy_classes: true
+    naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
+    auto_mapping: true
+    mappings:
+      User:
+        is_bundle: false
+        type: xml
+        dir: '%kernel.project_dir%/src/User/Infrastructure/Mapping'
+        prefix: 'FC\User\Domain'
+        alias: FC
+
+      Board:
+        is_bundle: false
+        type: xml
+        dir: '%kernel.project_dir%/src/Board/Infrastructure/Mapping'
+        prefix: 'FC\Board\Domain'
+        alias: FC
+
+      Category:
+        is_bundle: false
+        type: xml
+        dir: '%kernel.project_dir%/src/Category/Infrastructure/Mapping'
+        prefix: 'FC\Category\Domain'
+        alias: FC
+
+      Tag:
+        is_bundle: false
+        type: xml
+        dir: '%kernel.project_dir%/src/Tag/Infrastructure/Mapping'
+        prefix: 'FC\Tag\Domain'
+        alias: FC
+
+      Card:
+        is_bundle: false
+        type: xml
+        dir: '%kernel.project_dir%/src/Card/Infrastructure/Mapping'
+        prefix: 'FC\Card\Domain'
+        alias: FC
+
+      Shared:
+        is_bundle: false
+        type: xml
+        dir: '%kernel.project_dir%/src/Shared/Infrastructure/Mapping'
+        prefix: 'FC\Shared\Domain\ValueObject'
+        alias: FC

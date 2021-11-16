@@ -1,0 +1,17 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+
+  road_runner.key_value.factory:
+    class: Spiral\RoadRunner\KeyValue\Factory
+    arguments:
+      $rpc: '@goridge.rpc'
+
+  road_runner.key_value.psr16:
+    class: Spiral\RoadRunner\KeyValue\Cache
+    factory: [ '@Spiral\RoadRunner\KeyValue\FactoryInterface', 'select' ]
+    arguments: [ 'psr16' ]
+
+  Spiral\RoadRunner\KeyValue\FactoryInterface: '@road_runner.key_value.factory'
+  Spiral\RoadRunner\KeyValue\StorageInterface: '@road_runner.key_value.psr16'

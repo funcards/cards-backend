@@ -1,0 +1,15 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+
+  road_runner.worker:
+    class: Spiral\RoadRunner\Worker
+    arguments:
+      $relay: '@goridge.relay'
+
+  road_runner.logger:
+    class: Spiral\RoadRunner\Logger
+    factory: [ '@road_runner.worker', 'getLogger' ]
+
+  Spiral\RoadRunner\WorkerInterface: '@road_runner.worker'
