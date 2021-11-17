@@ -10,38 +10,3 @@
  *     )
  * )
  */
-
-/**
- * @OA\Tag(
- *     name="Boards",
- *     description="All api for boards"
- * )
- */
-
-/**
- * @OA\Tag(
- *     name="Categories",
- *     description="All api for categories"
- * )
- */
-
-/**
- * @OA\Tag(
- *     name="Tags",
- *     description="All api for tags"
- * )
- */
-
-/**
- * @OA\Tag(
- *     name="Cards",
- *     description="All api for cards"
- * )
- */
-
-/**
- * @OA\Tag(
- *     name="Users",
- *     description="All api for users"
- * )
- */

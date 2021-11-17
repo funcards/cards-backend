@@ -8,6 +8,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 final class WebsocketsController
 {
@@ -25,7 +26,7 @@ final class WebsocketsController
 
         if (null !== $request->attributes->get('ws:joinServer')) {
             if (!$this->authorizeServer($request)) {
-                return $this->forbidden();
+                throw new AccessDeniedException('Access Denied.');
             }
 
             return new Response();
@@ -35,14 +36,14 @@ final class WebsocketsController
             $topics = \explode(',', $topics);
             foreach ($topics as $topic) {
                 if (!$this->authorizeTopic($request, $topic)) {
-                    return $this->forbidden();
+                    throw new AccessDeniedException('Access Denied.');
                 }
             }
 
             return new Response();
         }
 
-        return $this->forbidden();
+        throw new AccessDeniedException('Access Denied.');
     }
 
     /**
@@ -64,13 +65,5 @@ final class WebsocketsController
     {
         // TODO
         return true;
-    }
-
-    /**
-     * @return Response
-     */
-    private function forbidden(): Response
-    {
-        return new Response(status: 403);
     }
 }
