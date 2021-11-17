@@ -14,7 +14,7 @@ use Symfony\Component\Serializer\SerializerInterface;
 /**
  * @OA\Tag(
  *     name="Tags",
- *     description="All api for tags"
+ *     description="Tags API"
  * )
  */
 #[Route('/api/v1')]

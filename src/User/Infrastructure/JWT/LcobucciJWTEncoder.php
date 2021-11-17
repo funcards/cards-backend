@@ -95,9 +95,9 @@ final class LcobucciJWTEncoder implements JWTEncoder
             return $token->claims()->all();
         } catch (\Throwable $e) {
             if ($e instanceof RequiredConstraintsViolated && \str_contains($e->getMessage(), 'expired')) {
-                throw ExpiredTokenException::create($e);
+                throw ExpiredTokenException::new($e);
             }
-            throw InvalidTokenException::create($e);
+            throw InvalidTokenException::new($e);
         }
     }
 }

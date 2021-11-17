@@ -13,7 +13,7 @@ final class InvalidTokenException extends \RuntimeException implements JWTExcept
      * @return static
      */
     #[Pure]
-    public static function create(\Throwable $previous): self
+    public static function new(\Throwable $previous): self
     {
         return new self('Invalid token', 400, $previous);
     }

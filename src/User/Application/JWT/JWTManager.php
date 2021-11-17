@@ -37,6 +37,6 @@ final class JWTManager implements JWTManagerInterface
      */
     public function getIdentifier(array $payload): string
     {
-        return $payload[$this->identifierName] ?? throw InvalidPayloadException::create();
+        return $payload[$this->identifierName] ?? throw InvalidPayloadException::new();
     }
 }

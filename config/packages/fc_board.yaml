@@ -5,3 +5,6 @@ services:
 
   FC\Board\Domain\BoardRepository:
     class: FC\Board\Infrastructure\Repository\DoctrineBoardRepository
+
+  FC\Board\Domain\Authorization\AuthorizationCheckerInterface:
+    class: FC\Board\Domain\Authorization\AuthorizationChecker

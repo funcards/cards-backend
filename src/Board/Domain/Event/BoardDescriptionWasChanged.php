@@ -10,17 +10,17 @@ final class BoardDescriptionWasChanged extends DomainEvent
 {
     /**
      * @param string $aggregateId
-     * @param string|null $description
+     * @param string $description
      */
-    public function __construct(string $aggregateId, private ?string $description)
+    public function __construct(string $aggregateId, private string $description)
     {
         parent::__construct($aggregateId);
     }
 
     /**
-     * @return string|null
+     * @return string
      */
-    public function getDescription(): ?string
+    public function getDescription(): string
     {
         return $this->description;
     }

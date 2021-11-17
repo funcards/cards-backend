@@ -6,7 +6,7 @@
 composer install
 docker-compose up -d
 bin/console jwt:generate-keypair
-bin/console migrations:migrate
+bin/console doctrine:migrations:migrate
 ./vendor/bin/rr get
 ./rr serve
 ```

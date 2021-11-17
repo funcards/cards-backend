@@ -5,7 +5,7 @@
                           https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
 
     <embeddable name="FC\Board\Domain\BoardDescription">
-        <field name="value" type="text" column="description" nullable="true"/>
+        <field name="value" type="text" column="description"/>
     </embeddable>
 
 </doctrine-mapping>

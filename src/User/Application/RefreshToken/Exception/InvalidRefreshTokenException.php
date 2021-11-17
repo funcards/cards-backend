@@ -12,7 +12,7 @@ final class InvalidRefreshTokenException extends \RuntimeException implements Re
      * @return static
      */
     #[Pure]
-    public static function create(): self
+    public static function new(): self
     {
         return new self('Invalid refresh token', 400);
     }

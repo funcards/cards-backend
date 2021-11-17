@@ -49,12 +49,12 @@ final class CreateCommandHandler implements CommandHandler
             UserName::fromString($command->getName()),
             UserEmail::fromString(\strtolower($command->getEmail())),
             UserPassword::fromString($hashed),
-            Roles::from(...$command->getRoles()),
+            Roles::fromString(...$command->getRoles()),
         );
 
         $this->userRepository->save($user);
         $this->eventBus->publish(...$user->releaseEvents());
 
-        return $this->authSessionService->newSession($user->email()->asString());
+        return $this->authSessionService->newSession($user->id()->asString());
     }
 }

@@ -14,7 +14,7 @@ use Symfony\Component\Serializer\SerializerInterface;
 /**
  * @OA\Tag(
  *     name="Users",
- *     description="All api for users"
+ *     description="Users API"
  * )
  */
 #[Route('/api/v1')]

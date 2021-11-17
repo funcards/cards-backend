@@ -11,22 +11,6 @@ use FC\Shared\Domain\ValueObject\User\UserId;
 
 final class Member implements Entity
 {
-    public const OWNER = 'ROLE_OWNER';
-    public const VIEW = 'ROLE_VIEW';
-    public const CREATE = 'ROLE_CREATE';
-    public const EDIT = 'ROLE_EDIT';
-    public const REMOVE = 'ROLE_REMOVE';
-    public const MODERATOR = 'ROLE_MODERATOR';
-
-    public const ROLES = [
-        self::OWNER,
-        self::VIEW,
-        self::CREATE,
-        self::EDIT,
-        self::REMOVE,
-        self::MODERATOR,
-    ];
-
     /**
      * @param MemberId $id
      * @param UserId $userId
@@ -41,7 +25,6 @@ final class Member implements Entity
         private CreatedAt $createdAt,
         private Board $board,
     ) {
-        Assert::thatAll($roles)->inArray(self::ROLES);
     }
 
     /**
@@ -73,7 +56,7 @@ final class Member implements Entity
      */
     public function changeRoles(Roles $newRoles): void
     {
-        Assert::that($newRoles->toArray())->notEq($this->roles->toArray())->all()->inArray(self::ROLES);
+        Assert::that($newRoles->toArray())->notEq($this->roles->toArray());
 
         $this->roles = $newRoles;
     }

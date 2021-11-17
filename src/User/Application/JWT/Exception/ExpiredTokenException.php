@@ -13,7 +13,7 @@ final class ExpiredTokenException extends \RuntimeException implements JWTExcept
      * @return static
      */
     #[Pure]
-    public static function create(\Throwable $previous): self
+    public static function new(\Throwable $previous): self
     {
         return new self('Expired jwt token', 401, $previous);
     }

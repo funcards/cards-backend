@@ -14,14 +14,16 @@ use FC\Board\Domain\Event\BoardMemberWasChanged;
 use FC\Board\Domain\Event\BoardMemberWasRemoved;
 use FC\Board\Domain\Event\BoardNameWasChanged;
 use FC\Board\Domain\Event\BoardWasCreated;
+use FC\Board\Domain\Exception\MemberNotFoundException;
 use FC\Shared\Domain\Aggregate\AggregateRoot;
 use FC\Shared\Domain\Aggregate\EventRecording;
-use FC\Shared\Domain\Exception\NotFoundDomainException;
 use FC\Shared\Domain\ValueObject\Board\BoardId;
 use FC\Shared\Domain\ValueObject\Board\MemberId;
 use FC\Shared\Domain\ValueObject\CreatedAt;
+use FC\Shared\Domain\ValueObject\Role;
 use FC\Shared\Domain\ValueObject\Roles;
 use FC\Shared\Domain\ValueObject\User\UserId;
+use JetBrains\PhpStorm\Pure;
 
 final class Board implements AggregateRoot
 {
@@ -32,7 +34,7 @@ final class Board implements AggregateRoot
      * @param UserId $ownerId
      * @param BoardName $name
      * @param BoardColor $color
-     * @param BoardDescription|null $description
+     * @param BoardDescription $description
      * @param CreatedAt $createdAt
      * @param Collection<int, Member> $members
      */
@@ -41,7 +43,7 @@ final class Board implements AggregateRoot
         private UserId $ownerId,
         private BoardName $name,
         private BoardColor $color,
-        private ?BoardDescription $description,
+        private BoardDescription $description,
         private CreatedAt $createdAt,
         private Collection $members,
     ) {
@@ -52,7 +54,7 @@ final class Board implements AggregateRoot
      * @param UserId $ownerId
      * @param BoardName $name
      * @param BoardColor $color
-     * @param BoardDescription|null $description
+     * @param BoardDescription $description
      * @return static
      */
     public static function create(
@@ -60,7 +62,7 @@ final class Board implements AggregateRoot
         UserId $ownerId,
         BoardName $name,
         BoardColor $color,
-        ?BoardDescription $description = null,
+        BoardDescription $description,
     ): self {
         $board = new self($id, $ownerId, $name, $color, $description, CreatedAt::now(), new ArrayCollection());
         $board->recordThat(
@@ -70,10 +72,10 @@ final class Board implements AggregateRoot
                 $ownerId->asString(),
                 $name->asString(),
                 $color->asString(),
-                $description?->asString(),
+                $description->asString(),
             )
         );
-        $board->addMember($ownerId, Roles::from(Member::OWNER));
+        $board->addMember($ownerId, Roles::from(Role::boardOwner()));
         return $board;
     }
 
@@ -94,6 +96,34 @@ final class Board implements AggregateRoot
     }
 
     /**
+     * @param UserId $id
+     * @return bool
+     */
+    #[Pure]
+    public function isOwner(UserId $id): bool
+    {
+        return $this->ownerId->equals($id);
+    }
+
+    /**
+     * @param UserId $userId
+     * @param Role $role
+     * @return bool
+     */
+    public function isGranted(UserId $userId, Role $role): bool
+    {
+        if ($this->isOwner($userId)) {
+            return true;
+        }
+
+        try {
+            return $this->member($userId)->roles()->contains($role);
+        } catch (MemberNotFoundException) {
+            return false;
+        }
+    }
+
+    /**
      * @return array<Member>
      */
     public function members(): array
@@ -104,7 +134,7 @@ final class Board implements AggregateRoot
     /**
      * @param UserId $userId
      * @return Member
-     * @throws NotFoundDomainException
+     * @throws MemberNotFoundException
      */
     public function member(UserId $userId): Member
     {
@@ -114,7 +144,7 @@ final class Board implements AggregateRoot
             }
         }
 
-        throw new NotFoundDomainException(
+        throw new MemberNotFoundException(
             \sprintf(
                 'Member (user) %s for board %s not found.',
                 $userId->asString(),
@@ -139,7 +169,7 @@ final class Board implements AggregateRoot
                     $roles->toArray(),
                 )
             );
-        } catch (NotFoundDomainException) {
+        } catch (MemberNotFoundException) {
             $this->members[] = new Member(MemberId::random(), $userId, $roles, CreatedAt::now(), $this);
             $this->recordThat(
                 new BoardMemberWasAdded($this->id->asString(), $userId->asString(), $roles->toArray())
@@ -186,15 +216,15 @@ final class Board implements AggregateRoot
     }
 
     /**
-     * @param BoardDescription|null $newDescription
+     * @param BoardDescription $newDescription
      */
-    public function changeDescription(?BoardDescription $newDescription): void
+    public function changeDescription(BoardDescription $newDescription): void
     {
-        Assert::that($newDescription?->asString())->notEq($this->description?->asString());
+        Assert::that($newDescription->asString())->notEq($this->description->asString());
 
         $this->description = $newDescription;
 
-        $this->recordThat(new BoardDescriptionWasChanged($this->id->asString(), $newDescription?->asString()));
+        $this->recordThat(new BoardDescriptionWasChanged($this->id->asString(), $newDescription->asString()));
     }
 
     /**

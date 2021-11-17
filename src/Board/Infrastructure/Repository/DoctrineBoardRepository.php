@@ -26,4 +26,12 @@ final class DoctrineBoardRepository extends DoctrineRepository implements BoardR
     {
         $this->persist($board);
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function remove(Board $board): void
+    {
+        $this->delete($board);
+    }
 }

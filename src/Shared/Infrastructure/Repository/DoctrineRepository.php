@@ -33,7 +33,7 @@ abstract class DoctrineRepository
     protected function find(string $className, Id $id): AggregateRoot
     {
         if (null === $entity = $this->entityManager->find($className, $id)) {
-            throw NotFoundDomainException::create($id);
+            throw NotFoundDomainException::new($id);
         }
 
         return $entity;
@@ -45,5 +45,13 @@ abstract class DoctrineRepository
     protected function persist(AggregateRoot $entity): void
     {
         $this->entityManager->persist($entity);
+    }
+
+    /**
+     * @param AggregateRoot $entity
+     */
+    protected function delete(AggregateRoot $entity): void
+    {
+        $this->entityManager->remove($entity);
     }
 }

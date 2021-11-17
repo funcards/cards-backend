@@ -5,14 +5,135 @@ declare(strict_types=1);
 namespace FC\Shared\Domain\ValueObject;
 
 use Assert\Assert;
+use JetBrains\PhpStorm\Pure;
 
-final class Role extends StringValue
+/**
+ * @method static Role boardOwner()
+ * @method static Role boardEdit()
+ * @method static Role boardRemove()
+ * @method static Role boardAddMember()
+ * @method static Role boardRemoveMember()
+ * @method static Role categoryView()
+ * @method static Role categoryAdd()
+ * @method static Role categoryEdit()
+ * @method static Role categoryRemove()
+ * @method static Role tagView()
+ * @method static Role tagAdd()
+ * @method static Role tagEdit()
+ * @method static Role tagRemove()
+ * @method static Role cardView()
+ * @method static Role cardAdd()
+ * @method static Role cardEdit()
+ * @method static Role cardRemove()
+ */
+final class Role implements \Stringable
 {
+    public const BOARD_OWNER = 'ROLE_BOARD_OWNER';
+    public const BOARD_EDIT = 'ROLE_BOARD_EDIT';
+    public const BOARD_REMOVE = 'ROLE_BOARD_REMOVE';
+    public const BOARD_ADD_MEMBER = 'ROLE_BOARD_ADD_MEMBER';
+    public const BOARD_REMOVE_MEMBER = 'ROLE_BOARD_REMOVE_MEMBER';
+    public const CATEGORY_VIEW = 'ROLE_CATEGORY_VIEW';
+    public const CATEGORY_ADD = 'ROLE_CATEGORY_ADD';
+    public const CATEGORY_EDIT = 'ROLE_CATEGORY_EDIT';
+    public const CATEGORY_REMOVE = 'ROLE_CATEGORY_REMOVE';
+    public const TAG_VIEW = 'ROLE_TAG_VIEW';
+    public const TAG_ADD = 'ROLE_TAG_ADD';
+    public const TAG_EDIT = 'ROLE_TAG_EDIT';
+    public const TAG_REMOVE = 'ROLE_TAG_REMOVE';
+    public const CARD_VIEW = 'ROLE_CARD_VIEW';
+    public const CARD_ADD = 'ROLE_CARD_ADD';
+    public const CARD_EDIT = 'ROLE_CARD_EDIT';
+    public const CARD_REMOVE = 'ROLE_CARD_REMOVE';
+
+    /**
+     * @var array<string, Role>
+     */
+    private static array $cache = [];
+
+    /**
+     * @param string $value
+     */
+    public function __construct(private string $value)
+    {
+        Assert::that($value)->notEmpty()->startsWith('ROLE_');
+    }
+
+    /**
+     * @param string $name
+     * @param array<mixed> $arguments
+     * @return static
+     */
+    public static function __callStatic(string $name, array $arguments): self
+    {
+        return self::cache()[$name];
+    }
+
+    /**
+     * @return Roles
+     */
+    public static function all(): Roles
+    {
+        return Roles::from(...self::values());
+    }
+
+    /**
+     * @return array<Role>
+     */
+    public static function values(): array
+    {
+        return \array_values(self::cache());
+    }
+
+    /**
+     * @param string $value
+     * @return static
+     */
+    public static function fromString(string $value): self
+    {
+        return self::cache()[self::toCamelCase($value)];
+    }
+
+    /**
+     * @return string
+     */
+    public function asString(): string
+    {
+        return $this->value;
+    }
+
     /**
      * {@inheritDoc}
      */
-    protected function assert(string $value): void
+    #[Pure]
+    public function __toString(): string
     {
-        Assert::that($value)->notEmpty()->startsWith('ROLE_');
+        return $this->asString();
+    }
+
+    /**
+     * @return array<string, Role>
+     */
+    private static function cache(): array
+    {
+        if (0 === \count(self::$cache)) {
+            $reflected = new \ReflectionClass(self::class);
+            foreach ($reflected->getConstants() as $name => $value) {
+                self::$cache[self::toCamelCase($name)] = self::fromString($value);
+            }
+        }
+
+        return self::$cache;
+    }
+
+    /**
+     * @param string $value
+     * @return string
+     */
+    private static function toCamelCase(string $value): string
+    {
+        $value = \str_replace('role_', '', \strtolower($value));
+        $value = \lcfirst(\ucwords($value, '_'));
+        return \str_replace('_', '', $value);
     }
 }

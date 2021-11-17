@@ -20,4 +20,9 @@ interface BoardRepository
      * @param Board $board
      */
     public function save(Board $board): void;
+
+    /**
+     * @param Board $board
+     */
+    public function remove(Board $board): void;
 }

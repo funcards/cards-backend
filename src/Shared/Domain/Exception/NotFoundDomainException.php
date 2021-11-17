@@ -25,7 +25,7 @@ class NotFoundDomainException extends \RuntimeException implements DomainExcepti
      * @param \Throwable|null $previous
      * @return static
      */
-    public static function create(Id $id, ?\Throwable $previous = null): static
+    public static function new(Id $id, ?\Throwable $previous = null): static
     {
         $parts = \explode('\\', $id::class);
         $name = \str_replace('Id', '', \end($parts));

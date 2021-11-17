@@ -14,7 +14,7 @@ use Symfony\Component\Serializer\SerializerInterface;
 /**
  * @OA\Tag(
  *     name="Cards",
- *     description="All api for cards"
+ *     description="Cards API"
  * )
  */
 #[Route('/api/v1')]

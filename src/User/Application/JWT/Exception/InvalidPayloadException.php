@@ -12,7 +12,7 @@ final class InvalidPayloadException extends \RuntimeException implements JWTExce
      * @return static
      */
     #[Pure]
-    public static function create(): self
+    public static function new(): self
     {
         return new self('Invalid jwt payload', 400);
     }

@@ -23,7 +23,7 @@ use Symfony\Component\Serializer\SerializerInterface;
 /**
  * @OA\Tag(
  *     name="Authentication",
- *     description="All api for authentication"
+ *     description="Authentication API"
  * )
  */
 #[Route('/api/v1')]

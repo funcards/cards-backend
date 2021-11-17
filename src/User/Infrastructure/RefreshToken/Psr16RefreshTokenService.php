@@ -35,7 +35,7 @@ final class Psr16RefreshTokenService implements RefreshTokenService
     public function get(string $refreshToken): string
     {
         if (null === $token = $this->cache->get($this->key($refreshToken))) {
-            throw InvalidRefreshTokenException::create();
+            throw InvalidRefreshTokenException::new();
         }
 
         return $token;
