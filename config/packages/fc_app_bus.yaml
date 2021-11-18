@@ -1,0 +1,16 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+
+  FC\Application\Bus\Command\CommandBus:
+    class: FC\Infrastructure\Bus\SymfonyCommandBus
+    arguments: [ '@command.bus' ]
+
+  FC\Application\Bus\Query\QueryBus:
+    class: FC\Infrastructure\Bus\SymfonyQueryBus
+    arguments: [ '@query.bus' ]
+
+  FC\Application\Bus\Event\EventBus:
+    class: FC\Infrastructure\Bus\SymfonyEventBus
+    arguments: [ '@event.bus' ]

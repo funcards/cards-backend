@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+  <entity name="FC\Domain\Aggregate\BoardAggregate\Board" table="boards">
+    <indexes>
+      <index columns="owner_id"/>
+    </indexes>
+
+    <id name="id" type="board_id" column="id"/>
+
+    <field name="ownerId" column="owner_id" type="user_id"/>
+
+    <embedded name="name" class="FC\Domain\Aggregate\BoardAggregate\BoardName" use-column-prefix="false"/>
+    <embedded name="color" class="FC\Domain\Aggregate\BoardAggregate\BoardColor" use-column-prefix="false"/>
+    <embedded name="description" class="FC\Domain\Aggregate\BoardAggregate\BoardDescription" use-column-prefix="false"/>
+    <embedded name="createdAt" class="FC\Domain\ValueObject\CreatedAt" use-column-prefix="false"/>
+
+    <one-to-many field="members" target-entity="FC\Domain\Aggregate\BoardAggregate\Member" mapped-by="board">
+      <cascade>
+        <cascade-persist/>
+        <cascade-remove/>
+      </cascade>
+    </one-to-many>
+  </entity>
+
+</doctrine-mapping>

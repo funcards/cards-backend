@@ -1,0 +1,22 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+
+  FC\Domain\Aggregate\UserAggregate\UserRepository:
+    class: FC\Infrastructure\Repository\DoctrineUserRepository
+
+  FC\Domain\Aggregate\BoardAggregate\BoardRepository:
+    class: FC\Infrastructure\Repository\DoctrineBoardRepository
+
+  FC\Domain\Aggregate\CategoryAggregate\CategoryRepository:
+    class: FC\Infrastructure\Repository\DoctrineCategoryRepository
+
+  FC\Domain\Aggregate\TagAggregate\TagRepository:
+    class: FC\Infrastructure\Repository\DoctrineTagRepository
+
+  FC\Domain\Aggregate\CardAggregate\CardRepository:
+    class: FC\Infrastructure\Repository\DoctrineCardRepository
+
+  FC\Domain\Authorization\AuthorizationCheckerInterface:
+    class: FC\Domain\Authorization\AuthorizationChecker

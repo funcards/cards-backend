@@ -11,28 +11,23 @@ services:
     autowire: true      # Automatically injects dependencies in your services.
     autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
 
-#  _instanceof:
-#    FC\Shared\Application\Command\CommandHandler:
-#      tags: [{ name: messenger.message_handler, bus: command.bus }]
-#
-#    FC\Shared\Application\Query\QueryHandler:
-#      tags: [{ name: messenger.message_handler, bus: query.bus }]
-#
-#    FC\Shared\Domain\Event\DomainEventSubscriber:
-#      tags: [{ name: messenger.message_handler, bus: event.bus }]
-
   Psr\SimpleCache\CacheInterface: '@road_runner.key_value.psr16'
   Symfony\Component\Serializer\Normalizer\DenormalizerInterface: '@Symfony\Component\Serializer\SerializerInterface'
 
+  Symfony\Component\PasswordHasher\PasswordHasherInterface:
+    class: Symfony\Component\PasswordHasher\Hasher\NativePasswordHasher
+
   # makes classes in src/ available to be used as services
   # this creates a service per class whose id is the fully-qualified class name
-  FC\App\Controller\:
-    resource: '../src/App/Controller/'
-    exclude:
-      - '../src/App/Controller/Api/api.php'
+  FC\UI\Http\Web\Controller\:
+    resource: '../src/UI/Http/Web/Controller/'
     tags: [ 'controller.service_arguments' ]
 
-  FC\App\Command\GenerateKeyPairCommand:
+  FC\UI\Http\Rest\V1\Controller\:
+    resource: '../src/UI/Http/Rest/V1/Controller/'
+    tags: [ 'controller.service_arguments' ]
+
+  FC\UI\Cli\Command\GenerateKeyPairCommand:
     arguments:
       $secretKey: '%env(JWT_PRIVATE_KEY)%'
       $publicKey: '%env(JWT_PUBLIC_KEY)%'
@@ -40,7 +35,7 @@ services:
     tags:
       - { name: 'console.command', command: 'jwt:generate-keypair' }
 
-  FC\App\Command\GenerateTokenCommand:
+  FC\UI\Cli\Command\GenerateTokenCommand:
     tags:
       - { name: 'console.command', command: 'jwt:generate-token' }
 

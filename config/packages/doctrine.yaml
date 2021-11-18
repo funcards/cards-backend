@@ -2,12 +2,12 @@ doctrine:
   dbal:
     url: '%env(resolve:DATABASE_URL)%'
     types:
-      user_id: FC\User\Infrastructure\Mapping\UserIdType
-      board_id: FC\Board\Infrastructure\Mapping\BoardIdType
-      member_id: FC\Board\Infrastructure\Mapping\MemberIdType
-      category_id: FC\Category\Infrastructure\Mapping\CategoryIdType
-      tag_id: FC\Tag\Infrastructure\Mapping\TagIdType
-      card_id: FC\Card\Infrastructure\Mapping\CardIdType
+      user_id: FC\Infrastructure\Mapping\User\UserIdType
+      board_id: FC\Infrastructure\Mapping\Board\BoardIdType
+      member_id: FC\Infrastructure\Mapping\Board\MemberIdType
+      category_id: FC\Infrastructure\Mapping\Category\CategoryIdType
+      tag_id: FC\Infrastructure\Mapping\Tag\TagIdType
+      card_id: FC\Infrastructure\Mapping\Card\CardIdType
 
     # IMPORTANT: You MUST configure your server version,
     # either here or in the DATABASE_URL env var (see .env file)
@@ -20,41 +20,41 @@ doctrine:
       User:
         is_bundle: false
         type: xml
-        dir: '%kernel.project_dir%/src/User/Infrastructure/Mapping'
-        prefix: 'FC\User\Domain'
+        dir: '%kernel.project_dir%/src/Infrastructure/Mapping/User'
+        prefix: 'FC\Domain\Aggregate\UserAggregate'
         alias: FC
 
       Board:
         is_bundle: false
         type: xml
-        dir: '%kernel.project_dir%/src/Board/Infrastructure/Mapping'
-        prefix: 'FC\Board\Domain'
+        dir: '%kernel.project_dir%/src/Infrastructure/Mapping/Board'
+        prefix: 'FC\Domain\Aggregate\BoardAggregate'
         alias: FC
 
       Category:
         is_bundle: false
         type: xml
-        dir: '%kernel.project_dir%/src/Category/Infrastructure/Mapping'
-        prefix: 'FC\Category\Domain'
+        dir: '%kernel.project_dir%/src/Infrastructure/Mapping/Category'
+        prefix: 'FC\Domain\Aggregate\CategoryAggregate'
         alias: FC
 
       Tag:
         is_bundle: false
         type: xml
-        dir: '%kernel.project_dir%/src/Tag/Infrastructure/Mapping'
-        prefix: 'FC\Tag\Domain'
+        dir: '%kernel.project_dir%/src/Infrastructure/Mapping/Tag'
+        prefix: 'FC\Domain\Aggregate\TagAggregate'
         alias: FC
 
       Card:
         is_bundle: false
         type: xml
-        dir: '%kernel.project_dir%/src/Card/Infrastructure/Mapping'
-        prefix: 'FC\Card\Domain'
+        dir: '%kernel.project_dir%/src/Infrastructure/Mapping/Card'
+        prefix: 'FC\Domain\Aggregate\CardAggregate'
         alias: FC
 
-      Shared:
+      ValueObject:
         is_bundle: false
         type: xml
-        dir: '%kernel.project_dir%/src/Shared/Infrastructure/Mapping'
-        prefix: 'FC\Shared\Domain\ValueObject'
+        dir: '%kernel.project_dir%/src/Infrastructure/Mapping/ValueObject'
+        prefix: 'FC\Domain\ValueObject'
         alias: FC

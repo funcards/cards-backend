@@ -1,0 +1,30 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+
+  refresh_token.ttl:
+    class: DateInterval
+    arguments: [ '%env(REFRESH_TOKEN_TTL)%' ]
+
+  access_token.ttl:
+    class: DateInterval
+    arguments: [ '%env(ACCESS_TOKEN_TTL)%' ]
+
+  FC\Application\Auth\RefreshToken\RefreshTokenService:
+    class: FC\Infrastructure\Auth\RefreshToken\Psr16RefreshTokenService
+    arguments:
+      $ttl: '@refresh_token.ttl'
+
+  FC\Application\Auth\JWT\JWTEncoder:
+    class: FC\Infrastructure\Auth\JWT\LcobucciJWTEncoder
+    arguments:
+      $ttl: '@access_token.ttl'
+
+  FC\Application\Auth\JWT\JWTManagerInterface:
+    class: FC\Application\Auth\JWT\JWTManager
+    arguments:
+      $identifierName: 'identifier'
+
+  FC\Application\Auth\AuthSessionServiceInterface:
+    class: FC\Application\Auth\AuthSessionService

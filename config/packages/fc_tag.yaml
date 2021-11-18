@@ -1,7 +1,0 @@
-services:
-  _defaults:
-    autowire: true
-    autoconfigure: true
-
-  FC\Tag\Domain\TagRepository:
-    class: FC\Tag\Infrastructure\Repository\DoctrineTagRepository

@@ -1,0 +1,28 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+
+  FC\Application\Command\Auth\SignUpCommandHandler:
+    tags: [ { name: messenger.message_handler, bus: command.bus } ]
+    autoconfigure: false
+
+  FC\Application\Command\Auth\SignInCommandHandler:
+    tags: [ { name: messenger.message_handler, bus: command.bus } ]
+    autoconfigure: false
+
+  FC\Application\Command\Auth\RefreshTokenCommandHandler:
+    tags: [ { name: messenger.message_handler, bus: command.bus } ]
+    autoconfigure: false
+
+  FC\Application\Command\Board\CreateBoardCommandHandler:
+    tags: [ { name: messenger.message_handler, bus: command.bus } ]
+    autoconfigure: false
+
+  FC\Application\Command\Board\UpdateBoardCommandHandler:
+    tags: [ { name: messenger.message_handler, bus: command.bus } ]
+    autoconfigure: false
+
+  FC\Application\Command\Board\RemoveBoardCommandHandler:
+    tags: [ { name: messenger.message_handler, bus: command.bus } ]
+    autoconfigure: false

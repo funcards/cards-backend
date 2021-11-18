@@ -1,7 +1,11 @@
-controllers:
-    resource: ../../src/App/Controller/
-    type: annotation
+web_controllers:
+  resource: ../../src/UI/Http/Web/Controller/
+  type: annotation
+
+rest_v1_controllers:
+  resource: ../../src/UI/Http/Rest/V1/Controller/
+  type: annotation
 
 kernel:
-    resource: ../../src/App/Kernel.php
-    type: annotation
+  resource: ../../src/Infrastructure/Kernel.php
+  type: annotation

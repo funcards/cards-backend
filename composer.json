@@ -91,7 +91,10 @@
   "autoload": {
     "psr-4": {
       "FC\\": "src/"
-    }
+    },
+    "exclude-from-classmap": [
+      "src/Infrastructure/Migrations/"
+    ]
   },
   "autoload-dev": {
     "psr-4": {
