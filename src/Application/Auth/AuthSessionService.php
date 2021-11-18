@@ -20,20 +20,20 @@ final class AuthSessionService implements AuthSessionServiceInterface
     /**
      * {@inheritDoc}
      */
-    public function newSession(string $identifier): AuthSession
+    public function newSession(string $identifier): Tokens
     {
         $accessToken = $this->manager->create($identifier);
         $refreshToken = $this->refreshTokenService->generate();
 
         $this->refreshTokenService->set($refreshToken, $identifier);
 
-        return new AuthSession($accessToken, $refreshToken);
+        return new Tokens($accessToken, $refreshToken);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function refreshSession(string $refreshToken): AuthSession
+    public function refreshSession(string $refreshToken): Tokens
     {
         $identifier = $this->refreshTokenService->get($refreshToken);
 

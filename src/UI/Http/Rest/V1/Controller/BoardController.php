@@ -76,7 +76,10 @@ final class BoardController
      *          response=201,
      *          description="Board added successfully",
      *          @OA\Header(header="Location", description="Board URL", @OA\Schema(type="string", format="uri"))
-     *     )
+     *     ),
+     *     security={
+     *         {"bearerAuth": {}}
+     *     }
      * )
      *
      * @param Request $request
@@ -113,7 +116,10 @@ final class BoardController
      *          required=true,
      *          @OA\JsonContent(ref="#/components/schemas/UpdateBoard")
      *     ),
-     *     @OA\Response(response=204, description="Board updated successfully")
+     *     @OA\Response(response=204, description="Board updated successfully"),
+     *     security={
+     *         {"bearerAuth": {}}
+     *     }
      * )
      *
      * @param Request $request
@@ -139,7 +145,10 @@ final class BoardController
      *     tags={"Boards"},
      *     operationId="removeBoard",
      *     @OA\Parameter(name="id", in="path", required=true, @OA\Schema(ref="#/components/schemas/boardId")),
-     *     @OA\Response(response=204, description="Board removed successfully")
+     *     @OA\Response(response=204, description="Board removed successfully"),
+     *     security={
+     *         {"bearerAuth": {}}
+     *     }
      * )
      *
      * @param string $id
@@ -156,9 +165,12 @@ final class BoardController
         return new Response(status: Response::HTTP_NO_CONTENT);
     }
 
+    /**
+     * @return string
+     */
     private function getUserId(): string
     {
-        return $this->tokenStorage->getToken()->getUser()->getUserIdentifier();
+        return $this->tokenStorage->getToken()->getUserIdentifier();
     }
 
     /**

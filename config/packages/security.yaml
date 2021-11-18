@@ -2,14 +2,22 @@ security:
   enable_authenticator_manager: true
   # https://symfony.com/doc/current/security.html#registering-the-user-hashing-passwords
   password_hashers:
+    FC\Infrastructure\Auth\User: 'bcrypt'
     Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
   # https://symfony.com/doc/current/security.html#loading-the-user-the-user-provider
   providers:
     users_in_memory: { memory: null }
+    api_user: { id: FC\Infrastructure\Auth\UserProvider }
   firewalls:
     dev:
       pattern: ^/(_(profiler|wdt)|css|images|js)/
       security: false
+    api:
+      pattern: ^/api
+      provider: api_user
+      stateless: true
+      custom_authenticators:
+        - FC\Infrastructure\Auth\JWT\JWTAuthenticator
     main:
 #      form_login:
 #        form_only: true
@@ -22,10 +30,15 @@ security:
       # https://symfony.com/doc/current/security/impersonating_user.html
       # switch_user: true
 
+  role_hierarchy:
+    ROLE_API_USER: ROLE_USER
+    ROLE_ADMIN: ROLE_API_USER
+    ROLE_SUPER_ADMIN: [ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
+
   # Easy way to control access for large sections of your site
   # Note: Only the *first* access control that matches will be used
   access_control:
     - { path: ^/api/v1/(sign-in|sign-up|refresh-token)$, roles: PUBLIC_ACCESS }
-    - { path: ^/api, roles: ROLE_USER }
+    - { path: ^/api, roles: ROLE_API_USER }
   # - { path: ^/admin, roles: ROLE_ADMIN }
   # - { path: ^/profile, roles: ROLE_USER }

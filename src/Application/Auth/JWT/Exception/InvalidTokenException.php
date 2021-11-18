@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace FC\Application\Auth\JWT\Exception;
 
 use JetBrains\PhpStorm\Pure;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
-final class InvalidTokenException extends \RuntimeException implements JWTException
+final class InvalidTokenException extends AuthenticationException implements JWTException
 {
     /**
      * @param \Throwable $previous
@@ -15,6 +16,14 @@ final class InvalidTokenException extends \RuntimeException implements JWTExcept
     #[Pure]
     public static function new(\Throwable $previous): self
     {
-        return new self('Invalid token', 400, $previous);
+        return new self('Invalid jwt token.', 400, $previous);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getMessageKey(): string
+    {
+        return 'Invalid jwt token';
     }
 }

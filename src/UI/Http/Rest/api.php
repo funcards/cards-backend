@@ -9,4 +9,6 @@
  *         url="https://github.com/funcards/cards-backend/blob/main/LICENSE"
  *     )
  * )
+ *
+ * @OA\SecurityScheme(securityScheme="bearerAuth", type="http", scheme="bearer", bearerFormat="JWT")
  */

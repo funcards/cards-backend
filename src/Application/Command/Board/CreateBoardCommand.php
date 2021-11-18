@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace FC\Application\Command\Board;
 
 use FC\Application\Bus\Command\Command;
+use Symfony\Component\Serializer\Annotation\SerializedName;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Uuid;
@@ -25,8 +26,8 @@ final class CreateBoardCommand implements Command
      * @param string $description
      */
     public function __construct(
-        #[NotBlank, Uuid(versions: [Uuid::V4_RANDOM])] private string $boardId,
-        #[NotBlank, Uuid(versions: [Uuid::V4_RANDOM])] private string $ownerId,
+        #[SerializedName('board_id')] #[NotBlank, Uuid(versions: [Uuid::V4_RANDOM])] private string $boardId,
+        #[SerializedName('owner_id')] #[NotBlank, Uuid(versions: [Uuid::V4_RANDOM])] private string $ownerId,
         /** @OA\Property() */ #[NotBlank, Length(max: 150)] private string $name,
         /** @OA\Property() */ #[NotBlank, Length(max: 50)] private string $color,
         /** @OA\Property() */ #[Length(max: 1000)] private string $description,

@@ -9,7 +9,7 @@ use OpenApi\Annotations as OA;
 /**
  * @OA\Schema(schema="Tokens", required={"access_token", "refresh_token"})
  */
-final class AuthSession
+final class Tokens
 {
     /**
      * @param string $accessToken

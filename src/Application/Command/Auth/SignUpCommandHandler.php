@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace FC\Application\Command\Auth;
 
-use FC\Application\Auth\AuthSession;
+use FC\Application\Auth\Tokens;
 use FC\Application\Auth\AuthSessionServiceInterface;
 use FC\Application\Bus\Command\CommandHandler;
 use FC\Application\Bus\Event\EventBus;
@@ -35,10 +35,10 @@ final class SignUpCommandHandler implements CommandHandler
 
     /**
      * @param SignUpCommand $command
-     * @return AuthSession
+     * @return Tokens
      * @throws \Throwable
      */
-    public function __invoke(SignUpCommand $command): AuthSession
+    public function __invoke(SignUpCommand $command): Tokens
     {
         do {
             $hashed = $this->passwordHasher->hash($command->getPassword());

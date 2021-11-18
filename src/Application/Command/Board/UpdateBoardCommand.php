@@ -6,6 +6,7 @@ namespace FC\Application\Command\Board;
 
 use FC\Application\Bus\Command\Command;
 use OpenApi\Annotations as OA;
+use Symfony\Component\Serializer\Annotation\SerializedName;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Uuid;
@@ -23,8 +24,8 @@ final class UpdateBoardCommand implements Command
      * @param string|null $description
      */
     public function __construct(
-        #[NotBlank, Uuid(versions: [Uuid::V4_RANDOM])] private string $boardId,
-        #[NotBlank, Uuid(versions: [Uuid::V4_RANDOM])] private string $userId,
+        #[SerializedName('board_id')] #[NotBlank, Uuid(versions: [Uuid::V4_RANDOM])] private string $boardId,
+        #[SerializedName('user_id')] #[NotBlank, Uuid(versions: [Uuid::V4_RANDOM])] private string $userId,
         /** @OA\Property() */ #[NotBlank(allowNull: true), Length(max: 150)] private ?string $name = null,
         /** @OA\Property() */ #[NotBlank(allowNull: true), Length(max: 50)] private ?string $color = null,
         /** @OA\Property() */ #[Length(max: 1000)] private ?string $description = null,

@@ -15,7 +15,7 @@ use OpenApi\Annotations as OA;
  */
 final class SignUpCommand implements Command
 {
-    public const DEFAULT = ['name' => '', 'email' => '', 'password' => '', 'roles' => ['ROLE_USER']];
+    public const DEFAULT = ['name' => '', 'email' => '', 'password' => '', 'roles' => ['ROLE_API_USER']];
 
     /**
      * @param string $name

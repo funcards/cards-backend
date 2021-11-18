@@ -9,8 +9,10 @@ use JetBrains\PhpStorm\Pure;
 
 /**
  * @method static Role user()
+ * @method static Role apiUser()
  * @method static Role admin()
  * @method static Role superAdmin()
+ * @method static Role allowedToSwitch()
  *
  * @method static Role boardOwner()
  * @method static Role boardEdit()
@@ -33,8 +35,10 @@ use JetBrains\PhpStorm\Pure;
 final class Role implements \Stringable
 {
     public const USER = 'ROLE_USER';
+    public const API_USER = 'ROLE_API_USER';
     public const ADMIN = 'ROLE_ADMIN';
     public const SUPER_ADMIN = 'ROLE_SUPER_ADMIN';
+    public const ALLOWED_TO_SWITCH = 'ROLE_ALLOWED_TO_SWITCH';
 
     public const BOARD_OWNER = 'ROLE_BOARD_OWNER';
     public const BOARD_EDIT = 'ROLE_BOARD_EDIT';

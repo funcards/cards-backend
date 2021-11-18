@@ -8,15 +8,15 @@ interface AuthSessionServiceInterface
 {
     /**
      * @param string $identifier
-     * @return AuthSession
+     * @return Tokens
      * @throws \Throwable
      */
-    public function newSession(string $identifier): AuthSession;
+    public function newSession(string $identifier): Tokens;
 
     /**
      * @param string $refreshToken
-     * @return AuthSession
+     * @return Tokens
      * @throws \Throwable
      */
-    public function refreshSession(string $refreshToken): AuthSession;
+    public function refreshSession(string $refreshToken): Tokens;
 }

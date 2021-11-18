@@ -28,3 +28,6 @@ services:
 
   FC\Application\Auth\AuthSessionServiceInterface:
     class: FC\Application\Auth\AuthSessionService
+
+  FC\Infrastructure\Auth\UserProvider: ~
+  FC\Infrastructure\Auth\JWT\JWTAuthenticator: ~

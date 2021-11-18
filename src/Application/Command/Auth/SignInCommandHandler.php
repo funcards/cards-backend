@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace FC\Application\Command\Auth;
 
-use FC\Application\Auth\AuthSession;
+use FC\Application\Auth\Tokens;
 use FC\Application\Auth\AuthSessionServiceInterface;
 use FC\Application\Bus\Command\CommandHandler;
 use FC\Domain\Aggregate\UserAggregate\UserEmail;
@@ -28,10 +28,10 @@ final class SignInCommandHandler implements CommandHandler
 
     /**
      * @param SignInCommand $command
-     * @return AuthSession
+     * @return Tokens
      * @throws \Throwable
      */
-    public function __invoke(SignInCommand $command): AuthSession
+    public function __invoke(SignInCommand $command): Tokens
     {
         $email = UserEmail::fromString(\strtolower($command->getEmail()));
 
