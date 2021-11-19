@@ -4,21 +4,13 @@ declare(strict_types=1);
 
 namespace FC\UI\Http\Rest\V1\Controller;
 
-use FC\Application\Bus\Command\Command;
-use FC\Application\Bus\Command\CommandBus;
 use FC\Application\Command\Auth\RefreshTokenCommand;
 use FC\Application\Command\Auth\SignInCommand;
 use FC\Application\Command\Auth\SignUpCommand;
-use Psr\Log\LoggerInterface;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Serializer\Exception\ExceptionInterface;
-use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use OpenApi\Annotations as OA;
-use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
-use Symfony\Component\Serializer\SerializerInterface;
 
 /**
  * @OA\Tag(
@@ -27,22 +19,8 @@ use Symfony\Component\Serializer\SerializerInterface;
  * )
  */
 #[Route('/api/v1')]
-final class AuthController
+final class AuthController extends ApiController
 {
-    /**
-     * @param DenormalizerInterface $denormalizer
-     * @param SerializerInterface $serializer
-     * @param CommandBus $commandBus
-     * @param LoggerInterface $logger
-     */
-    public function __construct(
-        private DenormalizerInterface $denormalizer,
-        private SerializerInterface $serializer,
-        private CommandBus $commandBus,
-        private LoggerInterface $logger,
-    ) {
-    }
-
     /**
      * @OA\Post(
      *     path="/api/v1/sign-in",
@@ -67,11 +45,11 @@ final class AuthController
     #[Route('/sign-in', 'sign-in', methods: 'POST')]
     public function signIn(Request $request): Response
     {
-        $this->logger->debug('ACTION -- {method}', ['method' => __METHOD__]);
+        $this->debugMethod(__NAMESPACE__);
 
-        $response = $this->commandBus->send($this->command($request, SignInCommand::class));
+        $response = $this->send($request->toArray(), SignInCommand::class);
 
-        return new JsonResponse($this->serializer->serialize($response, 'json'), json: true);
+        return $this->json($response);
     }
 
     /**
@@ -98,11 +76,14 @@ final class AuthController
     #[Route('/sign-up', 'sign-up', methods: 'POST')]
     public function signUp(Request $request): Response
     {
-        $this->logger->debug('ACTION -- {method}', ['method' => __METHOD__]);
+        $this->debugMethod(__NAMESPACE__);
 
-        $response = $this->commandBus->send($this->command($request, SignUpCommand::class));
+        $data = $request->toArray();
+        unset($data['roles']);
 
-        return new JsonResponse($this->serializer->serialize($response, 'json'), json: true);
+        $response = $this->send($data, SignUpCommand::class);
+
+        return $this->json($response);
     }
 
     /**
@@ -129,34 +110,10 @@ final class AuthController
     #[Route('/refresh-token', 'refresh-token', methods: 'POST')]
     public function refreshToken(Request $request): Response
     {
-        $this->logger->debug('ACTION -- {method}', ['method' => __METHOD__]);
+        $this->debugMethod(__NAMESPACE__);
 
-        $response = $this->commandBus->send($this->command($request, RefreshTokenCommand::class));
+        $response = $this->send($request->toArray(), RefreshTokenCommand::class);
 
-        return new JsonResponse($this->serializer->serialize($response, 'json'), json: true);
-    }
-
-    /**
-     * @template T of Command
-     *
-     * @param Request $request
-     * @param string $className
-     * @phpstan-param class-string<T> $className
-     *
-     * @return Command
-     * @phpstan-return T
-     *
-     * @throws ExceptionInterface
-     */
-    private function command(Request $request, string $className): Command
-    {
-        $data = $request->toArray();
-        unset($data['roles']);
-
-        return $this->denormalizer->denormalize($data, $className, null, [
-            AbstractNormalizer::DEFAULT_CONSTRUCTOR_ARGUMENTS => [
-                $className => \constant($className . '::DEFAULT'),
-            ],
-        ]);
+        return $this->json($response);
     }
 }

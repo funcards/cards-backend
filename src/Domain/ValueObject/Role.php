@@ -107,6 +107,15 @@ final class Role implements \Stringable
     }
 
     /**
+     * @param string $value
+     * @return static|null
+     */
+    public static function safeFromString(string $value): ?self
+    {
+        return self::cache()[self::toCamelCase($value)] ?? null;
+    }
+
+    /**
      * @return string
      */
     public function asString(): string

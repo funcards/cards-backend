@@ -18,7 +18,7 @@
     <embedded name="description" class="FC\Domain\Aggregate\BoardAggregate\BoardDescription" use-column-prefix="false"/>
     <embedded name="createdAt" class="FC\Domain\ValueObject\CreatedAt" use-column-prefix="false"/>
 
-    <one-to-many field="members" target-entity="FC\Domain\Aggregate\BoardAggregate\Member" mapped-by="board">
+    <one-to-many field="members" target-entity="FC\Domain\Aggregate\BoardAggregate\Member" mapped-by="board" orphan-removal="true">
       <cascade>
         <cascade-persist/>
         <cascade-remove/>

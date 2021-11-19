@@ -26,3 +26,11 @@ services:
   FC\Application\Command\Board\RemoveBoardCommandHandler:
     tags: [ { name: messenger.message_handler, bus: command.bus } ]
     autoconfigure: false
+
+  FC\Application\Command\Board\AddMemberCommandHandler:
+    tags: [ { name: messenger.message_handler, bus: command.bus } ]
+    autoconfigure: false
+
+  FC\Application\Command\Board\RemoveMemberCommandHandler:
+    tags: [ { name: messenger.message_handler, bus: command.bus } ]
+    autoconfigure: false

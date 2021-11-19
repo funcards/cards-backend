@@ -180,13 +180,8 @@ final class Board implements AggregateRoot
      */
     public function removeMember(UserId $userId): void
     {
-        foreach ($this->members as $index => $member) {
-            if ($member->userId()->equals($userId)) {
-                unset($this->members[$index]);
-                $this->recordThat(new BoardMemberWasRemoved($this->id->asString(), $userId->asString()));
-                break;
-            }
-        }
+        $this->members->removeElement($this->member($userId));
+        $this->recordThat(new BoardMemberWasRemoved($this->id->asString(), $userId->asString()));
     }
 
     /**

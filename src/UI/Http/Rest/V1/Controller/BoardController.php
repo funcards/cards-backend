@@ -4,23 +4,13 @@ declare(strict_types=1);
 
 namespace FC\UI\Http\Rest\V1\Controller;
 
-use FC\Application\Bus\Command\Command;
-use FC\Application\Bus\Command\CommandBus;
-use FC\Application\Bus\Query\QueryBus;
 use FC\Application\Command\Board\CreateBoardCommand;
 use FC\Application\Command\Board\RemoveBoardCommand;
 use FC\Application\Command\Board\UpdateBoardCommand;
-use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use OpenApi\Annotations as OA;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
-use Symfony\Component\Serializer\Exception\ExceptionInterface;
-use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
-use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
-use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Uid\Uuid;
 
 /**
@@ -32,32 +22,12 @@ use Symfony\Component\Uid\Uuid;
  * @OA\Schema(schema="boardId", type="string", format="uuid")
  */
 #[Route('/api/v1/boards')]
-final class BoardController
+final class BoardController extends ApiController
 {
-    private const UUID_REGEX = '^[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}$';
-
-    /**
-     * @param TokenStorageInterface $tokenStorage
-     * @param DenormalizerInterface $denormalizer
-     * @param SerializerInterface $serializer
-     * @param QueryBus $queryBus
-     * @param CommandBus $commandBus
-     * @param LoggerInterface $logger
-     */
-    public function __construct(
-        private TokenStorageInterface $tokenStorage,
-        private DenormalizerInterface $denormalizer,
-        private SerializerInterface $serializer,
-        private QueryBus $queryBus,
-        private CommandBus $commandBus,
-        private LoggerInterface $logger,
-    ) {
-    }
-
-    #[Route('/{id}', 'board', ['id' => self::UUID_REGEX], methods: 'GET')]
-    public function get(string $id): Response
+    #[Route('/{boardId}', 'board', ['boardId' => self::UUID_REGEX], methods: 'GET')]
+    public function get(string $boardId): Response
     {
-        $this->logger->debug('ACTION -- {method}', ['method' => __METHOD__]);
+        $this->debugMethod(__METHOD__);
 
         return new Response();
     }
@@ -83,34 +53,26 @@ final class BoardController
      * )
      *
      * @param Request $request
-     * @param UrlGeneratorInterface $urlGenerator
      * @return Response
-     * @throws \Throwable
      */
     #[Route(methods: 'POST')]
-    public function create(Request $request, UrlGeneratorInterface $urlGenerator): Response
+    public function create(Request $request): Response
     {
-        $this->logger->debug('ACTION -- {method}', ['method' => __METHOD__]);
+        $this->debugMethod(__METHOD__);
 
         $data = ['owner_id' => $this->getUserId()] + $request->toArray() + ['board_id' => Uuid::v4()->toRfc4122()];
 
-        $this->commandBus->send($this->command($data, CreateBoardCommand::class));
+        $this->send($data, CreateBoardCommand::class);
 
-        return new Response(status: Response::HTTP_CREATED, headers: [
-            'Location' => $urlGenerator->generate(
-                'board',
-                ['id' => $data['board_id']],
-                UrlGeneratorInterface::ABSOLUTE_URL,
-            ),
-        ]);
+        return $this->created('board', ['boardId' => $data['board_id']]);
     }
 
     /**
      * @OA\Patch(
-     *     path="/api/v1/boards/{id}",
+     *     path="/api/v1/boards/{boardId}",
      *     tags={"Boards"},
      *     operationId="updateBoard",
-     *     @OA\Parameter(name="id", in="path", required=true, @OA\Schema(ref="#/components/schemas/boardId")),
+     *     @OA\Parameter(name="boardId", in="path", required=true, @OA\Schema(ref="#/components/schemas/boardId")),
      *     @OA\RequestBody(
      *          request="UpdateBoard",
      *          required=true,
@@ -123,78 +85,43 @@ final class BoardController
      * )
      *
      * @param Request $request
-     * @param string $id
+     * @param string $boardId
      * @return Response
-     * @throws \Throwable
      */
-    #[Route('/{id}', requirements: ['id' => self::UUID_REGEX], methods: 'PATCH')]
-    public function update(Request $request, string $id): Response
+    #[Route('/{boardId}', requirements: ['boardId' => self::UUID_REGEX], methods: 'PATCH')]
+    public function update(Request $request, string $boardId): Response
     {
-        $this->logger->debug('ACTION -- {method}', ['method' => __METHOD__]);
+        $this->debugMethod(__METHOD__);
 
-        $data = ['board_id' => $id, 'user_id' => $this->getUserId()] + $request->toArray();
+        $data = ['board_id' => $boardId, 'user_id' => $this->getUserId()] + $request->toArray();
 
-        $this->commandBus->send($this->command($data, UpdateBoardCommand::class));
+        $this->send($data, UpdateBoardCommand::class);
 
-        return new Response(status: Response::HTTP_NO_CONTENT);
+        return $this->noContent();
     }
 
     /**
      * @OA\Delete(
-     *     path="/api/v1/boards/{id}",
+     *     path="/api/v1/boards/{boardId}",
      *     tags={"Boards"},
      *     operationId="removeBoard",
-     *     @OA\Parameter(name="id", in="path", required=true, @OA\Schema(ref="#/components/schemas/boardId")),
+     *     @OA\Parameter(name="boardId", in="path", required=true, @OA\Schema(ref="#/components/schemas/boardId")),
      *     @OA\Response(response=204, description="Board removed successfully"),
      *     security={
      *         {"bearerAuth": {}}
      *     }
      * )
      *
-     * @param string $id
+     * @param string $boardId
      * @return Response
-     * @throws \Throwable
      */
-    #[Route('/{id}', requirements: ['id' => self::UUID_REGEX], methods: 'DELETE')]
-    public function remove(string $id): Response
+    #[Route('/{boardId}', requirements: ['boardId' => self::UUID_REGEX], methods: 'DELETE')]
+    public function remove(string $boardId): Response
     {
-        $this->logger->debug('ACTION -- {method}', ['method' => __METHOD__]);
+        $this->debugMethod(__METHOD__);
 
-        $this->commandBus->send(new RemoveBoardCommand($id, $this->getUserId()));
+        $this->send(['board_id' => $boardId, 'user_id' => $this->getUserId()], RemoveBoardCommand::class);
 
-        return new Response(status: Response::HTTP_NO_CONTENT);
-    }
-
-    /**
-     * @return string
-     */
-    private function getUserId(): string
-    {
-        return $this->tokenStorage->getToken()->getUserIdentifier();
-    }
-
-    /**
-     * @template T of Command
-     *
-     * @param array<string, mixed> $data
-     * @param string $className
-     * @phpstan-param class-string<T> $className
-     *
-     * @return Command
-     * @phpstan-return T
-     *
-     * @throws ExceptionInterface
-     */
-    private function command(array $data, string $className): Command
-    {
-        $context = [];
-
-        if (\defined($c = $className . '::DEFAULT')) {
-            $context[AbstractNormalizer::DEFAULT_CONSTRUCTOR_ARGUMENTS] = [
-                $className => \constant($c),
-            ];
-        }
-
-        return $this->denormalizer->denormalize($data, $className, null, $context);
+        return $this->noContent();
     }
 }
