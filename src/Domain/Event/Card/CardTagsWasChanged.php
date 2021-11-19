@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace FC\Domain\Event\Category;
+namespace FC\Domain\Event\Card;
 
 use FC\Domain\Event\DomainEvent;
 
-final class CategoryNameWasChanged extends DomainEvent
+final class CardTagsWasChanged extends DomainEvent
 {
     /**
      * @param string $aggregateId
      * @param string $boardId
-     * @param string $name
+     * @param array<string> $tags
      */
-    public function __construct(string $aggregateId, private string $boardId, private string $name)
+    public function __construct(string $aggregateId, private string $boardId, private array $tags)
     {
         parent::__construct($aggregateId);
     }
@@ -27,10 +27,10 @@ final class CategoryNameWasChanged extends DomainEvent
     }
 
     /**
-     * @return string
+     * @return string[]
      */
-    public function getName(): string
+    public function getTags(): array
     {
-        return $this->name;
+        return $this->tags;
     }
 }

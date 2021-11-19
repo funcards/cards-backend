@@ -18,6 +18,7 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Uid\Uuid;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
 
 abstract class ApiController implements ServiceSubscriberInterface
@@ -45,6 +46,14 @@ abstract class ApiController implements ServiceSubscriberInterface
             'query_bus' => QueryBus::class,
             'command_bus' => CommandBus::class,
         ];
+    }
+
+    /**
+     * @return string
+     */
+    protected function uuid(): string
+    {
+        return Uuid::v4()->toRfc4122();
     }
 
     /**

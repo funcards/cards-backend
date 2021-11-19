@@ -10,11 +10,20 @@ final class CategoryPositionWasChanged extends DomainEvent
 {
     /**
      * @param string $aggregateId
+     * @param string $boardId
      * @param int $position
      */
-    public function __construct(string $aggregateId, private int $position)
+    public function __construct(string $aggregateId, private string $boardId, private int $position)
     {
         parent::__construct($aggregateId);
+    }
+
+    /**
+     * @return string
+     */
+    public function getBoardId(): string
+    {
+        return $this->boardId;
     }
 
     /**

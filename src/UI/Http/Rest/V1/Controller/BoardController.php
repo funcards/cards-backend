@@ -11,7 +11,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use OpenApi\Annotations as OA;
-use Symfony\Component\Uid\Uuid;
 
 /**
  * @OA\Tag(
@@ -59,7 +58,7 @@ final class BoardController extends ApiController
     {
         $this->debugMethod(__METHOD__);
 
-        $data = ['owner_id' => $this->getUserId()] + $request->toArray() + ['board_id' => Uuid::v4()->toRfc4122()];
+        $data = ['owner_id' => $this->getUserId()] + $request->toArray() + ['board_id' => $this->uuid()];
 
         $this->send($data, CreateBoardCommand::class);
 

@@ -100,7 +100,7 @@ final class Board implements AggregateRoot
     #[Pure]
     public function isOwner(UserId $id): bool
     {
-        return $this->ownerId->equals($id);
+        return $this->ownerId->isEqualTo($id);
     }
 
     /**
@@ -137,7 +137,7 @@ final class Board implements AggregateRoot
     public function member(UserId $userId): Member
     {
         foreach ($this->members as $member) {
-            if ($member->userId()->equals($userId)) {
+            if ($member->userId()->isEqualTo($userId)) {
                 return $member;
             }
         }

@@ -55,7 +55,7 @@ final class Member implements Entity
      */
     public function changeRoles(Roles $newRoles): void
     {
-        Assert::that($newRoles->toArray())->notEq($this->roles->toArray());
+        Assert::that($this->roles->isEqualTo($newRoles))->false();
 
         $this->roles = $newRoles;
     }

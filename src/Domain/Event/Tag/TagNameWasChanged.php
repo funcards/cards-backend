@@ -10,11 +10,20 @@ final class TagNameWasChanged extends DomainEvent
 {
     /**
      * @param string $aggregateId
+     * @param string $boardId
      * @param string $name
      */
-    public function __construct(string $aggregateId, private string $name)
+    public function __construct(string $aggregateId, private string $boardId, private string $name)
     {
         parent::__construct($aggregateId);
+    }
+
+    /**
+     * @return string
+     */
+    public function getBoardId(): string
+    {
+        return $this->boardId;
     }
 
     /**

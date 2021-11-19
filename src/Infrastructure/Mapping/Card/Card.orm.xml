@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+  <entity name="FC\Domain\Aggregate\CardAggregate\Card" table="cards">
+    <indexes>
+      <index columns="board_id"/>
+      <index columns="category_id"/>
+      <index columns="board_id,category_id"/>
+    </indexes>
+
+    <id name="id" type="card_id" column="id"/>
+
+    <field name="boardId" column="board_id" type="board_id"/>
+    <field name="categoryId" column="category_id" type="category_id"/>
+
+    <embedded name="name" class="FC\Domain\Aggregate\CardAggregate\CardName" use-column-prefix="false"/>
+    <embedded name="content" class="FC\Domain\Aggregate\CardAggregate\CardContent" use-column-prefix="false"/>
+    <embedded name="tags" class="FC\Domain\Aggregate\CardAggregate\CardTags" use-column-prefix="false"/>
+  </entity>
+
+</doctrine-mapping>

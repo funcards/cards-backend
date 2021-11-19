@@ -11,7 +11,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use OpenApi\Annotations as OA;
-use Symfony\Component\Uid\Uuid;
 
 /**
  * @OA\Tag(
@@ -62,8 +61,7 @@ final class CategoryController extends ApiController
         $this->debugMethod(__METHOD__);
 
         $data = ['board_id' => $boardId, 'user_id' => $this->getUserId()];
-        $data += $request->toArray();
-        $data += ['category_id' => Uuid::v4()->toRfc4122()];
+        $data += $request->toArray() + ['category_id' => $this->uuid()];
 
         $this->send($data, CreateCategoryCommand::class);
 

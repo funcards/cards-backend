@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace FC\Domain\Event\Category;
+namespace FC\Domain\Event\Card;
 
 use FC\Domain\Event\DomainEvent;
 
-final class CategoryNameWasChanged extends DomainEvent
+final class CardNameWasChanged extends DomainEvent
 {
     /**
      * @param string $aggregateId

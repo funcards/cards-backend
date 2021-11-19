@@ -63,7 +63,9 @@ final class Tag implements AggregateRoot
 
         $this->name = $newName;
 
-        $this->recordThat(new TagNameWasChanged($this->id->asString(), $newName->asString()));
+        $this->recordThat(
+            new TagNameWasChanged($this->id->asString(), $this->boardId->asString(), $newName->asString())
+        );
     }
 
     /**
@@ -75,7 +77,9 @@ final class Tag implements AggregateRoot
 
         $this->color = $newColor;
 
-        $this->recordThat(new TagColorWasChanged($this->id->asString(), $newColor->asString()));
+        $this->recordThat(
+            new TagColorWasChanged($this->id->asString(), $this->boardId->asString(), $newColor->asString())
+        );
     }
 
     /**

@@ -50,10 +50,9 @@ final class Roles implements \Countable, \Stringable
     /**
      * {@inheritDoc}
      */
-    #[Pure]
     final public function __toString(): string
     {
-        return \sprintf('[%s]', \implode(', ', $this->toArray()));
+        return \json_encode($this->toArray());
     }
 
     /**
@@ -82,5 +81,16 @@ final class Roles implements \Countable, \Stringable
     public function contains(Role $role): bool
     {
         return \in_array($role->asString(), $this->toArray(), true);
+    }
+
+    /**
+     * @param Roles $roles
+     * @return bool
+     */
+    #[Pure]
+    public function isEqualTo(self $roles): bool
+    {
+        return \count($this->roles) === \count($roles->toArray())
+            && \count($this->roles) === \count(\array_intersect($this->roles, $roles->toArray()));
     }
 }

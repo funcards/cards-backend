@@ -72,7 +72,9 @@ final class Category implements AggregateRoot
 
         $this->name = $newName;
 
-        $this->recordThat(new CategoryNameWasChanged($this->id->asString(), $newName->asString()));
+        $this->recordThat(
+            new CategoryNameWasChanged($this->id->asString(), $this->boardId->asString(), $newName->asString())
+        );
     }
 
     /**
@@ -84,7 +86,9 @@ final class Category implements AggregateRoot
 
         $this->position = $newPosition;
 
-        $this->recordThat(new CategoryPositionWasChanged($this->id->asString(), $newPosition->asInt()));
+        $this->recordThat(
+            new CategoryPositionWasChanged($this->id->asString(), $this->boardId->asString(), $newPosition->asInt())
+        );
     }
 
     /**
