@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace FC\UI\Http\Rest\V1\Controller;
 
 use FC\Application\Command\Category\CreateCategoryCommand;
+use FC\Application\Command\Category\RemoveCategoryCommand;
 use FC\Application\Command\Category\UpdateCategoryCommand;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -43,7 +44,7 @@ final class CategoryController extends ApiController
      *     ),
      *     @OA\Response(
      *          response=201,
-     *          description="Category added successfully",
+     *          description="Board category added successfully",
      *          @OA\Header(header="Location", description="Category URL", @OA\Schema(type="string", format="uri"))
      *     ),
      *     security={
@@ -118,20 +119,18 @@ final class CategoryController extends ApiController
      *     }
      * )
      *
-     * @param Request $request
      * @param string $boardId
      * @param string $categoryId
      * @return Response
      */
     #[Route('/{categoryId}', requirements: ['categoryId' => self::UUID_REGEX], methods: 'DELETE')]
-    public function remove(Request $request, string $boardId, string $categoryId): Response
+    public function remove(string $boardId, string $categoryId): Response
     {
         $this->debugMethod(__METHOD__);
 
         $data = ['board_id' => $boardId, 'user_id' => $this->getUserId(), 'category_id' => $categoryId];
-        $data += $request->toArray();
 
-        $this->send($data, UpdateCategoryCommand::class);
+        $this->send($data, RemoveCategoryCommand::class);
 
         return $this->noContent();
     }
