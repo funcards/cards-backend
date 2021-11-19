@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace FC\Application\Command\Card;
 
 use FC\Application\Bus\Command\Command;
-use FC\Application\Validator\TagsConstraint;
+use FC\Application\Validator\AllUuidConstraint;
 use OpenApi\Annotations as OA;
 use Symfony\Component\Serializer\Annotation\SerializedName;
 use Symfony\Component\Validator\Constraints\Length;
@@ -32,11 +32,11 @@ final class CreateCardCommand implements Command
         #[SerializedName('board_id')] #[NotBlank, Uuid(versions: [Uuid::V4_RANDOM])] private string $boardId,
         #[SerializedName('user_id')] #[NotBlank, Uuid(versions: [Uuid::V4_RANDOM])] private string $userId,
         #[SerializedName('card_id')] #[NotBlank, Uuid(versions: [Uuid::V4_RANDOM])] private string $cardId,
-        /** @OA\Property(property="category_id") */
+        /** @OA\Property(property="category_id", format="uuid") */
         #[SerializedName('category_id')] #[NotBlank, Uuid(versions: [Uuid::V4_RANDOM])] private string $categoryId,
         /** @OA\Property() */ #[NotBlank, Length(max: 1000)] private string $name,
         /** @OA\Property() */ #[Length(max: 10000)] private string $content,
-        /** @OA\Property(@OA\Items(type="string")) */ #[TagsConstraint] private array $tags,
+        /** @OA\Property(@OA\Items(type="string", format="uuid")) */ #[AllUuidConstraint] private array $tags,
     ) {
     }
 

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace FC\Application\Command\Card;
 
 use FC\Application\Bus\Command\Command;
-use FC\Application\Validator\TagsConstraint;
+use FC\Application\Validator\AllUuidConstraint;
 use OpenApi\Annotations as OA;
 use Symfony\Component\Serializer\Annotation\SerializedName;
 use Symfony\Component\Validator\Constraints\Length;
@@ -30,11 +30,11 @@ final class UpdateCardCommand implements Command
         #[SerializedName('board_id')] #[NotBlank, Uuid(versions: [Uuid::V4_RANDOM])] private string $boardId,
         #[SerializedName('user_id')] #[NotBlank, Uuid(versions: [Uuid::V4_RANDOM])] private string $userId,
         #[SerializedName('card_id')] #[NotBlank, Uuid(versions: [Uuid::V4_RANDOM])] private string $cardId,
-        /** @OA\Property(property="category_id") */
+        /** @OA\Property(property="category_id", format="uuid") */
         #[SerializedName('category_id')] #[NotBlank(allowNull: true), Uuid(versions: [Uuid::V4_RANDOM])] private ?string $categoryId = null,
         /** @OA\Property() */ #[NotBlank(allowNull: true), Length(max: 1000)] private ?string $name = null,
         /** @OA\Property() */ #[Length(max: 10000)] private ?string $content = null,
-        /** @OA\Property(@OA\Items(type="string")) */ #[TagsConstraint] private ?array $tags = null,
+        /** @OA\Property(@OA\Items(type="string", format="uuid")) */ #[AllUuidConstraint] private ?array $tags = null,
     ) {
     }
 

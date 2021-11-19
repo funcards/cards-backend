@@ -22,8 +22,61 @@ use OpenApi\Annotations as OA;
 #[Route('/api/v1/boards/{boardId}/categories', requirements: ['boardId' => self::UUID_REGEX])]
 final class CategoryController extends ApiController
 {
+    /**
+     * @OA\Get(
+     *     path="/api/v1/boards/{boardId}/categories/{categoryId}",
+     *     tags={"Categories"},
+     *     operationId="getCategory",
+     *     @OA\Parameter(name="boardId", in="path", required=true, @OA\Schema(ref="#/components/schemas/boardId")),
+     *     @OA\Parameter(name="categoryId", in="path", required=true, @OA\Schema(ref="#/components/schemas/categoryId")),
+     *     @OA\Response(
+     *          response=200,
+     *          description="Category",
+     *          @OA\JsonContent(ref="#/components/schemas/CategoryResponse")
+     *     ),
+     *     security={
+     *         {"bearerAuth": {}}
+     *     }
+     * )
+     *
+     * @param string $boardId
+     * @param string $categoryId
+     * @return Response
+     */
     #[Route('/{categoryId}', 'category', ['categoryId' => self::UUID_REGEX], methods: 'GET')]
     public function get(string $boardId, string $categoryId): Response
+    {
+        $this->debugMethod(__METHOD__);
+
+        return new Response();
+    }
+
+    /**
+     * @OA\Get(
+     *     path="/api/v1/boards/{boardId}/categories",
+     *     tags={"Categories"},
+     *     operationId="listCategory",
+     *     @OA\Response(
+     *          response=200,
+     *          description="Categories",
+     *          @OA\JsonContent(allOf={
+     *              @OA\Schema(ref="#/components/schemas/PaginatedResponse"),
+     *              @OA\Schema(
+     *                  @OA\Property(property="data", type="array", @OA\Items(ref="#/components/schemas/CategoryResponse"))
+     *              )
+     *          })
+     *     ),
+     *     security={
+     *         {"bearerAuth": {}}
+     *     }
+     * )
+     *
+     * @param Request $request
+     * @param string $boardId
+     * @return Response
+     */
+    #[Route(methods: 'GET')]
+    public function list(Request $request, string $boardId): Response
     {
         $this->debugMethod(__METHOD__);
 

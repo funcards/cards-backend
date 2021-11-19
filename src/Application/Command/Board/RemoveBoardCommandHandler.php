@@ -32,7 +32,7 @@ final class RemoveBoardCommandHandler implements CommandHandler
         $boardId = BoardId::fromString($command->getBoardId());
         $userId = UserId::fromString($command->getUserId());
 
-        if (false === $this->authorizationChecker->isGranted($boardId, $userId, Role::boardRemove())) {
+        if (false === $this->authorizationChecker->isGranted($boardId, $userId, Role::boardOwner())) {
             throw AccessDeniedException::new();
         }
 

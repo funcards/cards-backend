@@ -22,8 +22,61 @@ use OpenApi\Annotations as OA;
 #[Route('/api/v1/boards/{boardId}/tags', requirements: ['boardId' => self::UUID_REGEX])]
 final class TagController extends ApiController
 {
+    /**
+     * @OA\Get(
+     *     path="/api/v1/boards/{boardId}/tags/{tagId}",
+     *     tags={"Tags"},
+     *     operationId="getTag",
+     *     @OA\Parameter(name="boardId", in="path", required=true, @OA\Schema(ref="#/components/schemas/boardId")),
+     *     @OA\Parameter(name="tagId", in="path", required=true, @OA\Schema(ref="#/components/schemas/tagId")),
+     *     @OA\Response(
+     *          response=200,
+     *          description="Tag",
+     *          @OA\JsonContent(ref="#/components/schemas/TagResponse")
+     *     ),
+     *     security={
+     *         {"bearerAuth": {}}
+     *     }
+     * )
+     *
+     * @param string $boardId
+     * @param string $tagId
+     * @return Response
+     */
     #[Route('/{tagId}', 'tag', ['tagId' => self::UUID_REGEX], methods: 'GET')]
     public function get(string $boardId, string $tagId): Response
+    {
+        $this->debugMethod(__METHOD__);
+
+        return new Response();
+    }
+
+    /**
+     * @OA\Get(
+     *     path="/api/v1/boards/{boardId}/tags",
+     *     tags={"Tags"},
+     *     operationId="listTag",
+     *     @OA\Response(
+     *          response=200,
+     *          description="Tags",
+     *          @OA\JsonContent(allOf={
+     *              @OA\Schema(ref="#/components/schemas/PaginatedResponse"),
+     *              @OA\Schema(
+     *                  @OA\Property(property="data", type="array", @OA\Items(ref="#/components/schemas/TagResponse"))
+     *              )
+     *          })
+     *     ),
+     *     security={
+     *         {"bearerAuth": {}}
+     *     }
+     * )
+     *
+     * @param Request $request
+     * @param string $boardId
+     * @return Response
+     */
+    #[Route(methods: 'GET')]
+    public function list(Request $request, string $boardId): Response
     {
         $this->debugMethod(__METHOD__);
 

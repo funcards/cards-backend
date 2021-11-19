@@ -18,7 +18,7 @@ final class Roles implements \Countable, \Stringable
      */
     public function __construct(array $roles)
     {
-        $this->roles = \array_map(static fn($role) => (string)$role, $roles);
+        $this->roles = \array_unique(\array_map(static fn($role) => (string)$role, $roles));
     }
 
     /**
@@ -37,6 +37,17 @@ final class Roles implements \Countable, \Stringable
     public static function fromString(string ...$roles): self
     {
         return self::from(...\array_map(static fn($role) => Role::fromString($role), $roles));
+    }
+
+    /**
+     * @param Role|string $role
+     * @return static
+     */
+    public function add(Role|string $role): self
+    {
+        $role = Role::fromString((string)$role);
+
+        return new self(\array_merge($this->roles, [$role]));
     }
 
     /**

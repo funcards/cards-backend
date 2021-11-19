@@ -22,8 +22,61 @@ use OpenApi\Annotations as OA;
 #[Route('/api/v1/boards/{boardId}/cards', requirements: ['boardId' => self::UUID_REGEX])]
 final class CardController extends ApiController
 {
+    /**
+     * @OA\Get(
+     *     path="/api/v1/boards/{boardId}/cards/{cardId}",
+     *     tags={"Cards"},
+     *     operationId="getCard",
+     *     @OA\Parameter(name="boardId", in="path", required=true, @OA\Schema(ref="#/components/schemas/boardId")),
+     *     @OA\Parameter(name="cardId", in="path", required=true, @OA\Schema(ref="#/components/schemas/cardId")),
+     *     @OA\Response(
+     *          response=200,
+     *          description="Card",
+     *          @OA\JsonContent(ref="#/components/schemas/CardResponse")
+     *     ),
+     *     security={
+     *         {"bearerAuth": {}}
+     *     }
+     * )
+     *
+     * @param string $boardId
+     * @param string $cardId
+     * @return Response
+     */
     #[Route('/{cardId}', 'card', ['cardId' => self::UUID_REGEX], methods: 'GET')]
     public function get(string $boardId, string $cardId): Response
+    {
+        $this->debugMethod(__METHOD__);
+
+        return new Response();
+    }
+
+    /**
+     * @OA\Get(
+     *     path="/api/v1/boards/{boardId}/cards",
+     *     tags={"Cards"},
+     *     operationId="listCard",
+     *     @OA\Response(
+     *          response=200,
+     *          description="Cards",
+     *          @OA\JsonContent(allOf={
+     *              @OA\Schema(ref="#/components/schemas/PaginatedResponse"),
+     *              @OA\Schema(
+     *                  @OA\Property(property="data", type="array", @OA\Items(ref="#/components/schemas/CardResponse"))
+     *              )
+     *          })
+     *     ),
+     *     security={
+     *         {"bearerAuth": {}}
+     *     }
+     * )
+     *
+     * @param Request $request
+     * @param string $boardId
+     * @return Response
+     */
+    #[Route(methods: 'GET')]
+    public function list(Request $request, string $boardId): Response
     {
         $this->debugMethod(__METHOD__);
 

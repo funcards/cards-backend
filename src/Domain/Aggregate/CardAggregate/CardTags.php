@@ -20,7 +20,7 @@ final class CardTags implements \Countable, \Stringable
      */
     public function __construct(array $tags)
     {
-        $this->tags = \array_map(static fn($tag) => (string)$tag, $tags);
+        $this->tags = \array_unique(\array_map(static fn($tag) => (string)$tag, $tags));
 
         Assert::thatAll($this->tags)->uuid();
     }

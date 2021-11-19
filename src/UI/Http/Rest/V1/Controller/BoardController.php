@@ -22,8 +22,58 @@ use OpenApi\Annotations as OA;
 #[Route('/api/v1/boards')]
 final class BoardController extends ApiController
 {
+    /**
+     * @OA\Get(
+     *     path="/api/v1/boards/{boardId}",
+     *     tags={"Boards"},
+     *     operationId="getBoard",
+     *     @OA\Parameter(name="boardId", in="path", required=true, @OA\Schema(ref="#/components/schemas/boardId")),
+     *     @OA\Response(
+     *          response=200,
+     *          description="Board",
+     *          @OA\JsonContent(ref="#/components/schemas/BoardResponse")
+     *     ),
+     *     security={
+     *         {"bearerAuth": {}}
+     *     }
+     * )
+     *
+     * @param string $boardId
+     * @return Response
+     */
     #[Route('/{boardId}', 'board', ['boardId' => self::UUID_REGEX], methods: 'GET')]
     public function get(string $boardId): Response
+    {
+        $this->debugMethod(__METHOD__);
+
+        return new Response();
+    }
+
+    /**
+     * @OA\Get(
+     *     path="/api/v1/boards",
+     *     tags={"Boards"},
+     *     operationId="listBoard",
+     *     @OA\Response(
+     *          response=200,
+     *          description="Boards",
+     *          @OA\JsonContent(allOf={
+     *              @OA\Schema(ref="#/components/schemas/PaginatedResponse"),
+     *              @OA\Schema(
+     *                  @OA\Property(property="data", type="array", @OA\Items(ref="#/components/schemas/BoardResponse"))
+     *              )
+     *          })
+     *     ),
+     *     security={
+     *         {"bearerAuth": {}}
+     *     }
+     * )
+     *
+     * @param Request $request
+     * @return Response
+     */
+    #[Route(methods: 'GET')]
+    public function list(Request $request): Response
     {
         $this->debugMethod(__METHOD__);
 

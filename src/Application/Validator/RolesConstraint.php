@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace FC\Application\Validator;
 
+use FC\Domain\ValueObject\Role;
 use Symfony\Component\Validator\Constraint;
 
 #[\Attribute(\Attribute::TARGET_PROPERTY | \Attribute::TARGET_METHOD | \Attribute::IS_REPEATABLE)]
@@ -15,12 +16,12 @@ final class RolesConstraint extends Constraint
      * @var array<string>
      */
     public array $notValid = [
-        'ROLE_USER',
-        'ROLE_API_USER',
-        'ROLE_ADMIN',
-        'ROLE_SUPER_ADMIN',
-        'ROLE_ALLOWED_TO_SWITCH',
-        'ROLE_BOARD_OWNER',
+        Role::USER,
+        Role::API_USER,
+        Role::ADMIN,
+        Role::SUPER_ADMIN,
+        Role::ALLOWED_TO_SWITCH,
+        Role::BOARD_OWNER,
     ];
 
     /**

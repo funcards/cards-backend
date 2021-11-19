@@ -15,6 +15,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -41,6 +43,7 @@ abstract class ApiController implements ServiceSubscriberInterface
             'logger' => LoggerInterface::class,
             'url_generator' => UrlGeneratorInterface::class,
             'token_storage' => TokenStorageInterface::class,
+            'authorization_checker' => AuthorizationCheckerInterface::class,
             'denormalizer' => DenormalizerInterface::class,
             'serializer' => SerializerInterface::class,
             'query_bus' => QueryBus::class,
@@ -130,6 +133,10 @@ abstract class ApiController implements ServiceSubscriberInterface
      */
     protected function getUserId(): string
     {
+        if (!$this->container->get('authorization_checker')->isGranted('ROLE_API_USER')) {
+            throw new AccessDeniedException();
+        }
+
         return $this->container->get('token_storage')->getToken()->getUserIdentifier();
     }
 
