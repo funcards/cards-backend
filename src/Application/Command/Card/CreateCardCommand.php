@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace FC\Application\Command\Board;
+namespace FC\Application\Command\Card;
 
 use FC\Application\Bus\Command\Command;
 use OpenApi\Annotations as OA;
@@ -10,17 +10,22 @@ use Symfony\Component\Serializer\Annotation\SerializedName;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Uuid;
 
-final class RemoveMemberCommand implements Command
+/**
+ * @OA\Schema(schema="CreateCard")
+ */
+final class CreateCardCommand implements Command
 {
+    public const DEFAULT = [];
+
     /**
      * @param string $boardId
      * @param string $userId
-     * @param string $memberId
+     * @param string $cardId
      */
     public function __construct(
         #[SerializedName('board_id')] #[NotBlank, Uuid(versions: [Uuid::V4_RANDOM])] private string $boardId,
         #[SerializedName('user_id')] #[NotBlank, Uuid(versions: [Uuid::V4_RANDOM])] private string $userId,
-        #[SerializedName('member_id')] #[NotBlank, Uuid(versions: [Uuid::V4_RANDOM])] private string $memberId,
+        #[SerializedName('card_id')] #[NotBlank, Uuid(versions: [Uuid::V4_RANDOM])] private string $cardId,
     ) {
     }
 
@@ -43,8 +48,8 @@ final class RemoveMemberCommand implements Command
     /**
      * @return string
      */
-    public function getMemberId(): string
+    public function getCardId(): string
     {
-        return $this->memberId;
+        return $this->cardId;
     }
 }
