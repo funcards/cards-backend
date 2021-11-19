@@ -67,7 +67,7 @@ final class TagController extends ApiController
 
         $this->send($data, CreateTagCommand::class);
 
-        return $this->created('category', ['boardId' => $boardId, 'tagId' => $data['tag_id']]);
+        return $this->created('tag', ['boardId' => $boardId, 'tagId' => $data['tag_id']]);
     }
 
     /**
