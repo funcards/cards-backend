@@ -12,16 +12,20 @@ use Symfony\Component\Routing\Annotation\Route;
 use OpenApi\Annotations as OA;
 
 /**
+ * @OA\Tag(
+ *     name="Members",
+ *     description="Members API"
+ * )
  * @OA\Schema(schema="memberId", type="string", format="uuid")
  */
 #[Route('/api/v1/boards/{boardId}/members', requirements: ['boardId' => self::UUID_REGEX])]
-final class BoardMemberController extends ApiController
+final class MemberController extends ApiController
 {
     /**
      * @OA\Put(
      *     path="/api/v1/boards/{boardId}/members",
-     *     tags={"Boards"},
-     *     operationId="addBoardMember",
+     *     tags={"Members"},
+     *     operationId="addMember",
      *     @OA\Parameter(name="boardId", in="path", required=true, @OA\Schema(ref="#/components/schemas/boardId")),
      *     @OA\RequestBody(
      *          request="AddMember",
@@ -53,8 +57,8 @@ final class BoardMemberController extends ApiController
     /**
      * @OA\Delete(
      *     path="/api/v1/boards/{boardId}/members/{memberId}",
-     *     tags={"Boards"},
-     *     operationId="removeBoardMember",
+     *     tags={"Members"},
+     *     operationId="removeMember",
      *     @OA\Parameter(name="boardId", in="path", required=true, @OA\Schema(ref="#/components/schemas/boardId")),
      *     @OA\Parameter(name="memberId", in="path", required=true, @OA\Schema(ref="#/components/schemas/memberId")),
      *     @OA\Response(response=204, description="Board member removed successfully"),

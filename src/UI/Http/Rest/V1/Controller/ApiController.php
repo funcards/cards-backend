@@ -102,6 +102,10 @@ abstract class ApiController implements ServiceSubscriberInterface
 
     /**
      * Returns absolute route url
+     *
+     * @param string $route
+     * @param array<string, mixed> $parameters
+     * @return string
      */
     protected function url(string $route, array $parameters = []): string
     {
@@ -130,6 +134,12 @@ abstract class ApiController implements ServiceSubscriberInterface
 
     /**
      * Returns a JsonResponse that uses the serializer component if enabled, or json_encode.
+     *
+     * @param mixed $data
+     * @param int $status
+     * @param array<string, string|string[]> $headers
+     * @param array<string, mixed> $context
+     * @return JsonResponse
      */
     protected function json(mixed $data, int $status = 200, array $headers = [], array $context = []): JsonResponse
     {

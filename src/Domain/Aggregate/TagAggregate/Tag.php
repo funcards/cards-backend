@@ -31,17 +31,17 @@ final class Tag implements AggregateRoot
     }
 
     /**
-     * @param TagId $id
+     * @param TagId $tagId
      * @param BoardId $boardId
      * @param TagName $name
      * @param TagColor $color
      * @return static
      */
-    public static function create(TagId $id, BoardId $boardId, TagName $name, TagColor $color): self
+    public static function create(TagId $tagId, BoardId $boardId, TagName $name, TagColor $color): self
     {
-        $tag = new self($id, $boardId, $name, $color);
+        $tag = new self($tagId, $boardId, $name, $color);
         $tag->recordThat(
-            new TagWasCreated($id->asString(), $boardId->asString(), $name->asString(), $color->asString())
+            new TagWasCreated($tagId->asString(), $boardId->asString(), $name->asString(), $color->asString())
         );
         return $tag;
     }

@@ -19,4 +19,9 @@ interface TagRepository
      * @param Tag $tag
      */
     public function save(Tag $tag): void;
+
+    /**
+     * @param Tag $tag
+     */
+    public function remove(Tag $tag): void;
 }

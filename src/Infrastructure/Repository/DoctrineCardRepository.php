@@ -25,4 +25,12 @@ final class DoctrineCardRepository extends DoctrineRepository implements CardRep
     {
         $this->persist($card);
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function remove(Card $card): void
+    {
+        $this->delete($card);
+    }
 }

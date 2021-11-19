@@ -43,7 +43,7 @@ final class User implements AggregateRoot
     }
 
     /**
-     * @param UserId $id
+     * @param UserId $userId
      * @param UserName $name
      * @param UserEmail $email
      * @param UserPassword $password
@@ -51,16 +51,16 @@ final class User implements AggregateRoot
      * @return static
      */
     public static function create(
-        UserId $id,
+        UserId $userId,
         UserName $name,
         UserEmail $email,
         UserPassword $password,
         Roles $roles,
     ): self {
-        $user = new self($id, $name, $email, $password, $roles, CreatedAt::now(), null);
+        $user = new self($userId, $name, $email, $password, $roles, CreatedAt::now(), null);
         $user->recordThat(
             new UserWasCreated(
-                $id->asString(),
+                $userId->asString(),
                 $user->createdAt->asString(),
                 $name->asString(),
                 $email->asString(),

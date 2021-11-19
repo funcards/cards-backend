@@ -48,7 +48,7 @@ final class Board implements AggregateRoot
     }
 
     /**
-     * @param BoardId $id
+     * @param BoardId $boardId
      * @param UserId $ownerId
      * @param BoardName $name
      * @param BoardColor $color
@@ -56,16 +56,16 @@ final class Board implements AggregateRoot
      * @return static
      */
     public static function create(
-        BoardId $id,
+        BoardId $boardId,
         UserId $ownerId,
         BoardName $name,
         BoardColor $color,
         BoardDescription $description,
     ): self {
-        $board = new self($id, $ownerId, $name, $color, $description, CreatedAt::now(), new ArrayCollection());
+        $board = new self($boardId, $ownerId, $name, $color, $description, CreatedAt::now(), new ArrayCollection());
         $board->recordThat(
             new BoardWasCreated(
-                $id->asString(),
+                $boardId->asString(),
                 $board->createdAt->asString(),
                 $ownerId->asString(),
                 $name->asString(),

@@ -18,7 +18,6 @@ use Symfony\Component\Uid\Uuid;
  *     name="Boards",
  *     description="Boards API"
  * )
- *
  * @OA\Schema(schema="boardId", type="string", format="uuid")
  */
 #[Route('/api/v1/boards')]

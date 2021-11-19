@@ -11,6 +11,9 @@ final class RolesConstraint extends Constraint
 {
     public string $message = 'Role "{{ role }}" is not valid.';
 
+    /**
+     * @var array<string>
+     */
     public array $notValid = [
         'ROLE_USER',
         'ROLE_API_USER',
@@ -20,6 +23,13 @@ final class RolesConstraint extends Constraint
         'ROLE_BOARD_OWNER',
     ];
 
+    /**
+     * @param mixed|null $options
+     * @param string|null $message
+     * @param array<string>|null $notValid
+     * @param array<string>|null $groups
+     * @param mixed|null $payload
+     */
     public function __construct(
         mixed $options = null,
         string $message = null,

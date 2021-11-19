@@ -25,4 +25,12 @@ final class DoctrineTagRepository extends DoctrineRepository implements TagRepos
     {
         $this->persist($tag);
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function remove(Tag $tag): void
+    {
+        $this->delete($tag);
+    }
 }

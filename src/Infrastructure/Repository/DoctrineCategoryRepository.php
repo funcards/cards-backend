@@ -25,4 +25,12 @@ final class DoctrineCategoryRepository extends DoctrineRepository implements Cat
     {
         $this->persist($category);
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function remove(Category $category): void
+    {
+        $this->delete($category);
+    }
 }

@@ -34,3 +34,27 @@ services:
   FC\Application\Command\Board\RemoveMemberCommandHandler:
     tags: [ { name: messenger.message_handler, bus: command.bus } ]
     autoconfigure: false
+
+  FC\Application\Command\Category\CreateCategoryCommandHandler:
+    tags: [ { name: messenger.message_handler, bus: command.bus } ]
+    autoconfigure: false
+
+  FC\Application\Command\Category\UpdateCategoryCommandHandler:
+    tags: [ { name: messenger.message_handler, bus: command.bus } ]
+    autoconfigure: false
+
+  FC\Application\Command\Category\RemoveCategoryCommandHandler:
+    tags: [ { name: messenger.message_handler, bus: command.bus } ]
+    autoconfigure: false
+
+  FC\Application\Command\Tag\CreateTagCommandHandler:
+    tags: [ { name: messenger.message_handler, bus: command.bus } ]
+    autoconfigure: false
+
+  FC\Application\Command\Tag\UpdateTagCommandHandler:
+    tags: [ { name: messenger.message_handler, bus: command.bus } ]
+    autoconfigure: false
+
+  FC\Application\Command\Tag\RemoveTagCommandHandler:
+    tags: [ { name: messenger.message_handler, bus: command.bus } ]
+    autoconfigure: false

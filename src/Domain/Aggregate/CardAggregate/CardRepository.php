@@ -19,4 +19,9 @@ interface CardRepository
      * @param Card $card
      */
     public function save(Card $card): void;
+
+    /**
+     * @param Card $card
+     */
+    public function remove(Card $card): void;
 }

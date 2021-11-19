@@ -31,22 +31,22 @@ final class Category implements AggregateRoot
     }
 
     /**
-     * @param CategoryId $id
+     * @param CategoryId $categoryId
      * @param BoardId $boardId
      * @param CategoryName $name
      * @param CategoryPosition $position
      * @return static
      */
     public static function create(
-        CategoryId $id,
+        CategoryId $categoryId,
         BoardId $boardId,
         CategoryName $name,
         CategoryPosition $position,
     ): self {
-        $category = new self($id, $boardId, $name, $position);
+        $category = new self($categoryId, $boardId, $name, $position);
         $category->recordThat(
             new CategoryWasCreated(
-                $id->asString(),
+                $categoryId->asString(),
                 $boardId->asString(),
                 $name->asString(),
                 $position->asInt(),

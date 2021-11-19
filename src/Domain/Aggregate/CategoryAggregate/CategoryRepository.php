@@ -19,4 +19,9 @@ interface CategoryRepository
      * @param Category $category
      */
     public function save(Category $category): void;
+
+    /**
+     * @param Category $category
+     */
+    public function remove(Category $category): void;
 }
