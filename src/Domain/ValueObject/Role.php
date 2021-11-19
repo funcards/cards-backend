@@ -133,6 +133,15 @@ final class Role implements \Stringable
     }
 
     /**
+     * @param object|null $other
+     * @return bool
+     */
+    public function isEqualTo(?object $other): bool
+    {
+        return \get_class($other) === \get_class($this) && (string)$this === (string)$other;
+    }
+
+    /**
      * @return array<string, Role>
      */
     private static function cache(): array

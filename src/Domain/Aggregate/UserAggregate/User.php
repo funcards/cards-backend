@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace FC\Domain\Aggregate\UserAggregate;
 
-use Assert\Assert;
 use FC\Domain\ValueObject\CreatedAt;
 use FC\Domain\ValueObject\Role;
 use FC\Domain\ValueObject\Roles;
@@ -118,7 +117,9 @@ final class User implements AggregateRoot
      */
     public function changeEmail(UserEmail $newEmail): void
     {
-        Assert::that($newEmail->asString())->notEq($this->email->asString());
+        if ($this->email->isEqualTo($newEmail)) {
+            return;
+        }
 
         $this->email = $newEmail;
         $this->updatedAt = UpdatedAt::now();
@@ -133,7 +134,9 @@ final class User implements AggregateRoot
      */
     public function changeName(UserName $newName): void
     {
-        Assert::that($newName->asString())->notEq($this->name->asString());
+        if ($this->name->isEqualTo($newName)) {
+            return;
+        }
 
         $this->name = $newName;
         $this->updatedAt = UpdatedAt::now();
@@ -148,7 +151,9 @@ final class User implements AggregateRoot
      */
     public function changePassword(UserPassword $newPassword): void
     {
-        Assert::that($newPassword->asString())->notEq($this->password->asString());
+        if ($this->password->isEqualTo($newPassword)) {
+            return;
+        }
 
         $this->password = $newPassword;
         $this->updatedAt = UpdatedAt::now();
@@ -163,7 +168,9 @@ final class User implements AggregateRoot
      */
     public function changeRoles(Roles $newRoles): void
     {
-        Assert::that($newRoles->toArray())->notEq($this->roles->toArray());
+        if ($this->roles->isEqualTo($newRoles)) {
+            return;
+        }
 
         $this->roles = $newRoles;
         $this->updatedAt = UpdatedAt::now();

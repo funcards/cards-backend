@@ -14,4 +14,12 @@ final class TagsConstraint extends All
     {
         parent::__construct([new Uuid(versions: [Uuid::V4_RANDOM])], $groups, $payload);
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function validatedBy(): string
+    {
+        return All::class.'Validator';
+    }
 }

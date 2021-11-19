@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace FC\Domain\Aggregate\TagAggregate;
 
-use Assert\Assert;
 use FC\Domain\Aggregate\AggregateRoot;
 use FC\Domain\Aggregate\BoardAggregate\BoardId;
 use FC\Domain\Aggregate\EventRecording;
@@ -59,7 +58,9 @@ final class Tag implements AggregateRoot
      */
     public function changeName(TagName $newName): void
     {
-        Assert::that($newName->asString())->notEq($this->name->asString());
+        if ($this->name->isEqualTo($newName)) {
+            return;
+        }
 
         $this->name = $newName;
 
@@ -73,7 +74,9 @@ final class Tag implements AggregateRoot
      */
     public function changeColor(TagColor $newColor): void
     {
-        Assert::that($newColor->asString())->notEq($this->color->asString());
+        if ($this->color->isEqualTo($newColor)) {
+            return;
+        }
 
         $this->color = $newColor;
 

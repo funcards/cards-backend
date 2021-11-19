@@ -2,7 +2,6 @@
 
 namespace FC\Domain\Aggregate\BoardAggregate;
 
-use Assert\Assert;
 use FC\Domain\Aggregate\Entity;
 use FC\Domain\Aggregate\UserAggregate\UserId;
 use FC\Domain\ValueObject\CreatedAt;
@@ -55,7 +54,9 @@ final class Member implements Entity
      */
     public function changeRoles(Roles $newRoles): void
     {
-        Assert::that($this->roles->isEqualTo($newRoles))->false();
+        if ($this->roles->isEqualTo($newRoles)) {
+            return;
+        }
 
         $this->roles = $newRoles;
     }

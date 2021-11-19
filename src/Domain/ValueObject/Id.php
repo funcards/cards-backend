@@ -65,12 +65,11 @@ abstract class Id implements \Stringable
     }
 
     /**
-     * @param object|null $otherId
+     * @param object|null $other
      * @return bool
      */
-    final public function isEqualTo(?object $otherId): bool
+    final public function isEqualTo(?object $other): bool
     {
-        return \get_class($otherId) === \get_class($this)
-            && (string)$this === (string)$otherId;
+        return \get_class($other) === \get_class($this) && (string)$this === (string)$other;
     }
 }

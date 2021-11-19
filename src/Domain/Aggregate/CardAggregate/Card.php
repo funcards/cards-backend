@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace FC\Domain\Aggregate\CardAggregate;
 
-use Assert\Assert;
 use FC\Domain\Aggregate\AggregateRoot;
 use FC\Domain\Aggregate\BoardAggregate\BoardId;
 use FC\Domain\Aggregate\CategoryAggregate\CategoryId;
@@ -82,7 +81,9 @@ final class Card implements AggregateRoot
      */
     public function changeCategory(CategoryId $newCategoryId): void
     {
-        Assert::that($newCategoryId->asString())->notEq($this->categoryId->asString());
+        if ($this->categoryId->isEqualTo($newCategoryId)) {
+            return;
+        }
 
         $this->categoryId = $newCategoryId;
 
@@ -96,7 +97,9 @@ final class Card implements AggregateRoot
      */
     public function changeName(CardName $newName): void
     {
-        Assert::that($newName->asString())->notEq($this->name->asString());
+        if ($this->name->isEqualTo($newName)) {
+            return;
+        }
 
         $this->name = $newName;
 
@@ -110,7 +113,9 @@ final class Card implements AggregateRoot
      */
     public function changeContent(CardContent $newContent): void
     {
-        Assert::that($newContent->asString())->notEq($this->content->asString());
+        if ($this->content->isEqualTo($newContent)) {
+            return;
+        }
 
         $this->content = $newContent;
 
@@ -124,7 +129,9 @@ final class Card implements AggregateRoot
      */
     public function changeTags(CardTags $newTags): void
     {
-        Assert::that($this->tags->isEqualTo($newTags))->false();
+        if ($this->tags->isEqualTo($newTags)) {
+            return;
+        }
 
         $this->tags = $newTags;
 

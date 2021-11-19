@@ -60,6 +60,15 @@ abstract class IntValue implements \Stringable
     }
 
     /**
+     * @param object|null $other
+     * @return bool
+     */
+    final public function isEqualTo(?object $other): bool
+    {
+        return \get_class($other) === \get_class($this) && (string)$this === (string)$other;
+    }
+
+    /**
      * @param int $value
      */
     protected function assert(int $value): void

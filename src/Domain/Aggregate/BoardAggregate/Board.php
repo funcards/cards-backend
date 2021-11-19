@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace FC\Domain\Aggregate\BoardAggregate;
 
-use Assert\Assert;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use FC\Domain\Aggregate\AggregateRoot;
@@ -159,6 +158,11 @@ final class Board implements AggregateRoot
     {
         try {
             $member = $this->member($userId);
+
+            if ($member->roles()->isEqualTo($roles)) {
+                return;
+            }
+
             $member->changeRoles($roles);
             $this->recordThat(
                 new BoardMemberWasChanged(
@@ -189,7 +193,9 @@ final class Board implements AggregateRoot
      */
     public function changeName(BoardName $newName): void
     {
-        Assert::that($newName->asString())->notEq($this->name->asString());
+        if ($this->name->isEqualTo($newName)) {
+            return;
+        }
 
         $this->name = $newName;
 
@@ -201,7 +207,9 @@ final class Board implements AggregateRoot
      */
     public function changeColor(BoardColor $newColor): void
     {
-        Assert::that($newColor->asString())->notEq($this->color->asString());
+        if ($this->color->isEqualTo($newColor)) {
+            return;
+        }
 
         $this->color = $newColor;
 
@@ -213,7 +221,9 @@ final class Board implements AggregateRoot
      */
     public function changeDescription(BoardDescription $newDescription): void
     {
-        Assert::that($newDescription->asString())->notEq($this->description->asString());
+        if ($this->description->isEqualTo($newDescription)) {
+            return;
+        }
 
         $this->description = $newDescription;
 

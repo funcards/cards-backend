@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace FC\Domain\Aggregate\CategoryAggregate;
 
-use Assert\Assert;
 use FC\Domain\Aggregate\AggregateRoot;
 use FC\Domain\Aggregate\BoardAggregate\BoardId;
 use FC\Domain\Aggregate\EventRecording;
@@ -68,7 +67,9 @@ final class Category implements AggregateRoot
      */
     public function changeName(CategoryName $newName): void
     {
-        Assert::that($newName->asString())->notEq($this->name->asString());
+        if ($this->name->isEqualTo($newName)) {
+            return;
+        }
 
         $this->name = $newName;
 
@@ -82,7 +83,9 @@ final class Category implements AggregateRoot
      */
     public function changePosition(CategoryPosition $newPosition): void
     {
-        Assert::that($newPosition->asInt())->notEq($this->position->asInt());
+        if ($this->position->isEqualTo($newPosition)) {
+            return;
+        }
 
         $this->position = $newPosition;
 

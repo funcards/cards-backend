@@ -58,3 +58,15 @@ services:
   FC\Application\Command\Tag\RemoveTagCommandHandler:
     tags: [ { name: messenger.message_handler, bus: command.bus } ]
     autoconfigure: false
+
+  FC\Application\Command\Card\CreateCardCommandHandler:
+    tags: [ { name: messenger.message_handler, bus: command.bus } ]
+    autoconfigure: false
+
+  FC\Application\Command\Card\UpdateCardCommandHandler:
+    tags: [ { name: messenger.message_handler, bus: command.bus } ]
+    autoconfigure: false
+
+  FC\Application\Command\Card\RemoveCardCommandHandler:
+    tags: [ { name: messenger.message_handler, bus: command.bus } ]
+    autoconfigure: false
