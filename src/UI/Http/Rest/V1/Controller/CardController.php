@@ -17,7 +17,6 @@ use OpenApi\Annotations as OA;
  *     name="Cards",
  *     description="Cards API"
  * )
- * @OA\Schema(schema="cardId", type="string", format="uuid")
  */
 #[Route('/api/v1/boards/{boardId}/cards', requirements: ['boardId' => self::UUID_REGEX])]
 final class CardController extends ApiController

@@ -6,9 +6,10 @@ namespace FC\Application\Query\Board;
 
 use FC\Application\Bus\Query\Response;
 use OpenApi\Annotations as OA;
+use Symfony\Component\Serializer\Annotation\SerializedName;
 
 /**
- * @OA\Schema(schema="BoardResponse", required={"id", "name", "description"})
+ * @OA\Schema(schema="BoardResponse", required={"board_id", "name", "description"})
  */
 final class BoardResponse implements Response
 {
@@ -21,11 +22,11 @@ final class BoardResponse implements Response
      * @param array<MemberResponse> $members
      */
     public function __construct(
-        /** @OA\Property(property="board_id", format="uuid") */ private string $boardId,
+        /** @OA\Property(property="board_id", format="uuid") */ #[SerializedName('board_id')] private string $boardId,
         /** @OA\Property() */ private string $name,
         /** @OA\Property() */ private string $color,
         /** @OA\Property() */ private string $description,
-        /** @OA\Property(property="created_at") */ private string $createdAt,
+        /** @OA\Property(property="created_at") */ #[SerializedName('created_at')] private string $createdAt,
         /** @OA\Property(@OA\Items(ref="#/components/schemas/MemberResponse")) */ private array $members,
     ) {
     }

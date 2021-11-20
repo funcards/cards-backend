@@ -17,7 +17,6 @@ use OpenApi\Annotations as OA;
  *     name="Categories",
  *     description="Categories API"
  * )
- * @OA\Schema(schema="categoryId", type="string", format="uuid")
  */
 #[Route('/api/v1/boards/{boardId}/categories', requirements: ['boardId' => self::UUID_REGEX])]
 final class CategoryController extends ApiController

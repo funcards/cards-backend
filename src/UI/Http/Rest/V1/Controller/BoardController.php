@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace FC\UI\Http\Rest\V1\Controller;
 
+use FC\Application\Bus\Query\PaginatedResponse;
 use FC\Application\Command\Board\CreateBoardCommand;
 use FC\Application\Command\Board\RemoveBoardCommand;
 use FC\Application\Command\Board\UpdateBoardCommand;
+use FC\Application\Query\Board\BoardListQuery;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -17,7 +19,6 @@ use OpenApi\Annotations as OA;
  *     name="Boards",
  *     description="Boards API"
  * )
- * @OA\Schema(schema="boardId", type="string", format="uuid")
  */
 #[Route('/api/v1/boards')]
 final class BoardController extends ApiController
@@ -46,7 +47,14 @@ final class BoardController extends ApiController
     {
         $this->debugMethod(__METHOD__);
 
-        return new Response();
+        /** @var PaginatedResponse $response */
+        $response = $this->ask(new BoardListQuery($this->getUserId(), 0, 1, $boardId));
+
+        if (0 === \count($response->getData())) {
+            throw $this->createNotFoundException();
+        }
+
+        return $this->json($response->getData()[0]);
     }
 
     /**
@@ -54,6 +62,8 @@ final class BoardController extends ApiController
      *     path="/api/v1/boards",
      *     tags={"Boards"},
      *     operationId="listBoard",
+     *     @OA\Parameter(name="page-index", in="query", @OA\Schema(ref="#/components/schemas/pageIndex")),
+     *     @OA\Parameter(name="page-size", in="query", @OA\Schema(ref="#/components/schemas/pageSize")),
      *     @OA\Response(
      *          response=200,
      *          description="Boards",
@@ -77,7 +87,15 @@ final class BoardController extends ApiController
     {
         $this->debugMethod(__METHOD__);
 
-        return new Response();
+        $response = $this->ask(
+            new BoardListQuery(
+                $this->getUserId(),
+                (int)$request->query->get('page-index'),
+                (int)$request->query->get('page-size'),
+            )
+        );
+
+        return $this->json($response);
     }
 
     /**

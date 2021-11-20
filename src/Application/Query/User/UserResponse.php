@@ -6,9 +6,10 @@ namespace FC\Application\Query\User;
 
 use FC\Application\Bus\Query\Response;
 use OpenApi\Annotations as OA;
+use Symfony\Component\Serializer\Annotation\SerializedName;
 
 /**
- * @OA\Schema(schema="UserResponse", required={"id", "name", "email"})
+ * @OA\Schema(schema="UserResponse", required={"user_id", "name", "email"})
  */
 final class UserResponse implements Response
 {
@@ -18,7 +19,7 @@ final class UserResponse implements Response
      * @param string $email
      */
     public function __construct(
-        /** @OA\Property(property="user_id", format="uuid") */ private string $userId,
+        /** @OA\Property(property="user_id", format="uuid") */ #[SerializedName('user_id')] private string $userId,
         /** @OA\Property() */ private string $name,
         /** @OA\Property() */ private string $email,
     ) {

@@ -86,12 +86,23 @@ final class Roles implements \Countable, \Stringable
 
     /**
      * @param Role $role
+     * @param Role ...$roles
      * @return bool
      */
     #[Pure]
-    public function contains(Role $role): bool
+    public function contains(Role $role, Role ...$roles): bool
     {
-        return \in_array($role->asString(), $this->toArray(), true);
+        if (!\in_array($role->asString(), $this->toArray(), true)) {
+            return false;
+        }
+
+        foreach ($roles as $r) {
+            if (!\in_array($r->asString(), $this->toArray(), true)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**

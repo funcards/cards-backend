@@ -12,7 +12,6 @@ use OpenApi\Annotations as OA;
  *     name="Users",
  *     description="Users API"
  * )
- * @OA\Schema(schema="userId", type="string", format="uuid")
  */
 #[Route('/api/v1/users')]
 final class UserController extends ApiController

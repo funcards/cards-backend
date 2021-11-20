@@ -15,6 +15,7 @@ use JetBrains\PhpStorm\Pure;
  * @method static Role allowedToSwitch()
  *
  * @method static Role boardOwner()
+ * @method static Role boardView()
  * @method static Role boardEdit()
  * @method static Role boardAddMember()
  * @method static Role boardRemoveMember()
@@ -37,6 +38,7 @@ final class Role implements \Stringable
     public const ALLOWED_TO_SWITCH = 'ROLE_ALLOWED_TO_SWITCH';
 
     public const BOARD_OWNER = 'ROLE_BOARD_OWNER';
+    public const BOARD_VIEW = 'ROLE_BOARD_VIEW';
     public const BOARD_EDIT = 'ROLE_BOARD_EDIT';
     public const BOARD_ADD_MEMBER = 'ROLE_BOARD_ADD_MEMBER';
     public const BOARD_REMOVE_MEMBER = 'ROLE_BOARD_REMOVE_MEMBER';

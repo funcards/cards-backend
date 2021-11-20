@@ -13,6 +13,7 @@ use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
@@ -63,7 +64,7 @@ abstract class ApiController implements ServiceSubscriberInterface
      * @param Query $query
      * @return QueryResponse
      */
-    protected function askQuery(Query $query): QueryResponse
+    protected function ask(Query $query): QueryResponse
     {
         return $this->container->get('query_bus')->ask($query);
     }
@@ -104,9 +105,7 @@ abstract class ApiController implements ServiceSubscriberInterface
         $context = [];
 
         if (\defined($c = $className . '::DEFAULT')) {
-            $context[AbstractNormalizer::DEFAULT_CONSTRUCTOR_ARGUMENTS] = [
-                $className => \constant($c),
-            ];
+            $context[AbstractNormalizer::DEFAULT_CONSTRUCTOR_ARGUMENTS] = [$className => \constant($c)];
         }
 
         return $this->container->get('denormalizer')->denormalize($data, $className, null, $context);
@@ -162,9 +161,7 @@ abstract class ApiController implements ServiceSubscriberInterface
         $json = $this->container->get('serializer')->serialize(
             $data,
             'json',
-            \array_merge([
-                'json_encode_options' => JsonResponse::DEFAULT_ENCODING_OPTIONS,
-            ], $context)
+            \array_merge(['json_encode_options' => JsonResponse::DEFAULT_ENCODING_OPTIONS], $context)
         );
 
         return new JsonResponse($json, $status, $headers, true);
@@ -194,5 +191,15 @@ abstract class ApiController implements ServiceSubscriberInterface
     protected function debugMethod(string $method): void
     {
         $this->logger()->debug('ACTION -- {method}', ['method' => $method]);
+    }
+
+    /**
+     * @param string $message
+     * @param \Throwable|null $previous
+     * @return NotFoundHttpException
+     */
+    protected function createNotFoundException(string $message = 'Not Found', \Throwable $previous = null): NotFoundHttpException
+    {
+        return new NotFoundHttpException($message, $previous);
     }
 }

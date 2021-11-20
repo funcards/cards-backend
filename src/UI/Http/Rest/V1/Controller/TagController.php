@@ -17,7 +17,6 @@ use OpenApi\Annotations as OA;
  *     name="Tags",
  *     description="Tags API"
  * )
- * @OA\Schema(schema="tagId", type="string", format="uuid")
  */
 #[Route('/api/v1/boards/{boardId}/tags', requirements: ['boardId' => self::UUID_REGEX])]
 final class TagController extends ApiController

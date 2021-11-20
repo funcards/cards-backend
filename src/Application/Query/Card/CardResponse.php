@@ -6,9 +6,10 @@ namespace FC\Application\Query\Card;
 
 use FC\Application\Bus\Query\Response;
 use OpenApi\Annotations as OA;
+use Symfony\Component\Serializer\Annotation\SerializedName;
 
 /**
- * @OA\Schema(schema="CardResponse", required={"id", "board_id", "category_id", "name", "content", "tags"})
+ * @OA\Schema(schema="CardResponse", required={"card_id", "board_id", "category_id", "name", "content", "tags"})
  */
 final class CardResponse implements Response
 {
@@ -21,9 +22,10 @@ final class CardResponse implements Response
      * @param array<string> $tags
      */
     public function __construct(
-        /** @OA\Property(property="card_id", format="uuid") */ private string $cardId,
-        /** @OA\Property(property="board_id", format="uuid") */ private string $boardId,
-        /** @OA\Property(property="category_id", format="uuid") */ private string $categoryId,
+        /** @OA\Property(property="card_id", format="uuid") */ #[SerializedName('card_id')] private string $cardId,
+        /** @OA\Property(property="board_id", format="uuid") */ #[SerializedName('board_id')] private string $boardId,
+        /** @OA\Property(property="category_id", format="uuid") */
+        #[SerializedName('category_id')] private string $categoryId,
         /** @OA\Property() */ private string $name,
         /** @OA\Property() */ private string $content,
         /** @OA\Property(@OA\Items(type="string", format="uuid")) */ private array $tags,

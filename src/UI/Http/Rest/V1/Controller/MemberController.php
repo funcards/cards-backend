@@ -16,7 +16,6 @@ use OpenApi\Annotations as OA;
  *     name="Members",
  *     description="Members API"
  * )
- * @OA\Schema(schema="memberId", type="string", format="uuid")
  */
 #[Route('/api/v1/boards/{boardId}/members', requirements: ['boardId' => self::UUID_REGEX])]
 final class MemberController extends ApiController
@@ -60,7 +59,7 @@ final class MemberController extends ApiController
      *     tags={"Members"},
      *     operationId="removeMember",
      *     @OA\Parameter(name="boardId", in="path", required=true, @OA\Schema(ref="#/components/schemas/boardId")),
-     *     @OA\Parameter(name="memberId", in="path", required=true, @OA\Schema(ref="#/components/schemas/memberId")),
+     *     @OA\Parameter(name="memberId", in="path", required=true, @OA\Schema(ref="#/components/schemas/userId")),
      *     @OA\Response(response=204, description="Board member removed successfully"),
      *     security={
      *         {"bearerAuth": {}}

@@ -156,6 +156,10 @@ final class Board implements AggregateRoot
      */
     public function addMember(UserId $userId, Roles $roles): void
     {
+        if (!$roles->contains(Role::boardOwner(), Role::boardView())) {
+            $roles = $roles->add(Role::boardView());
+        }
+
         try {
             $member = $this->member($userId);
 
