@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace FC\UI\Http\Rest\V1\Controller;
 
+use FC\Application\Bus\Query\PaginatedResponse;
 use FC\Application\Command\Category\CreateCategoryCommand;
 use FC\Application\Command\Category\RemoveCategoryCommand;
 use FC\Application\Command\Category\UpdateCategoryCommand;
+use FC\Application\Query\Category\CategoryListQuery;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -23,11 +25,11 @@ final class CategoryController extends ApiController
 {
     /**
      * @OA\Get(
-     *     path="/api/v1/boards/{boardId}/categories/{categoryId}",
+     *     path="/api/v1/boards/{board-id}/categories/{category-id}",
      *     tags={"Categories"},
      *     operationId="getCategory",
-     *     @OA\Parameter(name="boardId", in="path", required=true, @OA\Schema(ref="#/components/schemas/boardId")),
-     *     @OA\Parameter(name="categoryId", in="path", required=true, @OA\Schema(ref="#/components/schemas/categoryId")),
+     *     @OA\Parameter(name="board-id", in="path", required=true, @OA\Schema(ref="#/components/schemas/boardId")),
+     *     @OA\Parameter(name="category-id", in="path", required=true, @OA\Schema(ref="#/components/schemas/categoryId")),
      *     @OA\Response(
      *          response=200,
      *          description="Category",
@@ -47,14 +49,24 @@ final class CategoryController extends ApiController
     {
         $this->debugMethod(__METHOD__);
 
-        return new Response();
+        /** @var PaginatedResponse $response */
+        $response = $this->ask(new CategoryListQuery($boardId, $this->getUserId(), 0, 1, $categoryId));
+
+        if (0 === \count($response->getData())) {
+            throw $this->createNotFoundException();
+        }
+
+        return $this->json($response->getData()[0]);
     }
 
     /**
      * @OA\Get(
-     *     path="/api/v1/boards/{boardId}/categories",
+     *     path="/api/v1/boards/{board-id}/categories",
      *     tags={"Categories"},
      *     operationId="listCategory",
+     *     @OA\Parameter(name="board-id", in="path", required=true, @OA\Schema(ref="#/components/schemas/boardId")),
+     *     @OA\Parameter(name="page-index", in="query", @OA\Schema(ref="#/components/schemas/pageIndex")),
+     *     @OA\Parameter(name="page-size", in="query", @OA\Schema(ref="#/components/schemas/pageSize")),
      *     @OA\Response(
      *          response=200,
      *          description="Categories",
@@ -79,15 +91,24 @@ final class CategoryController extends ApiController
     {
         $this->debugMethod(__METHOD__);
 
-        return new Response();
+        $response = $this->ask(
+            new CategoryListQuery(
+                $boardId,
+                $this->getUserId(),
+                (int)$request->query->get('page-index'),
+                (int)$request->query->get('page-size'),
+            )
+        );
+
+        return $this->json($response);
     }
 
     /**
      * @OA\Post(
-     *     path="/api/v1/boards/{boardId}/categories",
+     *     path="/api/v1/boards/{board-id}/categories",
      *     tags={"Categories"},
      *     operationId="createCategory",
-     *     @OA\Parameter(name="boardId", in="path", required=true, @OA\Schema(ref="#/components/schemas/boardId")),
+     *     @OA\Parameter(name="board-id", in="path", required=true, @OA\Schema(ref="#/components/schemas/boardId")),
      *     @OA\RequestBody(
      *          request="CreateCategory",
      *          required=true,
@@ -122,11 +143,11 @@ final class CategoryController extends ApiController
 
     /**
      * @OA\Patch(
-     *     path="/api/v1/boards/{boardId}/categories/{categoryId}",
+     *     path="/api/v1/boards/{board-id}/categories/{category-id}",
      *     tags={"Categories"},
      *     operationId="updateCategory",
-     *     @OA\Parameter(name="boardId", in="path", required=true, @OA\Schema(ref="#/components/schemas/boardId")),
-     *     @OA\Parameter(name="categoryId", in="path", required=true, @OA\Schema(ref="#/components/schemas/categoryId")),
+     *     @OA\Parameter(name="board-id", in="path", required=true, @OA\Schema(ref="#/components/schemas/boardId")),
+     *     @OA\Parameter(name="category-id", in="path", required=true, @OA\Schema(ref="#/components/schemas/categoryId")),
      *     @OA\RequestBody(
      *          request="UpdateCategory",
      *          required=true,
@@ -158,11 +179,11 @@ final class CategoryController extends ApiController
 
     /**
      * @OA\Delete(
-     *     path="/api/v1/boards/{boardId}/categories/{categoryId}",
+     *     path="/api/v1/boards/{board-id}/categories/{category-id}",
      *     tags={"Categories"},
      *     operationId="removeCategory",
-     *     @OA\Parameter(name="boardId", in="path", required=true, @OA\Schema(ref="#/components/schemas/boardId")),
-     *     @OA\Parameter(name="categoryId", in="path", required=true, @OA\Schema(ref="#/components/schemas/categoryId")),
+     *     @OA\Parameter(name="board-id", in="path", required=true, @OA\Schema(ref="#/components/schemas/boardId")),
+     *     @OA\Parameter(name="category-id", in="path", required=true, @OA\Schema(ref="#/components/schemas/categoryId")),
      *     @OA\Response(response=204, description="Board category removed successfully"),
      *     security={
      *         {"bearerAuth": {}}

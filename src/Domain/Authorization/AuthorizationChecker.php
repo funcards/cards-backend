@@ -24,8 +24,16 @@ final class AuthorizationChecker implements AuthorizationCheckerInterface
     /**
      * {@inheritDoc}
      */
-    public function isGranted(BoardId $boardId, UserId $userId, Role $role): bool
+    public function isGranted(BoardId|string $boardId, UserId|string $userId, Role $role): bool
     {
+        if (\is_string($boardId)) {
+            $boardId = BoardId::fromString($boardId);
+        }
+
+        if (\is_string($userId)) {
+            $userId = UserId::fromString($userId);
+        }
+
         try {
             if ($this->userRepository->get($userId)->isGranted(Role::superAdmin())) {
                 return true;

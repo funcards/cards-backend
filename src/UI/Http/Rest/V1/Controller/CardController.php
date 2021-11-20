@@ -23,11 +23,11 @@ final class CardController extends ApiController
 {
     /**
      * @OA\Get(
-     *     path="/api/v1/boards/{boardId}/cards/{cardId}",
+     *     path="/api/v1/boards/{board-id}/cards/{card-id}",
      *     tags={"Cards"},
      *     operationId="getCard",
-     *     @OA\Parameter(name="boardId", in="path", required=true, @OA\Schema(ref="#/components/schemas/boardId")),
-     *     @OA\Parameter(name="cardId", in="path", required=true, @OA\Schema(ref="#/components/schemas/cardId")),
+     *     @OA\Parameter(name="board-id", in="path", required=true, @OA\Schema(ref="#/components/schemas/boardId")),
+     *     @OA\Parameter(name="card-id", in="path", required=true, @OA\Schema(ref="#/components/schemas/cardId")),
      *     @OA\Response(
      *          response=200,
      *          description="Card",
@@ -52,9 +52,10 @@ final class CardController extends ApiController
 
     /**
      * @OA\Get(
-     *     path="/api/v1/boards/{boardId}/cards",
+     *     path="/api/v1/boards/{board-id}/cards",
      *     tags={"Cards"},
      *     operationId="listCard",
+     *     @OA\Parameter(name="board-id", in="path", required=true, @OA\Schema(ref="#/components/schemas/boardId")),
      *     @OA\Response(
      *          response=200,
      *          description="Cards",
@@ -84,10 +85,10 @@ final class CardController extends ApiController
 
     /**
      * @OA\Post(
-     *     path="/api/v1/boards/{boardId}/cards",
+     *     path="/api/v1/boards/{board-id}/cards",
      *     tags={"Cards"},
      *     operationId="createCard",
-     *     @OA\Parameter(name="boardId", in="path", required=true, @OA\Schema(ref="#/components/schemas/boardId")),
+     *     @OA\Parameter(name="board-id", in="path", required=true, @OA\Schema(ref="#/components/schemas/boardId")),
      *     @OA\RequestBody(
      *          request="CreateCard",
      *          required=true,
@@ -122,11 +123,11 @@ final class CardController extends ApiController
 
     /**
      * @OA\Patch(
-     *     path="/api/v1/boards/{boardId}/cards/{cardId}",
+     *     path="/api/v1/boards/{board-id}/cards/{card-id}",
      *     tags={"Cards"},
      *     operationId="updateCard",
-     *     @OA\Parameter(name="boardId", in="path", required=true, @OA\Schema(ref="#/components/schemas/boardId")),
-     *     @OA\Parameter(name="cardId", in="path", required=true, @OA\Schema(ref="#/components/schemas/cardId")),
+     *     @OA\Parameter(name="board-id", in="path", required=true, @OA\Schema(ref="#/components/schemas/boardId")),
+     *     @OA\Parameter(name="card-id", in="path", required=true, @OA\Schema(ref="#/components/schemas/cardId")),
      *     @OA\RequestBody(
      *          request="UpdateCard",
      *          required=true,
@@ -158,11 +159,11 @@ final class CardController extends ApiController
 
     /**
      * @OA\Delete(
-     *     path="/api/v1/boards/{boardId}/cards/{cardId}",
+     *     path="/api/v1/boards/{board-id}/cards/{card-id}",
      *     tags={"Cards"},
      *     operationId="removeCard",
-     *     @OA\Parameter(name="boardId", in="path", required=true, @OA\Schema(ref="#/components/schemas/boardId")),
-     *     @OA\Parameter(name="cardId", in="path", required=true, @OA\Schema(ref="#/components/schemas/cardId")),
+     *     @OA\Parameter(name="board-id", in="path", required=true, @OA\Schema(ref="#/components/schemas/boardId")),
+     *     @OA\Parameter(name="card-id", in="path", required=true, @OA\Schema(ref="#/components/schemas/cardId")),
      *     @OA\Response(response=204, description="Board card removed successfully"),
      *     security={
      *         {"bearerAuth": {}}

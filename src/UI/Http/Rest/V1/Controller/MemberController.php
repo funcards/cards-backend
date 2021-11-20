@@ -22,10 +22,10 @@ final class MemberController extends ApiController
 {
     /**
      * @OA\Put(
-     *     path="/api/v1/boards/{boardId}/members",
+     *     path="/api/v1/boards/{board-id}/members",
      *     tags={"Members"},
      *     operationId="addMember",
-     *     @OA\Parameter(name="boardId", in="path", required=true, @OA\Schema(ref="#/components/schemas/boardId")),
+     *     @OA\Parameter(name="board-id", in="path", required=true, @OA\Schema(ref="#/components/schemas/boardId")),
      *     @OA\RequestBody(
      *          request="AddMember",
      *          required=true,
@@ -55,11 +55,11 @@ final class MemberController extends ApiController
 
     /**
      * @OA\Delete(
-     *     path="/api/v1/boards/{boardId}/members/{memberId}",
+     *     path="/api/v1/boards/{board-id}/members/{member-id}",
      *     tags={"Members"},
      *     operationId="removeMember",
-     *     @OA\Parameter(name="boardId", in="path", required=true, @OA\Schema(ref="#/components/schemas/boardId")),
-     *     @OA\Parameter(name="memberId", in="path", required=true, @OA\Schema(ref="#/components/schemas/userId")),
+     *     @OA\Parameter(name="board-id", in="path", required=true, @OA\Schema(ref="#/components/schemas/boardId")),
+     *     @OA\Parameter(name="member-id", in="path", required=true, @OA\Schema(ref="#/components/schemas/userId")),
      *     @OA\Response(response=204, description="Board member removed successfully"),
      *     security={
      *         {"bearerAuth": {}}

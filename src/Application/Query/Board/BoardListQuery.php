@@ -11,30 +11,26 @@ final class BoardListQuery extends PaginatedQuery
     /**
      * @var array<string>
      */
-    private array $boardIds;
+    private array $boards;
 
     /**
      * @param string $userId
      * @param int $pageIndex
      * @param int $pageSize
-     * @param string ...$boardIds
+     * @param string ...$boards
      */
-    public function __construct(
-        string $userId,
-        int $pageIndex = 0,
-        int $pageSize = self::MAX_PAGE_SIZE,
-        string ...$boardIds,
-    ) {
+    public function __construct(string $userId, int $pageIndex = 0, int $pageSize = 0, string ...$boards)
+    {
         parent::__construct($userId, $pageIndex, $pageSize);
 
-        $this->boardIds = $boardIds;
+        $this->boards = $boards;
     }
 
     /**
      * @return array<string>
      */
-    public function getBoardIds(): array
+    public function getBoards(): array
     {
-        return $this->boardIds;
+        return $this->boards;
     }
 }

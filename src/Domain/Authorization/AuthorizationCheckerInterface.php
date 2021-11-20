@@ -11,10 +11,10 @@ use FC\Domain\ValueObject\Role;
 interface AuthorizationCheckerInterface
 {
     /**
-     * @param BoardId $boardId
-     * @param UserId $userId
+     * @param BoardId|string $boardId
+     * @param UserId|string $userId
      * @param Role $role
      * @return bool
      */
-    public function isGranted(BoardId $boardId, UserId $userId, Role $role): bool;
+    public function isGranted(BoardId|string $boardId, UserId|string $userId, Role $role): bool;
 }

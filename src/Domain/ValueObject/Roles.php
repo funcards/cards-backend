@@ -40,14 +40,12 @@ final class Roles implements \Countable, \Stringable
     }
 
     /**
-     * @param Role|string $role
+     * @param Role|string ...$roles
      * @return static
      */
-    public function add(Role|string $role): self
+    public function add(Role|string ...$roles): self
     {
-        $role = Role::fromString((string)$role);
-
-        return new self(\array_merge($this->roles, [$role]));
+        return new self(\array_merge($this->roles, \array_map(static fn($role) => (string)$role, $roles)));
     }
 
     /**

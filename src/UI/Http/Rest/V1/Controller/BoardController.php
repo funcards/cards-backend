@@ -25,10 +25,10 @@ final class BoardController extends ApiController
 {
     /**
      * @OA\Get(
-     *     path="/api/v1/boards/{boardId}",
+     *     path="/api/v1/boards/{board-id}",
      *     tags={"Boards"},
      *     operationId="getBoard",
-     *     @OA\Parameter(name="boardId", in="path", required=true, @OA\Schema(ref="#/components/schemas/boardId")),
+     *     @OA\Parameter(name="board-id", in="path", required=true, @OA\Schema(ref="#/components/schemas/boardId")),
      *     @OA\Response(
      *          response=200,
      *          description="Board",
@@ -135,10 +135,10 @@ final class BoardController extends ApiController
 
     /**
      * @OA\Patch(
-     *     path="/api/v1/boards/{boardId}",
+     *     path="/api/v1/boards/{board-id}",
      *     tags={"Boards"},
      *     operationId="updateBoard",
-     *     @OA\Parameter(name="boardId", in="path", required=true, @OA\Schema(ref="#/components/schemas/boardId")),
+     *     @OA\Parameter(name="board-id", in="path", required=true, @OA\Schema(ref="#/components/schemas/boardId")),
      *     @OA\RequestBody(
      *          request="UpdateBoard",
      *          required=true,
@@ -168,10 +168,10 @@ final class BoardController extends ApiController
 
     /**
      * @OA\Delete(
-     *     path="/api/v1/boards/{boardId}",
+     *     path="/api/v1/boards/{board-id}",
      *     tags={"Boards"},
      *     operationId="removeBoard",
-     *     @OA\Parameter(name="boardId", in="path", required=true, @OA\Schema(ref="#/components/schemas/boardId")),
+     *     @OA\Parameter(name="board-id", in="path", required=true, @OA\Schema(ref="#/components/schemas/boardId")),
      *     @OA\Response(response=204, description="Board removed successfully"),
      *     security={
      *         {"bearerAuth": {}}

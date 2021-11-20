@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace FC\UI\Http\Rest\V1\Controller;
 
+use FC\Application\Bus\Query\PaginatedResponse;
 use FC\Application\Command\Tag\CreateTagCommand;
 use FC\Application\Command\Tag\RemoveTagCommand;
 use FC\Application\Command\Tag\UpdateTagCommand;
+use FC\Application\Query\Tag\TagListQuery;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -23,11 +25,11 @@ final class TagController extends ApiController
 {
     /**
      * @OA\Get(
-     *     path="/api/v1/boards/{boardId}/tags/{tagId}",
+     *     path="/api/v1/boards/{board-id}/tags/{tag-id}",
      *     tags={"Tags"},
      *     operationId="getTag",
-     *     @OA\Parameter(name="boardId", in="path", required=true, @OA\Schema(ref="#/components/schemas/boardId")),
-     *     @OA\Parameter(name="tagId", in="path", required=true, @OA\Schema(ref="#/components/schemas/tagId")),
+     *     @OA\Parameter(name="board-id", in="path", required=true, @OA\Schema(ref="#/components/schemas/boardId")),
+     *     @OA\Parameter(name="tag-id", in="path", required=true, @OA\Schema(ref="#/components/schemas/tagId")),
      *     @OA\Response(
      *          response=200,
      *          description="Tag",
@@ -47,14 +49,24 @@ final class TagController extends ApiController
     {
         $this->debugMethod(__METHOD__);
 
-        return new Response();
+        /** @var PaginatedResponse $response */
+        $response = $this->ask(new TagListQuery($boardId, $this->getUserId(), 0, 1, $tagId));
+
+        if (0 === \count($response->getData())) {
+            throw $this->createNotFoundException();
+        }
+
+        return $this->json($response->getData()[0]);
     }
 
     /**
      * @OA\Get(
-     *     path="/api/v1/boards/{boardId}/tags",
+     *     path="/api/v1/boards/{board-id}/tags",
      *     tags={"Tags"},
      *     operationId="listTag",
+     *     @OA\Parameter(name="board-id", in="path", required=true, @OA\Schema(ref="#/components/schemas/boardId")),
+     *     @OA\Parameter(name="page-index", in="query", @OA\Schema(ref="#/components/schemas/pageIndex")),
+     *     @OA\Parameter(name="page-size", in="query", @OA\Schema(ref="#/components/schemas/pageSize")),
      *     @OA\Response(
      *          response=200,
      *          description="Tags",
@@ -79,15 +91,24 @@ final class TagController extends ApiController
     {
         $this->debugMethod(__METHOD__);
 
-        return new Response();
+        $response = $this->ask(
+            new TagListQuery(
+                $boardId,
+                $this->getUserId(),
+                (int)$request->query->get('page-index'),
+                (int)$request->query->get('page-size'),
+            )
+        );
+
+        return $this->json($response);
     }
 
     /**
      * @OA\Post(
-     *     path="/api/v1/boards/{boardId}/tags",
+     *     path="/api/v1/boards/{board-id}/tags",
      *     tags={"Tags"},
      *     operationId="createTag",
-     *     @OA\Parameter(name="boardId", in="path", required=true, @OA\Schema(ref="#/components/schemas/boardId")),
+     *     @OA\Parameter(name="board-id", in="path", required=true, @OA\Schema(ref="#/components/schemas/boardId")),
      *     @OA\RequestBody(
      *          request="CreateTag",
      *          required=true,
@@ -122,11 +143,11 @@ final class TagController extends ApiController
 
     /**
      * @OA\Patch(
-     *     path="/api/v1/boards/{boardId}/tags/{tagId}",
+     *     path="/api/v1/boards/{board-id}/tags/{tag-id}",
      *     tags={"Tags"},
      *     operationId="updateTag",
-     *     @OA\Parameter(name="boardId", in="path", required=true, @OA\Schema(ref="#/components/schemas/boardId")),
-     *     @OA\Parameter(name="tagId", in="path", required=true, @OA\Schema(ref="#/components/schemas/tagId")),
+     *     @OA\Parameter(name="board-id", in="path", required=true, @OA\Schema(ref="#/components/schemas/boardId")),
+     *     @OA\Parameter(name="tag-id", in="path", required=true, @OA\Schema(ref="#/components/schemas/tagId")),
      *     @OA\RequestBody(
      *          request="UpdateTag",
      *          required=true,
@@ -158,11 +179,11 @@ final class TagController extends ApiController
 
     /**
      * @OA\Delete(
-     *     path="/api/v1/boards/{boardId}/tags/{tagId}",
+     *     path="/api/v1/boards/{board-id}/tags/{tag-id}",
      *     tags={"Tags"},
      *     operationId="removeTag",
-     *     @OA\Parameter(name="boardId", in="path", required=true, @OA\Schema(ref="#/components/schemas/boardId")),
-     *     @OA\Parameter(name="tagId", in="path", required=true, @OA\Schema(ref="#/components/schemas/tagId")),
+     *     @OA\Parameter(name="board-id", in="path", required=true, @OA\Schema(ref="#/components/schemas/boardId")),
+     *     @OA\Parameter(name="tag-id", in="path", required=true, @OA\Schema(ref="#/components/schemas/tagId")),
      *     @OA\Response(response=204, description="Board tag removed successfully"),
      *     security={
      *         {"bearerAuth": {}}

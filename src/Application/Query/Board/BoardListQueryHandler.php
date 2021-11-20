@@ -32,15 +32,13 @@ final class BoardListQueryHandler implements QueryHandler
             ->where('m.user_id = :userId')
             ->groupBy('b.id')
             ->setFirstResult($query->getPageIndex())
+            ->setMaxResults($query->getPageSize())
             ->setParameter('userId', $query->getUserId());
 
-        if (\PHP_INT_MAX !== $query->getPageSize()) {
-            $qb->setMaxResults($query->getPageSize());
-        }
-
-        if (0 < \count($query->getBoardIds())) {
-            $qb->andWhere('b.id IN(:boardIds)')
-                ->setParameter('boardIds', $query->getBoardIds(), Connection::PARAM_STR_ARRAY);
+        if (0 < \count($query->getBoards())) {
+            $qb
+                ->andWhere('b.id IN(:boards)')
+                ->setParameter('boards', $query->getBoards(), Connection::PARAM_STR_ARRAY);
         }
 
         $data = [];
@@ -67,8 +65,8 @@ final class BoardListQueryHandler implements QueryHandler
 
         $count = \count($data);
 
-        if ($query->getPageSize() > 1 && $query->getPageSize() === $count) {
-            $count = (int)$qb->select('count(b.id)')->fetchOne();
+        if ($query->getPageSize() > 1) {
+            $count = (int)$qb->select('COUNT(b.id)')->fetchOne();
         }
 
         return new PaginatedResponse($query->getPageIndex(), $query->getPageSize(), $count, $data);

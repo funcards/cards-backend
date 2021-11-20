@@ -117,7 +117,7 @@
     "post-update-cmd": [
       "@auto-scripts"
     ],
-    "test:stan": "phpstan --debug"
+    "test:stan": "phpstan --memory-limit=-1"
   },
   "conflict": {
     "symfony/symfony": "*"

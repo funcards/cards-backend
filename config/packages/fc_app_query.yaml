@@ -6,3 +6,11 @@ services:
   FC\Application\Query\Board\BoardListQueryHandler:
     tags: [ { name: messenger.message_handler, bus: query.bus } ]
     autoconfigure: false
+
+  FC\Application\Query\Category\CategoryListQueryHandler:
+    tags: [ { name: messenger.message_handler, bus: query.bus } ]
+    autoconfigure: false
+
+  FC\Application\Query\Tag\TagListQueryHandler:
+    tags: [ { name: messenger.message_handler, bus: query.bus } ]
+    autoconfigure: false
