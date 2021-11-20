@@ -188,6 +188,10 @@ final class Board implements AggregateRoot
      */
     public function removeMember(UserId $userId): void
     {
+        if ($this->isOwner($userId)) {
+            return;
+        }
+
         $this->members->removeElement($this->member($userId));
         $this->recordThat(new BoardMemberWasRemoved($this->id->asString(), $userId->asString()));
     }

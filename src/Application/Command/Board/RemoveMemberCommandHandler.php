@@ -35,7 +35,8 @@ final class RemoveMemberCommandHandler implements CommandHandler
         $boardId = BoardId::fromString($command->getBoardId());
         $userId = UserId::fromString($command->getUserId());
 
-        if (false === $this->authorizationChecker->isGranted($boardId, $userId, Role::boardRemoveMember())) {
+        if (false === $this->authorizationChecker->isGranted($boardId, $userId, Role::boardRemoveMember())
+            || 0 === \strcasecmp($command->getUserId(), $command->getMemberId())) {
             throw AccessDeniedException::new();
         }
 
