@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace FC\UI\Http\Rest\V1\Controller;
 
+use FC\Application\Bus\Query\PaginatedResponse;
 use FC\Application\Command\Card\CreateCardCommand;
 use FC\Application\Command\Card\RemoveCardCommand;
 use FC\Application\Command\Card\UpdateCardCommand;
+use FC\Application\Query\Card\CardListQuery;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -47,7 +49,14 @@ final class CardController extends ApiController
     {
         $this->debugMethod(__METHOD__);
 
-        return new Response();
+        /** @var PaginatedResponse $response */
+        $response = $this->ask(new CardListQuery($boardId, $this->getUserId(), 0, 1, [], $cardId));
+
+        if (0 === \count($response->getData())) {
+            throw $this->createNotFoundException();
+        }
+
+        return $this->json($response->getData()[0]);
     }
 
     /**
@@ -56,6 +65,9 @@ final class CardController extends ApiController
      *     tags={"Cards"},
      *     operationId="cardList",
      *     @OA\Parameter(name="board-id", in="path", required=true, @OA\Schema(ref="#/components/schemas/boardId")),
+     *     @OA\Parameter(name="page-index", in="query", @OA\Schema(ref="#/components/schemas/pageIndex")),
+     *     @OA\Parameter(name="page-size", in="query", @OA\Schema(ref="#/components/schemas/pageSize")),
+     *     @OA\Parameter(name="categories[]", in="query", @OA\Schema(ref="#/components/schemas/categories")),
      *     @OA\Response(
      *          response=200,
      *          description="Cards",
@@ -80,7 +92,17 @@ final class CardController extends ApiController
     {
         $this->debugMethod(__METHOD__);
 
-        return new Response();
+        $response = $this->ask(
+            new CardListQuery(
+                $boardId,
+                $this->getUserId(),
+                (int)$request->query->get('page-index'),
+                (int)$request->query->get('page-size'),
+                $request->query->all('categories'),
+            )
+        );
+
+        return $this->json($response);
     }
 
     /**

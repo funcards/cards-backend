@@ -93,8 +93,8 @@ final class UserController extends ApiController
      *     operationId="userList",
      *     @OA\Parameter(name="page-index", in="query", @OA\Schema(ref="#/components/schemas/pageIndex")),
      *     @OA\Parameter(name="page-size", in="query", @OA\Schema(ref="#/components/schemas/pageSize")),
-     *     @OA\Parameter(name="users[]", in="query", @OA\Schema(ref="#/components/schemas/userId")),
-     *     @OA\Parameter(name="emails[]", in="query", @OA\Schema(ref="#/components/schemas/email")),
+     *     @OA\Parameter(name="users[]", in="query", @OA\Schema(ref="#/components/schemas/users")),
+     *     @OA\Parameter(name="emails[]", in="query", @OA\Schema(ref="#/components/schemas/emails")),
      *     @OA\Response(
      *          response=200,
      *          description="Users",

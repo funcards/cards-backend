@@ -18,3 +18,7 @@ services:
   FC\Application\Query\Tag\TagListQueryHandler:
     tags: [ { name: messenger.message_handler, bus: query.bus } ]
     autoconfigure: false
+
+  FC\Application\Query\Card\CardListQueryHandler:
+    tags: [ { name: messenger.message_handler, bus: query.bus } ]
+    autoconfigure: false
