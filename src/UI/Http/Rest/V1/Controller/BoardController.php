@@ -61,7 +61,7 @@ final class BoardController extends ApiController
      * @OA\Get(
      *     path="/api/v1/boards",
      *     tags={"Boards"},
-     *     operationId="listBoard",
+     *     operationId="boardList",
      *     @OA\Parameter(name="page-index", in="query", @OA\Schema(ref="#/components/schemas/pageIndex")),
      *     @OA\Parameter(name="page-size", in="query", @OA\Schema(ref="#/components/schemas/pageSize")),
      *     @OA\Response(

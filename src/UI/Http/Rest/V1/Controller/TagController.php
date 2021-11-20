@@ -63,7 +63,7 @@ final class TagController extends ApiController
      * @OA\Get(
      *     path="/api/v1/boards/{board-id}/tags",
      *     tags={"Tags"},
-     *     operationId="listTag",
+     *     operationId="tagList",
      *     @OA\Parameter(name="board-id", in="path", required=true, @OA\Schema(ref="#/components/schemas/boardId")),
      *     @OA\Parameter(name="page-index", in="query", @OA\Schema(ref="#/components/schemas/pageIndex")),
      *     @OA\Parameter(name="page-size", in="query", @OA\Schema(ref="#/components/schemas/pageSize")),

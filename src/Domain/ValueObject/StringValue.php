@@ -21,7 +21,7 @@ abstract class StringValue implements \Stringable
      * @param string $value
      * @return static
      */
-    final public static function fromString(string $value): static
+    public static function fromString(string $value): static
     {
         return new static($value);
     }

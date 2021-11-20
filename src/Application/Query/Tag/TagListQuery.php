@@ -22,12 +22,12 @@ final class TagListQuery extends PaginatedQuery
      */
     public function __construct(
         private string $boardId,
-        string $userId,
+        private string $userId,
         int $pageIndex = 0,
         int $pageSize = 0,
         string ...$tags,
     ) {
-        parent::__construct($userId, $pageIndex, $pageSize);
+        parent::__construct($pageIndex, $pageSize);
 
         $this->tags = $tags;
     }
@@ -38,6 +38,14 @@ final class TagListQuery extends PaginatedQuery
     public function getBoardId(): string
     {
         return $this->boardId;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUserId(): string
+    {
+        return $this->userId;
     }
 
     /**

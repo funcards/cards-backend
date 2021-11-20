@@ -54,7 +54,7 @@ final class CardController extends ApiController
      * @OA\Get(
      *     path="/api/v1/boards/{board-id}/cards",
      *     tags={"Cards"},
-     *     operationId="listCard",
+     *     operationId="cardList",
      *     @OA\Parameter(name="board-id", in="path", required=true, @OA\Schema(ref="#/components/schemas/boardId")),
      *     @OA\Response(
      *          response=200,

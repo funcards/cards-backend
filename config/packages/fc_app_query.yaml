@@ -3,6 +3,10 @@ services:
     autowire: true
     autoconfigure: true
 
+  FC\Application\Query\User\UserListQueryHandler:
+    tags: [ { name: messenger.message_handler, bus: query.bus } ]
+    autoconfigure: false
+
   FC\Application\Query\Board\BoardListQueryHandler:
     tags: [ { name: messenger.message_handler, bus: query.bus } ]
     autoconfigure: false

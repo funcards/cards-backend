@@ -33,7 +33,7 @@ final class SignInCommandHandler implements CommandHandler
      */
     public function __invoke(SignInCommand $command): Tokens
     {
-        $email = UserEmail::fromString(\strtolower($command->getEmail()));
+        $email = UserEmail::fromString($command->getEmail());
 
         try {
             $user = $this->userRepository->get($email);

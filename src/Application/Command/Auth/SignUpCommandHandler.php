@@ -47,7 +47,7 @@ final class SignUpCommandHandler implements CommandHandler
         $user = User::create(
             UserId::random(),
             UserName::fromString($command->getName()),
-            UserEmail::fromString(\strtolower($command->getEmail())),
+            UserEmail::fromString($command->getEmail()),
             UserPassword::fromString($hashed),
             Roles::fromString(...$command->getRoles()),
         );

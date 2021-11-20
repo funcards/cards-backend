@@ -16,6 +16,7 @@
  * @OA\Schema(schema="pageSize", type="integer", format="int32", default=1000, minimum=1, maximum=1000)
  *
  * @OA\Schema(schema="userId", type="string", format="uuid")
+ * @OA\Schema(schema="email", type="string", format="email")
  * @OA\Schema(schema="boardId", type="string", format="uuid")
  * @OA\Schema(schema="categoryId", type="string", format="uuid")
  * @OA\Schema(schema="tagId", type="string", format="uuid")

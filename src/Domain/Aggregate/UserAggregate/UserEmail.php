@@ -12,6 +12,16 @@ final class UserEmail extends StringValue
     /**
      * {@inheritDoc}
      */
+    public static function fromString(string $value): static
+    {
+        $value = \strtolower($value);
+
+        return parent::fromString($value);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     protected function assert(string $value): void
     {
         Assert::that($value)->notEmpty()->email();

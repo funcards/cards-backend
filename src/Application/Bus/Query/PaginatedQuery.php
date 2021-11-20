@@ -11,11 +11,10 @@ class PaginatedQuery implements Query
     public const MAX_PAGE_SIZE = 1000;
 
     /**
-     * @param string $userId
      * @param int $pageIndex
      * @param int $pageSize
      */
-    public function __construct(private string $userId, private int $pageIndex = 0, private int $pageSize = 0)
+    public function __construct(private int $pageIndex = 0, private int $pageSize = 0)
     {
         if ($this->pageIndex < 0) {
             $this->pageIndex = 0;
@@ -27,14 +26,6 @@ class PaginatedQuery implements Query
 
         Assert::that($this->pageIndex)->range(0, 1000);
         Assert::that($this->pageSize)->range(1, static::MAX_PAGE_SIZE);
-    }
-
-    /**
-     * @return string
-     */
-    public function getUserId(): string
-    {
-        return $this->userId;
     }
 
     /**
