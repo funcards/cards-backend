@@ -32,6 +32,13 @@ final class MemberController extends ApiController
      *          @OA\JsonContent(ref="#/components/schemas/AddMember")
      *     ),
      *     @OA\Response(response=204, description="Board member added successfully"),
+     *     @OA\Response(response=400, description="Bad Request", @OA\JsonContent(ref="#/components/schemas/error")),
+     *     @OA\Response(response=401, description="Unauthorized", @OA\JsonContent(ref="#/components/schemas/error")),
+     *     @OA\Response(response=403, description="Forbidden", @OA\JsonContent(ref="#/components/schemas/error")),
+     *     @OA\Response(response=404, description="Not Found", @OA\JsonContent(ref="#/components/schemas/error")),
+     *     @OA\Response(response=409, description="Conflict", @OA\JsonContent(ref="#/components/schemas/error")),
+     *     @OA\Response(response=422, description="Unprocessable Entity", @OA\JsonContent(ref="#/components/schemas/validationError")),
+     *     @OA\Response(response=500, description="Internal Server Error", @OA\JsonContent(ref="#/components/schemas/error")),
      *     security={
      *         {"bearerAuth": {}}
      *     }
@@ -61,6 +68,11 @@ final class MemberController extends ApiController
      *     @OA\Parameter(name="board-id", in="path", required=true, @OA\Schema(ref="#/components/schemas/boardId")),
      *     @OA\Parameter(name="member-id", in="path", required=true, @OA\Schema(ref="#/components/schemas/userId")),
      *     @OA\Response(response=204, description="Board member removed successfully"),
+     *     @OA\Response(response=400, description="Bad Request", @OA\JsonContent(ref="#/components/schemas/error")),
+     *     @OA\Response(response=401, description="Unauthorized", @OA\JsonContent(ref="#/components/schemas/error")),
+     *     @OA\Response(response=403, description="Forbidden", @OA\JsonContent(ref="#/components/schemas/error")),
+     *     @OA\Response(response=404, description="Not Found", @OA\JsonContent(ref="#/components/schemas/error")),
+     *     @OA\Response(response=500, description="Internal Server Error", @OA\JsonContent(ref="#/components/schemas/error")),
      *     security={
      *         {"bearerAuth": {}}
      *     }

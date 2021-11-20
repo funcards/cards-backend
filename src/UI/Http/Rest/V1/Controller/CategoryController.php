@@ -35,6 +35,11 @@ final class CategoryController extends ApiController
      *          description="Category",
      *          @OA\JsonContent(ref="#/components/schemas/CategoryResponse")
      *     ),
+     *     @OA\Response(response=400, description="Bad Request", @OA\JsonContent(ref="#/components/schemas/error")),
+     *     @OA\Response(response=401, description="Unauthorized", @OA\JsonContent(ref="#/components/schemas/error")),
+     *     @OA\Response(response=403, description="Forbidden", @OA\JsonContent(ref="#/components/schemas/error")),
+     *     @OA\Response(response=404, description="Not Found", @OA\JsonContent(ref="#/components/schemas/error")),
+     *     @OA\Response(response=500, description="Internal Server Error", @OA\JsonContent(ref="#/components/schemas/error")),
      *     security={
      *         {"bearerAuth": {}}
      *     }
@@ -77,6 +82,10 @@ final class CategoryController extends ApiController
      *              )
      *          })
      *     ),
+     *     @OA\Response(response=400, description="Bad Request", @OA\JsonContent(ref="#/components/schemas/error")),
+     *     @OA\Response(response=401, description="Unauthorized", @OA\JsonContent(ref="#/components/schemas/error")),
+     *     @OA\Response(response=403, description="Forbidden", @OA\JsonContent(ref="#/components/schemas/error")),
+     *     @OA\Response(response=500, description="Internal Server Error", @OA\JsonContent(ref="#/components/schemas/error")),
      *     security={
      *         {"bearerAuth": {}}
      *     }
@@ -119,6 +128,11 @@ final class CategoryController extends ApiController
      *          description="Board category added successfully",
      *          @OA\Header(header="Location", description="Category URL", @OA\Schema(type="string", format="uri"))
      *     ),
+     *     @OA\Response(response=400, description="Bad Request", @OA\JsonContent(ref="#/components/schemas/error")),
+     *     @OA\Response(response=401, description="Unauthorized", @OA\JsonContent(ref="#/components/schemas/error")),
+     *     @OA\Response(response=403, description="Forbidden", @OA\JsonContent(ref="#/components/schemas/error")),
+     *     @OA\Response(response=422, description="Unprocessable Entity", @OA\JsonContent(ref="#/components/schemas/validationError")),
+     *     @OA\Response(response=500, description="Internal Server Error", @OA\JsonContent(ref="#/components/schemas/error")),
      *     security={
      *         {"bearerAuth": {}}
      *     }
@@ -154,6 +168,12 @@ final class CategoryController extends ApiController
      *          @OA\JsonContent(ref="#/components/schemas/UpdateCategory")
      *     ),
      *     @OA\Response(response=204, description="Board category updated successfully"),
+     *     @OA\Response(response=400, description="Bad Request", @OA\JsonContent(ref="#/components/schemas/error")),
+     *     @OA\Response(response=401, description="Unauthorized", @OA\JsonContent(ref="#/components/schemas/error")),
+     *     @OA\Response(response=403, description="Forbidden", @OA\JsonContent(ref="#/components/schemas/error")),
+     *     @OA\Response(response=404, description="Not Found", @OA\JsonContent(ref="#/components/schemas/error")),
+     *     @OA\Response(response=422, description="Unprocessable Entity", @OA\JsonContent(ref="#/components/schemas/validationError")),
+     *     @OA\Response(response=500, description="Internal Server Error", @OA\JsonContent(ref="#/components/schemas/error")),
      *     security={
      *         {"bearerAuth": {}}
      *     }
@@ -185,6 +205,11 @@ final class CategoryController extends ApiController
      *     @OA\Parameter(name="board-id", in="path", required=true, @OA\Schema(ref="#/components/schemas/boardId")),
      *     @OA\Parameter(name="category-id", in="path", required=true, @OA\Schema(ref="#/components/schemas/categoryId")),
      *     @OA\Response(response=204, description="Board category removed successfully"),
+     *     @OA\Response(response=400, description="Bad Request", @OA\JsonContent(ref="#/components/schemas/error")),
+     *     @OA\Response(response=401, description="Unauthorized", @OA\JsonContent(ref="#/components/schemas/error")),
+     *     @OA\Response(response=403, description="Forbidden", @OA\JsonContent(ref="#/components/schemas/error")),
+     *     @OA\Response(response=404, description="Not Found", @OA\JsonContent(ref="#/components/schemas/error")),
+     *     @OA\Response(response=500, description="Internal Server Error", @OA\JsonContent(ref="#/components/schemas/error")),
      *     security={
      *         {"bearerAuth": {}}
      *     }

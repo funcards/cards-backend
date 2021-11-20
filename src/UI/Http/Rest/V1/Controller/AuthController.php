@@ -35,7 +35,13 @@ final class AuthController extends ApiController
      *          response=200,
      *          description="Returns access token and refresh token",
      *          @OA\JsonContent(ref="#/components/schemas/Tokens")
-     *     )
+     *     ),
+     *     @OA\Response(response=400, description="Bad Request", @OA\JsonContent(ref="#/components/schemas/error")),
+     *     @OA\Response(response=401, description="Unauthorized", @OA\JsonContent(ref="#/components/schemas/error")),
+     *     @OA\Response(response=403, description="Forbidden", @OA\JsonContent(ref="#/components/schemas/error")),
+     *     @OA\Response(response=404, description="Not Found", @OA\JsonContent(ref="#/components/schemas/error")),
+     *     @OA\Response(response=422, description="Unprocessable Entity", @OA\JsonContent(ref="#/components/schemas/validationError")),
+     *     @OA\Response(response=500, description="Internal Server Error", @OA\JsonContent(ref="#/components/schemas/error")),
      * )
      *
      * @param Request $request
@@ -66,7 +72,14 @@ final class AuthController extends ApiController
      *          response=200,
      *          description="Returns access token and refresh token",
      *          @OA\JsonContent(ref="#/components/schemas/Tokens")
-     *     )
+     *     ),
+     *     @OA\Response(response=400, description="Bad Request", @OA\JsonContent(ref="#/components/schemas/error")),
+     *     @OA\Response(response=401, description="Unauthorized", @OA\JsonContent(ref="#/components/schemas/error")),
+     *     @OA\Response(response=403, description="Forbidden", @OA\JsonContent(ref="#/components/schemas/error")),
+     *     @OA\Response(response=404, description="Not Found", @OA\JsonContent(ref="#/components/schemas/error")),
+     *     @OA\Response(response=409, description="Conflict", @OA\JsonContent(ref="#/components/schemas/error")),
+     *     @OA\Response(response=422, description="Unprocessable Entity", @OA\JsonContent(ref="#/components/schemas/validationError")),
+     *     @OA\Response(response=500, description="Internal Server Error", @OA\JsonContent(ref="#/components/schemas/error")),
      * )
      *
      * @param Request $request
@@ -100,7 +113,13 @@ final class AuthController extends ApiController
      *          response=200,
      *          description="Returns access token and refresh token",
      *          @OA\JsonContent(ref="#/components/schemas/Tokens")
-     *     )
+     *     ),
+     *     @OA\Response(response=400, description="Bad Request", @OA\JsonContent(ref="#/components/schemas/error")),
+     *     @OA\Response(response=401, description="Unauthorized", @OA\JsonContent(ref="#/components/schemas/error")),
+     *     @OA\Response(response=403, description="Forbidden", @OA\JsonContent(ref="#/components/schemas/error")),
+     *     @OA\Response(response=404, description="Not Found", @OA\JsonContent(ref="#/components/schemas/error")),
+     *     @OA\Response(response=422, description="Unprocessable Entity", @OA\JsonContent(ref="#/components/schemas/validationError")),
+     *     @OA\Response(response=500, description="Internal Server Error", @OA\JsonContent(ref="#/components/schemas/error")),
      * )
      *
      * @param Request $request

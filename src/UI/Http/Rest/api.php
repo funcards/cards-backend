@@ -38,7 +38,7 @@
  *     schema="validationError",
  *     allOf={
  *          @OA\Schema(ref="#/components/schemas/error"),
- *          @OA\Schema(required={"details"}, @OA\Property(property="details", required=true, type="array", @OA\Items(type="string")))
+ *          @OA\Schema(required={"details"}, @OA\Property(property="details", required=true, type="object"))
  *     }
  * )
  */
