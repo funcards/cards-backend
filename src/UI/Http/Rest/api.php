@@ -30,15 +30,17 @@
  *     schema="error",
  *     type="object",
  *     required={"code", "message"},
- *     @OA\Property(property="code", type="integer", format="int32", description="Status code"),
- *     @OA\Property(property="message", type="string", description="Error message")
+ *     @OA\Property(property="status", type="integer", format="int32", description="Status code"),
+ *     @OA\Property(property="message", type="string", description="Error message"),
+ *     @OA\Property(property="type", type="string", description="Error type"),
+ *     @OA\Property(property="title", type="string", description="Error title"),
  * )
  *
  * @OA\Schema(
  *     schema="validationError",
  *     allOf={
  *          @OA\Schema(ref="#/components/schemas/error"),
- *          @OA\Schema(required={"details"}, @OA\Property(property="details", required=true, type="object"))
+ *          @OA\Schema(required={"errors"}, @OA\Property(property="errors", required=true, type="object"))
  *     }
  * )
  */

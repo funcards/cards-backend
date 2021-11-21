@@ -27,6 +27,10 @@ services:
     resource: '../src/UI/Http/Rest/V1/Controller/'
     tags: [ 'controller.service_arguments' ]
 
+  FC\UI\Http\Rest\V1\EventSubscriber\ExceptionSubscriber:
+    arguments:
+      $debug: '%kernel.debug%'
+
   FC\UI\Cli\Command\GenerateKeyPairCommand:
     arguments:
       $secretKey: '%env(JWT_PRIVATE_KEY)%'
