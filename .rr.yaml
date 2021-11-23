@@ -14,10 +14,11 @@ http:
     forbid: [ ".php", ".exe", ".bat", ".sh" ]
   headers:
     cors:
-      allowed_origin: "*"
-      allowed_headers: "*"
-      allowed_methods: "GET,POST,PUT,DELETE"
+      allowed_origin: "http://localhost:1234"
+      allowed_headers: "Content-Type,Accept,Authorization"
+      allowed_methods: "GET,POST,PATCH,PUT,DELETE,OPTIONS"
       allow_credentials: true
+#      exposed_headers: "*"
 #      exposed_headers: "Cache-Control,Content-Language,Content-Type,Expires,Last-Modified,Pragma"
   pool:
     debug: true
