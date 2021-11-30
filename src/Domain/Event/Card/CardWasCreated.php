@@ -14,6 +14,7 @@ final class CardWasCreated extends DomainEvent
      * @param string $categoryId
      * @param string $name
      * @param string $content
+     * @param int $position
      * @param array<string> $tags
      */
     public function __construct(
@@ -22,6 +23,7 @@ final class CardWasCreated extends DomainEvent
         private string $categoryId,
         private string $name,
         private string $content,
+        private int $position,
         private array $tags,
     ) {
         parent::__construct($aggregateId);
@@ -57,6 +59,14 @@ final class CardWasCreated extends DomainEvent
     public function getContent(): string
     {
         return $this->content;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPosition(): int
+    {
+        return $this->position;
     }
 
     /**

@@ -10,6 +10,7 @@ use FC\Domain\Aggregate\BoardAggregate\BoardId;
 use FC\Domain\Aggregate\CardAggregate\CardContent;
 use FC\Domain\Aggregate\CardAggregate\CardId;
 use FC\Domain\Aggregate\CardAggregate\CardName;
+use FC\Domain\Aggregate\CardAggregate\CardPosition;
 use FC\Domain\Aggregate\CardAggregate\CardRepository;
 use FC\Domain\Aggregate\CardAggregate\CardTags;
 use FC\Domain\Aggregate\CategoryAggregate\CategoryId;
@@ -56,6 +57,10 @@ final class UpdateCardCommandHandler implements CommandHandler
 
         if (null !== $command->getContent()) {
             $card->changeContent(CardContent::fromString($command->getContent()));
+        }
+
+        if (null !== $command->getPosition()) {
+            $card->changePosition(CardPosition::fromInt($command->getPosition()));
         }
 
         if (null !== $command->getTags()) {

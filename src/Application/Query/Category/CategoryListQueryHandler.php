@@ -39,6 +39,7 @@ final class CategoryListQueryHandler implements QueryHandler
             ->select('c.*')
             ->from('categories', 'c')
             ->where('c.board_id = :boardId')
+            ->orderBy('c.position', 'ASC')
             ->setFirstResult($query->getPageIndex())
             ->setMaxResults($query->getPageSize())
             ->setParameter('boardId', $query->getBoardId());

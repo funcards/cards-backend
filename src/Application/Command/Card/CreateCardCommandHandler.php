@@ -11,6 +11,7 @@ use FC\Domain\Aggregate\CardAggregate\Card;
 use FC\Domain\Aggregate\CardAggregate\CardContent;
 use FC\Domain\Aggregate\CardAggregate\CardId;
 use FC\Domain\Aggregate\CardAggregate\CardName;
+use FC\Domain\Aggregate\CardAggregate\CardPosition;
 use FC\Domain\Aggregate\CardAggregate\CardRepository;
 use FC\Domain\Aggregate\CardAggregate\CardTags;
 use FC\Domain\Aggregate\CategoryAggregate\CategoryId;
@@ -51,6 +52,7 @@ final class CreateCardCommandHandler implements CommandHandler
             CategoryId::fromString($command->getCategoryId()),
             CardName::fromString($command->getName()),
             CardContent::fromString($command->getContent()),
+            CardPosition::fromInt($command->getPosition()),
             CardTags::from(...$command->getTags()),
         );
 

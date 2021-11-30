@@ -18,6 +18,7 @@
 
     <embedded name="name" class="FC\Domain\Aggregate\CardAggregate\CardName" use-column-prefix="false"/>
     <embedded name="content" class="FC\Domain\Aggregate\CardAggregate\CardContent" use-column-prefix="false"/>
+    <embedded name="position" class="FC\Domain\Aggregate\CardAggregate\CardPosition" use-column-prefix="false"/>
     <embedded name="tags" class="FC\Domain\Aggregate\CardAggregate\CardTags" use-column-prefix="false"/>
   </entity>
 

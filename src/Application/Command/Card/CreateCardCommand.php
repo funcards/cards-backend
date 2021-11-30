@@ -10,14 +10,15 @@ use OpenApi\Annotations as OA;
 use Symfony\Component\Serializer\Annotation\SerializedName;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\Range;
 use Symfony\Component\Validator\Constraints\Uuid;
 
 /**
- * @OA\Schema(schema="CreateCard", required={"category_id", "name"})
+ * @OA\Schema(schema="CreateCard", required={"category_id", "name", "position"})
  */
 final class CreateCardCommand implements Command
 {
-    public const DEFAULT = ['category_id' => '', 'name' => '', 'content' => '', 'tags' => []];
+    public const DEFAULT = ['category_id' => '', 'name' => '', 'content' => '', 'position' => 0, 'tags' => []];
 
     /**
      * @param string $boardId
@@ -26,6 +27,7 @@ final class CreateCardCommand implements Command
      * @param string $categoryId
      * @param string $name
      * @param string $content
+     * @param int $position
      * @param array<string> $tags
      */
     public function __construct(
@@ -36,6 +38,7 @@ final class CreateCardCommand implements Command
         #[SerializedName('category_id')] #[NotBlank, Uuid(versions: [Uuid::V4_RANDOM])] private string $categoryId,
         /** @OA\Property() */ #[NotBlank, Length(max: 1000)] private string $name,
         /** @OA\Property() */ #[Length(max: 10000)] private string $content,
+        /** @OA\Property() */ #[Range(min: \PHP_INT_MIN, max: \PHP_INT_MAX)] private int $position,
         /** @OA\Property(@OA\Items(type="string", format="uuid")) */ #[AllUuidConstraint] private array $tags,
     ) {
     }
@@ -86,6 +89,14 @@ final class CreateCardCommand implements Command
     public function getContent(): string
     {
         return $this->content;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPosition(): int
+    {
+        return $this->position;
     }
 
     /**

@@ -43,6 +43,7 @@ final class CardListQueryHandler implements QueryHandler
             ->select('c.*')
             ->from('cards', 'c')
             ->where('c.board_id = :boardId')
+            ->orderBy('c.position', 'ASC')
             ->setFirstResult($query->getPageIndex())
             ->setMaxResults($query->getPageSize())
             ->setParameter('boardId', $query->getBoardId());
@@ -68,6 +69,7 @@ final class CardListQueryHandler implements QueryHandler
                 $row['category_id'],
                 $row['name'],
                 $row['content'],
+                (int)$row['position'],
                 \json_decode($row['tags'], true),
             );
         }

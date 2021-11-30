@@ -12,6 +12,7 @@ use FC\Domain\Aggregate\TagAggregate\TagId;
 use FC\Domain\Event\Card\CardCategoryWasChanged;
 use FC\Domain\Event\Card\CardContentWasChanged;
 use FC\Domain\Event\Card\CardNameWasChanged;
+use FC\Domain\Event\Card\CardPositionWasChanged;
 use FC\Domain\Event\Card\CardTagsWasChanged;
 use FC\Domain\Event\Card\CardWasCreated;
 
@@ -25,6 +26,7 @@ final class Card implements AggregateRoot
      * @param CategoryId $categoryId
      * @param CardName $name
      * @param CardContent $content
+     * @param CardPosition $position
      * @param CardTags $tags
      */
     public function __construct(
@@ -33,6 +35,7 @@ final class Card implements AggregateRoot
         private CategoryId $categoryId,
         private CardName $name,
         private CardContent $content,
+        private CardPosition $position,
         private CardTags $tags,
     ) {
     }
@@ -43,6 +46,7 @@ final class Card implements AggregateRoot
      * @param CategoryId $categoryId
      * @param CardName $name
      * @param CardContent $content
+     * @param CardPosition $position
      * @param CardTags $tags
      * @return static
      */
@@ -52,9 +56,10 @@ final class Card implements AggregateRoot
         CategoryId $categoryId,
         CardName $name,
         CardContent $content,
+        CardPosition $position,
         CardTags $tags,
     ): self {
-        $card = new self($cardId, $boardId, $categoryId, $name, $content, $tags);
+        $card = new self($cardId, $boardId, $categoryId, $name, $content, $position, $tags);
         $card->recordThat(
             new CardWasCreated(
                 $cardId->asString(),
@@ -62,6 +67,7 @@ final class Card implements AggregateRoot
                 $categoryId->asString(),
                 $name->asString(),
                 $content->asString(),
+                $position->asInt(),
                 $tags->toArray(),
             )
         );
@@ -125,6 +131,22 @@ final class Card implements AggregateRoot
     }
 
     /**
+     * @param CardPosition $newPosition
+     */
+    public function changePosition(CardPosition $newPosition): void
+    {
+        if ($this->position->isEqualTo($newPosition)) {
+            return;
+        }
+
+        $this->position = $newPosition;
+
+        $this->recordThat(
+            new CardPositionWasChanged($this->id->asString(), $this->boardId->asString(), $newPosition->asInt())
+        );
+    }
+
+    /**
      * @param CardTags $newTags
      */
     public function changeTags(CardTags $newTags): void
@@ -162,11 +184,12 @@ final class Card implements AggregateRoot
     public function __toString(): string
     {
         return \sprintf(
-            'Card: [id => %s, boardId => %s, categoryId => %s, name => %s, tags => %s]',
+            'Card: [id => %s, boardId => %s, categoryId => %s, name => %s, position => %s, tags => %s]',
             $this->id,
             $this->boardId,
             $this->categoryId,
             $this->name,
+            $this->position,
             $this->tags,
         );
     }
