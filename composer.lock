@@ -3151,16 +3151,16 @@
         },
         {
             "name": "spiral/roadrunner-cli",
-            "version": "v2.0.13",
+            "version": "v2.0.14",
             "source": {
                 "type": "git",
                 "url": "https://github.com/funcards/roadrunner-cli.git",
-                "reference": "17bd4ba4eb603d2e450ec0d68f6234e6ca69e7fd"
+                "reference": "63558e44dff713ab6f386be13e0e932bd56a4e7b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/funcards/roadrunner-cli/zipball/17bd4ba4eb603d2e450ec0d68f6234e6ca69e7fd",
-                "reference": "17bd4ba4eb603d2e450ec0d68f6234e6ca69e7fd",
+                "url": "https://api.github.com/repos/funcards/roadrunner-cli/zipball/63558e44dff713ab6f386be13e0e932bd56a4e7b",
+                "reference": "63558e44dff713ab6f386be13e0e932bd56a4e7b",
                 "shasum": ""
             },
             "require": {
@@ -3211,9 +3211,9 @@
             ],
             "description": "RoadRunner: Command Line Interface",
             "support": {
-                "source": "https://github.com/funcards/roadrunner-cli/tree/v2.0.13"
+                "source": "https://github.com/funcards/roadrunner-cli/tree/v2.0.14"
             },
-            "time": "2021-11-13T09:59:24+00:00"
+            "time": "2021-12-02T18:49:39+00:00"
         },
         {
             "name": "spiral/roadrunner-http",
