@@ -8,6 +8,7 @@ use Assert\Assert;
 
 class PaginatedQuery implements Query
 {
+    public const MAX_PAGE_INDEX = 1000;
     public const MAX_PAGE_SIZE = 1000;
 
     /**
@@ -24,7 +25,7 @@ class PaginatedQuery implements Query
             $this->pageSize = static::MAX_PAGE_SIZE;
         }
 
-        Assert::that($this->pageIndex)->range(0, 1000);
+        Assert::that($this->pageIndex)->range(0, static::MAX_PAGE_INDEX);
         Assert::that($this->pageSize)->range(1, static::MAX_PAGE_SIZE);
     }
 
