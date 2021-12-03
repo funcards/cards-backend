@@ -19,7 +19,7 @@ http:
       allowed_methods: "GET,POST,PATCH,PUT,DELETE,OPTIONS"
       allow_credentials: true
 #      exposed_headers: "*"
-#      exposed_headers: "Cache-Control,Content-Language,Content-Type,Expires,Last-Modified,Pragma"
+      exposed_headers: "Location,Cache-Control,Content-Language,Content-Type,Expires,Last-Modified,Pragma"
   pool:
     debug: true
     num_workers: 4
