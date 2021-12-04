@@ -11,6 +11,8 @@ use FC\Application\Bus\Query\QueryHandler;
 
 final class BoardListQueryHandler implements QueryHandler
 {
+    private const SEPARATOR = '<|>';
+
     /**
      * @param Connection $connection
      */
@@ -26,9 +28,16 @@ final class BoardListQueryHandler implements QueryHandler
     public function __invoke(BoardListQuery $query): PaginatedResponse
     {
         $qb = $this->connection->createQueryBuilder()
-            ->select('b.*', 'STRING_AGG(m.user_id::TEXT, \'|\' ORDER BY m.user_id) as users', 'STRING_AGG(m.roles::TEXT, \'|\'  ORDER BY m.user_id) as roles')
+            ->select(
+                'b.*',
+                \sprintf('STRING_AGG(u.id::TEXT, \'%s\' ORDER BY u.id) as user_ids', self::SEPARATOR),
+                \sprintf('STRING_AGG(u.name::TEXT, \'%s\' ORDER BY u.id) as user_names', self::SEPARATOR),
+                \sprintf('STRING_AGG(u.email::TEXT, \'%s\' ORDER BY u.id) as user_emails', self::SEPARATOR),
+                \sprintf('STRING_AGG(m.roles::TEXT, \'%s\'  ORDER BY u.id) as member_roles', self::SEPARATOR),
+            )
             ->from('boards', 'b')
             ->leftJoin('b', 'board_members', 'm', 'm.board_id = b.id')
+            ->leftJoin('b', 'users', 'u', 'u.id = m.user_id')
             ->where('m.user_id = :userId')
             ->groupBy('b.id')
             ->setFirstResult($query->getPageIndex())
@@ -46,11 +55,13 @@ final class BoardListQueryHandler implements QueryHandler
         foreach ($qb->fetchAllAssociative() as $row) {
             $members = [];
 
-            $users = \explode('|', $row['users']);
-            $roles = \explode('|', $row['roles']);
+            $ids = \explode(self::SEPARATOR, $row['user_ids']);
+            $names = \explode(self::SEPARATOR, $row['user_names']);
+            $emails = \explode(self::SEPARATOR, $row['user_emails']);
+            $roles = \explode(self::SEPARATOR, $row['member_roles']);
 
-            foreach ($users as $i => $user) {
-                $members[] = new MemberResponse($user, \json_decode($roles[$i], true));
+            foreach ($ids as $i => $userId) {
+                $members[$userId] = new MemberResponse($userId, $names[$i], $emails[$i], \json_decode($roles[$i], true));
             }
 
             $data[] = new BoardResponse(

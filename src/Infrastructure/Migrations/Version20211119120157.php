@@ -19,9 +19,6 @@ final class Version20211119120157 extends AbstractMigration
 
     public function up(Schema $schema): void
     {
-        // this up() migration is auto-generated, please modify it to your needs
-        $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'postgresql', 'Migration can only be executed safely on \'postgresql\'.');
-
         $this->addSql('CREATE TABLE categories (id UUID NOT NULL, board_id UUID NOT NULL, name VARCHAR(150) NOT NULL, "position" INT NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE INDEX idx_3af34668e7ec5785 ON categories (board_id)');
         $this->addSql('CREATE INDEX idx_3af34668e7ec5785462ce4f5 ON categories (board_id, position)');
@@ -65,9 +62,6 @@ final class Version20211119120157 extends AbstractMigration
 
     public function down(Schema $schema): void
     {
-        // this down() migration is auto-generated, please modify it to your needs
-        $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'postgresql', 'Migration can only be executed safely on \'postgresql\'.');
-
         $this->addSql('DROP TABLE cards');
         $this->addSql('DROP TABLE categories');
         $this->addSql('DROP TABLE tags');

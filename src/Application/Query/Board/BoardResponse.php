@@ -19,7 +19,7 @@ final class BoardResponse implements Response
      * @param string $color
      * @param string $description
      * @param string $createdAt
-     * @param array<MemberResponse> $members
+     * @param array<string, MemberResponse> $members
      */
     public function __construct(
         /** @OA\Property(property="board_id", format="uuid") */ #[SerializedName('board_id')] private string $boardId,
@@ -27,7 +27,8 @@ final class BoardResponse implements Response
         /** @OA\Property() */ private string $color,
         /** @OA\Property() */ private string $description,
         /** @OA\Property(property="created_at") */ #[SerializedName('created_at')] private string $createdAt,
-        /** @OA\Property(@OA\Items(ref="#/components/schemas/MemberResponse")) */ private array $members,
+        /** @OA\Property(type="object", @OA\AdditionalProperties(ref="#/components/schemas/MemberResponse")) */
+        private array $members,
     ) {
     }
 
@@ -72,7 +73,7 @@ final class BoardResponse implements Response
     }
 
     /**
-     * @return MemberResponse[]
+     * @return array<string, MemberResponse>
      */
     public function getMembers(): array
     {
