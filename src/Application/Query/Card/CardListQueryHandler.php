@@ -77,7 +77,7 @@ final class CardListQueryHandler implements QueryHandler
         $count = \count($data);
 
         if ($query->getPageSize() > 1) {
-            $count = (int)$qb->select('COUNT(c.id)')->fetchOne();
+            $count = (int)$qb->select('COUNT(c.id)')->resetQueryPart('orderBy')->fetchOne();
         }
 
         return new PaginatedResponse($query->getPageIndex(), $query->getPageSize(), $count, $data);
