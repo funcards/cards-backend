@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace FC\UI\Http\Rest\V1\Controller;
 
 use FC\Application\Bus\Query\PaginatedResponse;
+use FC\Application\Command\Card\BatchUpdateCardCommand;
 use FC\Application\Command\Card\CreateCardCommand;
 use FC\Application\Command\Card\RemoveCardCommand;
 use FC\Application\Command\Card\UpdateCardCommand;
@@ -155,6 +156,58 @@ final class CardController extends ApiController
         $this->send($data, CreateCardCommand::class);
 
         return $this->created('card', ['boardId' => $boardId, 'cardId' => $data['card_id']]);
+    }
+
+    /**
+     * @OA\Patch(
+     *     path="/api/v1/boards/{board-id}/cards",
+     *     tags={"Cards"},
+     *     operationId="batchUpdateCards",
+     *     @OA\Parameter(name="board-id", in="path", required=true, @OA\Schema(ref="#/components/schemas/boardId")),
+     *     @OA\RequestBody(
+     *          request="BatchUpdateCards",
+     *          required=true,
+     *          @OA\JsonContent(@OA\Items(allOf={
+     *              @OA\Schema(
+     *                  @OA\Property(property="card_id", type="string", format="uuid")
+     *              ),
+     *              @OA\Schema(ref="#/components/schemas/UpdateCard")
+     *          }))
+     *     ),
+     *     @OA\Response(response=204, description="Board cards updated successfully"),
+     *     @OA\Response(response=400, description="Bad Request", @OA\JsonContent(ref="#/components/schemas/error")),
+     *     @OA\Response(response=401, description="Unauthorized", @OA\JsonContent(ref="#/components/schemas/error")),
+     *     @OA\Response(response=403, description="Forbidden", @OA\JsonContent(ref="#/components/schemas/error")),
+     *     @OA\Response(response=404, description="Not Found", @OA\JsonContent(ref="#/components/schemas/error")),
+     *     @OA\Response(response=422, description="Unprocessable Entity", @OA\JsonContent(ref="#/components/schemas/validationError")),
+     *     @OA\Response(response=500, description="Internal Server Error", @OA\JsonContent(ref="#/components/schemas/error")),
+     *     security={
+     *         {"bearerAuth": {}}
+     *     }
+     * )
+     *
+     * @param Request $request
+     * @param string $boardId
+     * @return Response
+     */
+    #[Route(methods: 'PATCH')]
+    public function batchUpdate(Request $request, string $boardId): Response
+    {
+        $this->debugMethod(__METHOD__);
+
+        $userId = $this->getUserId();
+        $commands = [];
+
+        foreach ($request->toArray() as $data) {
+            $commands[] = $this->command(
+                ['board_id' => $boardId, 'user_id' => $userId] + (array)$data,
+                UpdateCardCommand::class
+            );
+        }
+
+        $this->sendCommand(new BatchUpdateCardCommand(...$commands));
+
+        return $this->noContent();
     }
 
     /**

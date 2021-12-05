@@ -70,3 +70,11 @@ services:
   FC\Application\Command\Card\RemoveCardCommandHandler:
     tags: [ { name: messenger.message_handler, bus: command.bus } ]
     autoconfigure: false
+
+  FC\Application\Command\Category\BatchUpdateCategoryCommandHandler:
+    tags: [ { name: messenger.message_handler, bus: command.bus } ]
+    autoconfigure: false
+
+  FC\Application\Command\Card\BatchUpdateCardCommandHandler:
+    tags: [ { name: messenger.message_handler, bus: command.bus } ]
+    autoconfigure: false
