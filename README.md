@@ -1,14 +1,9 @@
 # FunCards - Backend
 
-### Install (dev)
+## Install (dev)
 
-```shell
-composer install
-docker-compose up -d
-bin/console jwt:generate-keypair
-bin/console doctrine:migrations:migrate
-./vendor/bin/rr get
-./rr serve
-```
+Start: ```make start```
+
+Stop: ```make stop```
 
 [http://localhost:8080/swagger/ui](http://localhost:8080/swagger/ui)

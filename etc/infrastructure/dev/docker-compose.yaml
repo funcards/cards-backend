@@ -1,0 +1,57 @@
+version: "3.8"
+
+services:
+  rr:
+    image: ${DOCKER_REGISTRY:-funcards}/rr:${PLATFORM:-linux}-${TAG:-latest}
+    build:
+      context: ./php
+      dockerfile: Dockerfile
+    environment:
+      - PHP_OPCACHE_ENABLE=0
+      - PHP_OPCACHE_ENABLE_CLI=0
+      - PHP_XDEBUG_ENABLE=0
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    ports:
+      - "8080:8080"
+      - "6001:6001"
+    volumes:
+      - ./config/rr.yaml:/etc/rr.yaml
+      - ./config/rr-on-init:/usr/local/bin/rr-on-init
+      - ../../../:/app
+    depends_on:
+      - postgres
+
+  mailer:
+    image: schickling/mailcatcher
+    ports:
+      - "1025:1025"
+      - "1080:1080"
+
+  postgres:
+    image: postgres:${POSTGRES_VERSION:-13-alpine}
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-funcards}
+      POSTGRES_USER: ${POSTGRES_USER:-funcards}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-funcards}
+    shm_size: 512mb
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data:rw
+
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: root
+    ports:
+      - "8083:80"
+    volumes:
+      - ./pgadmin/servers.json:/pgadmin4/servers.json
+      - ./pgadmin/pgpass:/pgadmin4/pgpass
+    depends_on:
+      - postgres
+
+volumes:
+  postgres-data:

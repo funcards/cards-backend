@@ -1,14 +1,18 @@
 rpc:
-  listen: tcp://127.0.0.1:6001
+  listen: tcp://0.0.0.0:6001
 
 server:
+  on_init:
+    command: "sh /usr/local/bin/rr-on-init"
+    exec_timeout: 60m
   command: "php public/index.php"
   env:
     APP_RUNTIME: Runtime\RoadRunnerSymfonyNyholm\Runtime
     XDEBUG_SESSION: 1
+    DATABASE_URL: pgsql://funcards:funcards@postgres:5432/funcards?serverVersion=13&charset=utf8"
 
 http:
-  address: 127.0.0.1:8080
+  address: 0.0.0.0:8080
   middleware: [ "headers", "gzip", "websockets" ]
   uploads:
     forbid: [ ".php", ".exe", ".bat", ".sh" ]

@@ -1,0 +1,6 @@
+#!/usr/bin/env sh
+
+cd /app
+composer install
+php bin/console doctrine:migrations:migrate -n
+php bin/console jwt:generate-keypair -n
