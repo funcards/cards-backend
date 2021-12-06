@@ -1,0 +1,12 @@
+version: "3.8"
+
+services:
+  rr:
+    environment:
+      - PHP_OPCACHE_ENABLE=0
+      - PHP_OPCACHE_ENABLE_CLI=0
+      - PHP_XDEBUG_MODE=develop,debug,coverage
+    volumes:
+      - ./config/rr-debug.yaml:/etc/rr.yaml
+      - ./config/rr-on-init:/usr/local/bin/rr-on-init
+      - ../../../:/app

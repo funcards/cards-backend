@@ -8,7 +8,7 @@ server:
   command: "php public/index.php"
   env:
     APP_RUNTIME: Runtime\RoadRunnerSymfonyNyholm\Runtime
-    XDEBUG_SESSION: 0
+    XDEBUG_SESSION: 1
     DATABASE_URL: pgsql://funcards:funcards@postgres:5432/funcards?serverVersion=13&charset=utf8"
 
 http:
@@ -25,7 +25,7 @@ http:
 #      exposed_headers: "*"
       exposed_headers: "Location,Cache-Control,Content-Language,Content-Type,Expires,Last-Modified,Pragma"
   pool:
-    debug: false
+    debug: true
     num_workers: 4
     max_jobs: 64
 
@@ -34,15 +34,15 @@ websockets:
   allowed_origin: "*"
   path: "/ws"
   pool:
-    debug: false
+    debug: true
     num_workers: 4
     max_jobs: 64
 
-#reload:
-#  services:
-#    http:
-#      dirs: [ "." ]
-#      recursive: true
+reload:
+  services:
+    http:
+      dirs: [ "." ]
+      recursive: true
 
 kv:
   psr16:

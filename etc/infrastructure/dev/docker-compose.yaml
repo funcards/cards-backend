@@ -7,9 +7,9 @@ services:
       context: ./php
       dockerfile: Dockerfile
     environment:
-      - PHP_OPCACHE_ENABLE=0
-      - PHP_OPCACHE_ENABLE_CLI=0
-      - PHP_XDEBUG_ENABLE=0
+      - PHP_OPCACHE_ENABLE=1
+      - PHP_OPCACHE_ENABLE_CLI=1
+      - PHP_XDEBUG_MODE=off
     extra_hosts:
       - "host.docker.internal:host-gateway"
     ports:
