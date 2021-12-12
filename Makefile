@@ -24,4 +24,4 @@ rr-ash: ## RR ash
 
 .PHONY: rr-logs
 rr-logs: ## RR logs
-	@docker-compose -f $(YAML) logs rr -f
+	@docker-compose -f $(YAML) logs rr
