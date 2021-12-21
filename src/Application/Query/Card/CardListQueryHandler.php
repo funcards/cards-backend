@@ -14,10 +14,6 @@ use FC\Domain\ValueObject\Role;
 
 final class CardListQueryHandler implements QueryHandler
 {
-    /**
-     * @param Connection $connection
-     * @param AuthorizationCheckerInterface $authorizationChecker
-     */
     public function __construct(
         private Connection $connection,
         private AuthorizationCheckerInterface $authorizationChecker,
@@ -25,13 +21,11 @@ final class CardListQueryHandler implements QueryHandler
     }
 
     /**
-     * @param CardListQuery $query
-     * @return PaginatedResponse
      * @throws Exception
      */
     public function __invoke(CardListQuery $query): PaginatedResponse
     {
-        if (false === $this->authorizationChecker->isGranted(
+        if (!$this->authorizationChecker->isGranted(
                 $query->getBoardId(),
                 $query->getUserId(),
                 Role::cardView()
@@ -48,13 +42,13 @@ final class CardListQueryHandler implements QueryHandler
             ->setMaxResults($query->getPageSize())
             ->setParameter('boardId', $query->getBoardId());
 
-        if (0 < \count($query->getCategories())) {
+        if ([] !== $query->getCategories()) {
             $qb
                 ->andWhere('c.category_id IN(:categories)')
                 ->setParameter('categories', $query->getCategories(), Connection::PARAM_STR_ARRAY);
         }
 
-        if (0 < \count($query->getCards())) {
+        if ([] !== $query->getCards()) {
             $qb
                 ->andWhere('c.id IN(:cards)')
                 ->setParameter('cards', $query->getCards(), Connection::PARAM_STR_ARRAY);
@@ -70,7 +64,7 @@ final class CardListQueryHandler implements QueryHandler
                 $row['name'],
                 $row['content'],
                 (int)$row['position'],
-                \json_decode($row['tags'], true),
+                \json_decode($row['tags'], true, 512, JSON_THROW_ON_ERROR),
             );
         }
 

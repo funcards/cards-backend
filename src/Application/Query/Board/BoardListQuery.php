@@ -13,12 +13,6 @@ final class BoardListQuery extends PaginatedQuery
      */
     private array $boards;
 
-    /**
-     * @param string $userId
-     * @param int $pageIndex
-     * @param int $pageSize
-     * @param string ...$boards
-     */
     public function __construct(private string $userId, int $pageIndex = 0, int $pageSize = 0, string ...$boards)
     {
         parent::__construct($pageIndex, $pageSize);
@@ -26,9 +20,6 @@ final class BoardListQuery extends PaginatedQuery
         $this->boards = $boards;
     }
 
-    /**
-     * @return string
-     */
     public function getUserId(): string
     {
         return $this->userId;

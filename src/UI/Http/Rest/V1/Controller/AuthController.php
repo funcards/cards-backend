@@ -44,8 +44,6 @@ final class AuthController extends ApiController
      *     @OA\Response(response=500, description="Internal Server Error", @OA\JsonContent(ref="#/components/schemas/error")),
      * )
      *
-     * @param Request $request
-     * @return Response
      * @throws \Throwable
      */
     #[Route('/sign-in', 'sign-in', methods: 'POST')]
@@ -82,8 +80,6 @@ final class AuthController extends ApiController
      *     @OA\Response(response=500, description="Internal Server Error", @OA\JsonContent(ref="#/components/schemas/error")),
      * )
      *
-     * @param Request $request
-     * @return Response
      * @throws \Throwable
      */
     #[Route('/sign-up', 'sign-up', methods: 'POST')]
@@ -122,8 +118,6 @@ final class AuthController extends ApiController
      *     @OA\Response(response=500, description="Internal Server Error", @OA\JsonContent(ref="#/components/schemas/error")),
      * )
      *
-     * @param Request $request
-     * @return Response
      * @throws \Throwable
      */
     #[Route('/refresh-token', 'refresh-token', methods: 'POST')]

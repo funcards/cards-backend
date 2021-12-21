@@ -14,10 +14,6 @@ use FC\Domain\ValueObject\Role;
 
 final class TagListQueryHandler implements QueryHandler
 {
-    /**
-     * @param Connection $connection
-     * @param AuthorizationCheckerInterface $authorizationChecker
-     */
     public function __construct(
         private Connection $connection,
         private AuthorizationCheckerInterface $authorizationChecker,
@@ -25,13 +21,11 @@ final class TagListQueryHandler implements QueryHandler
     }
 
     /**
-     * @param TagListQuery $query
-     * @return PaginatedResponse
      * @throws Exception
      */
     public function __invoke(TagListQuery $query): PaginatedResponse
     {
-        if (false === $this->authorizationChecker->isGranted($query->getBoardId(), $query->getUserId(), Role::tagView())) {
+        if (!$this->authorizationChecker->isGranted($query->getBoardId(), $query->getUserId(), Role::tagView())) {
             throw AccessDeniedException::new();
         }
 
@@ -43,7 +37,7 @@ final class TagListQueryHandler implements QueryHandler
             ->setMaxResults($query->getPageSize())
             ->setParameter('boardId', $query->getBoardId());
 
-        if (0 < \count($query->getTags())) {
+        if ([] !== $query->getTags()) {
             $qb
                 ->andWhere('t.id IN(:tags)')
                 ->setParameter('tags', $query->getTags(), Connection::PARAM_STR_ARRAY);

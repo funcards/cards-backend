@@ -18,9 +18,6 @@ final class SignUpCommand implements Command
     public const DEFAULT = ['name' => '', 'email' => '', 'password' => '', 'roles' => ['ROLE_API_USER']];
 
     /**
-     * @param string $name
-     * @param string $email
-     * @param string $password
      * @param array<string> $roles
      */
     public function __construct(
@@ -34,25 +31,16 @@ final class SignUpCommand implements Command
     ) {
     }
 
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * @return string
-     */
     public function getEmail(): string
     {
         return $this->email;
     }
 
-    /**
-     * @return string
-     */
     public function getPassword(): string
     {
         return $this->password;

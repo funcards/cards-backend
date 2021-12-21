@@ -19,9 +19,6 @@ final class AddMemberCommand implements Command
     public const DEFAULT = ['member_id' => '', 'roles' => []];
 
     /**
-     * @param string $boardId
-     * @param string $userId
-     * @param string $memberId
      * @param array<string> $roles
      */
     public function __construct(
@@ -33,25 +30,16 @@ final class AddMemberCommand implements Command
     ) {
     }
 
-    /**
-     * @return string
-     */
     public function getBoardId(): string
     {
         return $this->boardId;
     }
 
-    /**
-     * @return string
-     */
     public function getUserId(): string
     {
         return $this->userId;
     }
 
-    /**
-     * @return string
-     */
     public function getMemberId(): string
     {
         return $this->memberId;

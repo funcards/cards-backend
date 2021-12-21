@@ -8,9 +8,6 @@ use JetBrains\PhpStorm\Pure;
 
 final class InvalidRefreshTokenException extends \RuntimeException implements RefreshTokenException
 {
-    /**
-     * @return static
-     */
     #[Pure]
     public static function new(): self
     {

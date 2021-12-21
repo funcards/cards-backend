@@ -15,25 +15,18 @@ use FC\Domain\ValueObject\Role;
 
 final class RemoveTagCommandHandler implements CommandHandler
 {
-    /**
-     * @param TagRepository $tagRepository
-     * @param AuthorizationCheckerInterface $authorizationChecker
-     */
     public function __construct(
         private TagRepository $tagRepository,
         private AuthorizationCheckerInterface $authorizationChecker,
     ) {
     }
 
-    /**
-     * @param RemoveTagCommand $command
-     */
     public function __invoke(RemoveTagCommand $command): void
     {
         $boardId = BoardId::fromString($command->getBoardId());
         $userId = UserId::fromString($command->getUserId());
 
-        if (false === $this->authorizationChecker->isGranted($boardId, $userId, Role::tagRemove())) {
+        if (!$this->authorizationChecker->isGranted($boardId, $userId, Role::tagRemove())) {
             throw AccessDeniedException::new();
         }
 

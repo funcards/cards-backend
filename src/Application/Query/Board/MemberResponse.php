@@ -14,9 +14,6 @@ use Symfony\Component\Serializer\Annotation\SerializedName;
 final class MemberResponse implements Response
 {
     /**
-     * @param string $userId
-     * @param string $name
-     * @param string $email
      * @param array<string> $roles
      */
     public function __construct(
@@ -27,25 +24,16 @@ final class MemberResponse implements Response
     ) {
     }
 
-    /**
-     * @return string
-     */
     public function getUserId(): string
     {
         return $this->userId;
     }
 
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * @return string
-     */
     public function getEmail(): string
     {
         return $this->email;

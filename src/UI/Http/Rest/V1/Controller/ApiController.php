@@ -28,9 +28,6 @@ abstract class ApiController implements ServiceSubscriberInterface
 {
     protected const UUID_REGEX = '^[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}$';
 
-    /**
-     * @param ContainerInterface $container
-     */
     public function __construct(protected ContainerInterface $container)
     {
     }
@@ -52,27 +49,16 @@ abstract class ApiController implements ServiceSubscriberInterface
         ];
     }
 
-    /**
-     * @return string
-     */
     protected function uuid(): string
     {
         return Uuid::v4()->toRfc4122();
     }
 
-    /**
-     * @param Query $query
-     * @return QueryResponse
-     */
     protected function ask(Query $query): QueryResponse
     {
         return $this->container->get('query_bus')->ask($query);
     }
 
-    /**
-     * @param Command $command
-     * @return mixed
-     */
     protected function sendCommand(Command $command): mixed
     {
         return $this->container->get('command_bus')->send($command);
@@ -80,10 +66,8 @@ abstract class ApiController implements ServiceSubscriberInterface
 
     /**
      * @param array<string, mixed> $data
-     * @param string $command
      * @psalm-param class-string $command
      *
-     * @return mixed
      */
     protected function send(array $data, string $command): mixed
     {
@@ -94,11 +78,8 @@ abstract class ApiController implements ServiceSubscriberInterface
      * @template T of Command
      *
      * @param array<string, mixed> $data
-     * @param string $className
      * @phpstan-param class-string<T> $className
      *
-     * @return Command
-     * @phpstan-return T
      */
     protected function command(array $data, string $className): Command
     {
@@ -114,9 +95,7 @@ abstract class ApiController implements ServiceSubscriberInterface
     /**
      * Returns absolute route url
      *
-     * @param string $route
      * @param array<string, mixed> $parameters
-     * @return string
      */
     protected function url(string $route, array $parameters = []): string
     {
@@ -127,9 +106,6 @@ abstract class ApiController implements ServiceSubscriberInterface
         );
     }
 
-    /**
-     * @return string
-     */
     protected function getUserId(): string
     {
         if (!$this->container->get('authorization_checker')->isGranted('ROLE_API_USER')) {
@@ -139,9 +115,6 @@ abstract class ApiController implements ServiceSubscriberInterface
         return $this->container->get('token_storage')->getToken()->getUserIdentifier();
     }
 
-    /**
-     * @return LoggerInterface
-     */
     protected function logger(): LoggerInterface
     {
         return $this->container->get('logger');
@@ -150,11 +123,8 @@ abstract class ApiController implements ServiceSubscriberInterface
     /**
      * Returns a JsonResponse that uses the serializer component if enabled, or json_encode.
      *
-     * @param mixed $data
-     * @param int $status
      * @param array<string, string|string[]> $headers
      * @param array<string, mixed> $context
-     * @return JsonResponse
      */
     protected function json(mixed $data, int $status = 200, array $headers = [], array $context = []): JsonResponse
     {
@@ -168,35 +138,25 @@ abstract class ApiController implements ServiceSubscriberInterface
     }
 
     /**
-     * @param string $route
      * @param array<string, mixed> $parameters
-     * @return Response
      */
     protected function created(string $route, array $parameters = []): Response
     {
         return new Response(status: Response::HTTP_CREATED, headers: ['Location' => $this->url($route, $parameters)]);
     }
 
-    /**
-     * @return Response
-     */
     protected function noContent(): Response
     {
         return new Response(status: Response::HTTP_NO_CONTENT);
     }
 
-    /**
-     * @param string $method
-     */
     protected function debugMethod(string $method): void
     {
         $this->logger()->debug('ACTION -- {method}', ['method' => $method]);
     }
 
     /**
-     * @param string $message
      * @param \Throwable|null $previous
-     * @return NotFoundHttpException
      */
     protected function createNotFoundException(string $message = 'Not Found', \Throwable $previous = null): NotFoundHttpException
     {

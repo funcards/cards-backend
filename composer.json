@@ -86,6 +86,7 @@
     "phpstan/phpstan-deprecation-rules": "^1.0",
     "phpstan/phpstan-phpunit": "^1.0",
     "phpstan/phpstan-strict-rules": "^1.0",
+    "rector/rector": "^0.12.8",
     "symfony/maker-bundle": "^1.35",
     "symfony/phpunit-bridge": "^6.0"
   },

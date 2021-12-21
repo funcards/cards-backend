@@ -13,13 +13,6 @@ final class CategoryListQuery extends PaginatedQuery
      */
     private array $categories;
 
-    /**
-     * @param string $boardId
-     * @param string $userId
-     * @param int $pageIndex
-     * @param int $pageSize
-     * @param string ...$categories
-     */
     public function __construct(
         private string $boardId,
         private string $userId,
@@ -32,17 +25,11 @@ final class CategoryListQuery extends PaginatedQuery
         $this->categories = $categories;
     }
 
-    /**
-     * @return string
-     */
     public function getBoardId(): string
     {
         return $this->boardId;
     }
 
-    /**
-     * @return string
-     */
     public function getUserId(): string
     {
         return $this->userId;

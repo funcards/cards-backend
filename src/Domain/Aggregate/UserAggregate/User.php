@@ -21,15 +21,6 @@ final class User implements AggregateRoot
 {
     use EventRecording;
 
-    /**
-     * @param UserId $id
-     * @param UserName $name
-     * @param UserEmail $email
-     * @param UserPassword $password
-     * @param Roles $roles
-     * @param CreatedAt $createdAt
-     * @param UpdatedAt|null $updatedAt
-     */
     public function __construct(
         private UserId $id,
         private UserName $name,
@@ -41,14 +32,6 @@ final class User implements AggregateRoot
     ) {
     }
 
-    /**
-     * @param UserId $userId
-     * @param UserName $name
-     * @param UserEmail $email
-     * @param UserPassword $password
-     * @param Roles $roles
-     * @return static
-     */
     public static function create(
         UserId $userId,
         UserName $name,
@@ -70,51 +53,32 @@ final class User implements AggregateRoot
         return $user;
     }
 
-    /**
-     * @return UserId
-     */
     public function id(): UserId
     {
         return $this->id;
     }
 
-    /**
-     * @return UserEmail
-     */
     public function email(): UserEmail
     {
         return $this->email;
     }
 
-    /**
-     * @return Roles
-     */
     public function roles(): Roles
     {
         return $this->roles;
     }
 
-    /**
-     * @return UserPassword
-     */
     public function password(): UserPassword
     {
         return $this->password;
     }
 
-    /**
-     * @param Role $role
-     * @return bool
-     */
     #[Pure]
     public function isGranted(Role $role): bool
     {
         return $this->roles->contains($role);
     }
 
-    /**
-     * @param UserEmail $newEmail
-     */
     public function changeEmail(UserEmail $newEmail): void
     {
         if ($this->email->isEqualTo($newEmail)) {
@@ -129,9 +93,6 @@ final class User implements AggregateRoot
         );
     }
 
-    /**
-     * @param UserName $newName
-     */
     public function changeName(UserName $newName): void
     {
         if ($this->name->isEqualTo($newName)) {
@@ -146,9 +107,6 @@ final class User implements AggregateRoot
         );
     }
 
-    /**
-     * @param UserPassword $newPassword
-     */
     public function changePassword(UserPassword $newPassword): void
     {
         if ($this->password->isEqualTo($newPassword)) {
@@ -163,9 +121,6 @@ final class User implements AggregateRoot
         );
     }
 
-    /**
-     * @param Roles $newRoles
-     */
     public function changeRoles(Roles $newRoles): void
     {
         if ($this->roles->isEqualTo($newRoles)) {

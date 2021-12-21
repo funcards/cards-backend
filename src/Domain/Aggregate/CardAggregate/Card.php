@@ -20,15 +20,6 @@ final class Card implements AggregateRoot
 {
     use EventRecording;
 
-    /**
-     * @param CardId $id
-     * @param BoardId $boardId
-     * @param CategoryId $categoryId
-     * @param CardName $name
-     * @param CardContent $content
-     * @param CardPosition $position
-     * @param CardTags $tags
-     */
     public function __construct(
         private CardId $id,
         private BoardId $boardId,
@@ -40,16 +31,6 @@ final class Card implements AggregateRoot
     ) {
     }
 
-    /**
-     * @param CardId $cardId
-     * @param BoardId $boardId
-     * @param CategoryId $categoryId
-     * @param CardName $name
-     * @param CardContent $content
-     * @param CardPosition $position
-     * @param CardTags $tags
-     * @return static
-     */
     public static function create(
         CardId $cardId,
         BoardId $boardId,
@@ -74,17 +55,11 @@ final class Card implements AggregateRoot
         return $card;
     }
 
-    /**
-     * @return CardId
-     */
     public function id(): CardId
     {
         return $this->id;
     }
 
-    /**
-     * @param CategoryId $newCategoryId
-     */
     public function changeCategory(CategoryId $newCategoryId): void
     {
         if ($this->categoryId->isEqualTo($newCategoryId)) {
@@ -98,9 +73,6 @@ final class Card implements AggregateRoot
         );
     }
 
-    /**
-     * @param CardName $newName
-     */
     public function changeName(CardName $newName): void
     {
         if ($this->name->isEqualTo($newName)) {
@@ -114,9 +86,6 @@ final class Card implements AggregateRoot
         );
     }
 
-    /**
-     * @param CardContent $newContent
-     */
     public function changeContent(CardContent $newContent): void
     {
         if ($this->content->isEqualTo($newContent)) {
@@ -130,9 +99,6 @@ final class Card implements AggregateRoot
         );
     }
 
-    /**
-     * @param CardPosition $newPosition
-     */
     public function changePosition(CardPosition $newPosition): void
     {
         if ($this->position->isEqualTo($newPosition)) {
@@ -146,9 +112,6 @@ final class Card implements AggregateRoot
         );
     }
 
-    /**
-     * @param CardTags $newTags
-     */
     public function changeTags(CardTags $newTags): void
     {
         if ($this->tags->isEqualTo($newTags)) {
@@ -162,17 +125,11 @@ final class Card implements AggregateRoot
         );
     }
 
-    /**
-     * @param TagId $tagId
-     */
     public function addTag(TagId $tagId): void
     {
         $this->changeTags($this->tags->add($tagId));
     }
 
-    /**
-     * @param TagId $tagId
-     */
     public function removeTag(TagId $tagId): void
     {
         $this->changeTags($this->tags->remove($tagId));

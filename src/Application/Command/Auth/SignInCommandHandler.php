@@ -14,11 +14,6 @@ use Symfony\Component\PasswordHasher\PasswordHasherInterface;
 
 final class SignInCommandHandler implements CommandHandler
 {
-    /**
-     * @param UserRepository $userRepository
-     * @param PasswordHasherInterface $passwordHasher
-     * @param AuthSessionServiceInterface $authSessionService
-     */
     public function __construct(
         private UserRepository $userRepository,
         private PasswordHasherInterface $passwordHasher,
@@ -27,8 +22,6 @@ final class SignInCommandHandler implements CommandHandler
     }
 
     /**
-     * @param SignInCommand $command
-     * @return Tokens
      * @throws \Throwable
      */
     public function __invoke(SignInCommand $command): Tokens

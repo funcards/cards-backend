@@ -15,9 +15,6 @@ class GenerateTokenCommand extends Command
     protected static $defaultName = 'jwt:generate-token';
     protected static $defaultDescription = 'Generates a JWT token.';
 
-    /**
-     * @param JWTManagerInterface $jwtManager
-     */
     public function __construct(private JWTManagerInterface $jwtManager)
     {
         parent::__construct();

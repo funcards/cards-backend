@@ -34,12 +34,6 @@ final class Board implements AggregateRoot
     ];
 
     /**
-     * @param BoardId $id
-     * @param UserId $ownerId
-     * @param BoardName $name
-     * @param BoardColor $color
-     * @param BoardDescription $description
-     * @param CreatedAt $createdAt
      * @param Collection<int, Member> $members
      */
     public function __construct(
@@ -53,14 +47,6 @@ final class Board implements AggregateRoot
     ) {
     }
 
-    /**
-     * @param BoardId $boardId
-     * @param UserId $ownerId
-     * @param BoardName $name
-     * @param BoardColor $color
-     * @param BoardDescription $description
-     * @return static
-     */
     public static function create(
         BoardId $boardId,
         UserId $ownerId,
@@ -83,37 +69,22 @@ final class Board implements AggregateRoot
         return $board;
     }
 
-    /**
-     * @return BoardId
-     */
     public function id(): BoardId
     {
         return $this->id;
     }
 
-    /**
-     * @return UserId
-     */
     public function ownerId(): UserId
     {
         return $this->ownerId;
     }
 
-    /**
-     * @param UserId $id
-     * @return bool
-     */
     #[Pure]
     public function isOwner(UserId $id): bool
     {
         return $this->ownerId->isEqualTo($id);
     }
 
-    /**
-     * @param UserId $userId
-     * @param Role $role
-     * @return bool
-     */
     public function isGranted(UserId $userId, Role $role): bool
     {
         if ($this->isOwner($userId)) {
@@ -136,8 +107,6 @@ final class Board implements AggregateRoot
     }
 
     /**
-     * @param UserId $userId
-     * @return Member
      * @throws NotFoundException
      */
     public function member(UserId $userId): Member
@@ -157,10 +126,6 @@ final class Board implements AggregateRoot
         );
     }
 
-    /**
-     * @param UserId $userId
-     * @param Roles $roles
-     */
     public function addMember(UserId $userId, Roles $roles): void
     {
         if ($roles->contains(Role::boardOwner())) {
@@ -194,9 +159,6 @@ final class Board implements AggregateRoot
         }
     }
 
-    /**
-     * @param UserId $userId
-     */
     public function removeMember(UserId $userId): void
     {
         if ($this->isOwner($userId)) {
@@ -207,9 +169,6 @@ final class Board implements AggregateRoot
         $this->recordThat(new BoardMemberWasRemoved($this->id->asString(), $userId->asString()));
     }
 
-    /**
-     * @param BoardName $newName
-     */
     public function changeName(BoardName $newName): void
     {
         if ($this->name->isEqualTo($newName)) {
@@ -221,9 +180,6 @@ final class Board implements AggregateRoot
         $this->recordThat(new BoardNameWasChanged($this->id->asString(), $newName->asString()));
     }
 
-    /**
-     * @param BoardColor $newColor
-     */
     public function changeColor(BoardColor $newColor): void
     {
         if ($this->color->isEqualTo($newColor)) {
@@ -235,9 +191,6 @@ final class Board implements AggregateRoot
         $this->recordThat(new BoardColorWasChanged($this->id->asString(), $newColor->asString()));
     }
 
-    /**
-     * @param BoardDescription $newDescription
-     */
     public function changeDescription(BoardDescription $newDescription): void
     {
         if ($this->description->isEqualTo($newDescription)) {

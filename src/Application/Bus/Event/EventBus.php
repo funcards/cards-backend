@@ -8,8 +8,5 @@ use FC\Domain\Event\DomainEvent;
 
 interface EventBus
 {
-    /**
-     * @param DomainEvent ...$events
-     */
     public function publish(DomainEvent ...$events): void;
 }

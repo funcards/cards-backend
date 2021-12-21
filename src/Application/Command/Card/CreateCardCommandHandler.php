@@ -22,11 +22,6 @@ use FC\Domain\ValueObject\Role;
 
 final class CreateCardCommandHandler implements CommandHandler
 {
-    /**
-     * @param CardRepository $cardRepository
-     * @param AuthorizationCheckerInterface $authorizationChecker
-     * @param EventBus $eventBus
-     */
     public function __construct(
         private CardRepository $cardRepository,
         private AuthorizationCheckerInterface $authorizationChecker,
@@ -34,15 +29,12 @@ final class CreateCardCommandHandler implements CommandHandler
     ) {
     }
 
-    /**
-     * @param CreateCardCommand $command
-     */
     public function __invoke(CreateCardCommand $command): void
     {
         $boardId = BoardId::fromString($command->getBoardId());
         $userId = UserId::fromString($command->getUserId());
 
-        if (false === $this->authorizationChecker->isGranted($boardId, $userId, Role::cardAdd())) {
+        if (!$this->authorizationChecker->isGranted($boardId, $userId, Role::cardAdd())) {
             throw AccessDeniedException::new();
         }
 

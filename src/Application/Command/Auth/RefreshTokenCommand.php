@@ -16,18 +16,12 @@ final class RefreshTokenCommand implements Command
 {
     public const DEFAULT = ['token' => ''];
 
-    /**
-     * @param string $token
-     */
     public function __construct(
         /** @OA\Property() */
         #[NotBlank, Uuid(message: 'Token is not valid.', versions: [Uuid::V4_RANDOM], strict: false)] private string $token,
     ) {
     }
 
-    /**
-     * @return string
-     */
     public function getToken(): string
     {
         return $this->token;

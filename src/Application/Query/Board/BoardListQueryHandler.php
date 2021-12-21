@@ -13,16 +13,11 @@ final class BoardListQueryHandler implements QueryHandler
 {
     private const SEPARATOR = '<|>';
 
-    /**
-     * @param Connection $connection
-     */
     public function __construct(private Connection $connection)
     {
     }
 
     /**
-     * @param BoardListQuery $query
-     * @return PaginatedResponse
      * @throws Exception
      */
     public function __invoke(BoardListQuery $query): PaginatedResponse
@@ -44,7 +39,7 @@ final class BoardListQueryHandler implements QueryHandler
             ->setMaxResults($query->getPageSize())
             ->setParameter('userId', $query->getUserId());
 
-        if (0 < \count($query->getBoards())) {
+        if ([] !== $query->getBoards()) {
             $qb
                 ->andWhere('b.id IN(:boards)')
                 ->setParameter('boards', $query->getBoards(), Connection::PARAM_STR_ARRAY);
@@ -61,7 +56,7 @@ final class BoardListQueryHandler implements QueryHandler
             $roles = \explode(self::SEPARATOR, $row['member_roles']);
 
             foreach ($ids as $i => $userId) {
-                $members[$userId] = new MemberResponse($userId, $names[$i], $emails[$i], \json_decode($roles[$i], true));
+                $members[$userId] = new MemberResponse($userId, $names[$i], $emails[$i], \json_decode($roles[$i], true, 512, JSON_THROW_ON_ERROR));
             }
 
             $data[] = new BoardResponse(

@@ -24,7 +24,7 @@ final class RolesConstraintValidator extends ConstraintValidator
             throw new UnexpectedValueException($value, 'array');
         }
 
-        if (0 === \count($value)) {
+        if ([] === $value) {
             $this->context->buildViolation('Empty roles.')->addViolation();
             return;
         }

@@ -16,17 +16,10 @@ use FC\Domain\Aggregate\UserAggregate\UserId;
 
 final class CreateBoardCommandHandler implements CommandHandler
 {
-    /**
-     * @param BoardRepository $boardRepository
-     * @param EventBus $eventBus
-     */
     public function __construct(private BoardRepository $boardRepository, private EventBus $eventBus)
     {
     }
 
-    /**
-     * @param CreateBoardCommand $command
-     */
     public function __invoke(CreateBoardCommand $command): void
     {
         $board = Board::create(

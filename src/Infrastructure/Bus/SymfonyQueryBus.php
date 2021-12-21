@@ -17,9 +17,6 @@ final class SymfonyQueryBus implements QueryBus
 {
     use HandleTrait;
 
-    /**
-     * @param MessageBusInterface $messageBus
-     */
     public function __construct(MessageBusInterface $messageBus)
     {
         $this->messageBus = $messageBus;

@@ -26,8 +26,8 @@ RUN apk add --update --no-cache bash pcre icu yaml libpq libuv libpng libjpeg li
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 # Copy RoadRunner
-COPY --from=spiralscout/roadrunner:2.6.3 /usr/bin/rr /usr/bin/rr
-COPY --from=spiralscout/roadrunner:2.6.3 /etc/rr.yaml /etc/rr.yaml
+COPY --from=spiralscout/roadrunner:2.6.6 /usr/bin/rr /usr/bin/rr
+COPY --from=spiralscout/roadrunner:2.6.6 /etc/rr.yaml /etc/rr.yaml
 
 ENV PHP_MEMORY_LIMIT=-1
 ENV PHP_MAX_EXECUTION_TIME=0

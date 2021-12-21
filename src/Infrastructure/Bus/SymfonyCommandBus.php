@@ -14,9 +14,6 @@ use Symfony\Component\Messenger\Stamp\HandledStamp;
 
 final class SymfonyCommandBus implements CommandBus
 {
-    /**
-     * @param MessageBusInterface $messageBus
-     */
     public function __construct(private MessageBusInterface $messageBus)
     {
     }

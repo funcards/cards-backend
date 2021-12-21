@@ -12,13 +12,11 @@ interface JWTEncoder
     /**
      * @param array<string, mixed> $payload
      * @param array<string, mixed> $headers
-     * @return string
      * @throws \Throwable
      */
     public function encode(array $payload, array $headers = []): string;
 
     /**
-     * @param string $token
      * @return array<string, mixed> return payload
      * @throws InvalidTokenException
      * @throws ExpiredTokenException

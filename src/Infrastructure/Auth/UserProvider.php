@@ -12,9 +12,6 @@ use Symfony\Component\Security\Core\User\UserProviderInterface;
 
 final class UserProvider implements UserProviderInterface
 {
-    /**
-     * @param Connection $connection
-     */
     public function __construct(private Connection $connection)
     {
     }
@@ -60,6 +57,6 @@ final class UserProvider implements UserProviderInterface
             throw $ex;
         }
 
-        return new User($data['id'], $data['password'], \json_decode($data['roles'], true));
+        return new User($data['id'], $data['password'], \json_decode($data['roles'], true, 512, JSON_THROW_ON_ERROR));
     }
 }

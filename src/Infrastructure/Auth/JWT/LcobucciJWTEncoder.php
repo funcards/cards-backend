@@ -27,11 +27,6 @@ final class LcobucciJWTEncoder implements JWTEncoder
         RegisteredClaims::SUBJECT => 'relatedTo',
     ];
 
-    /**
-     * @param Configuration $configuration
-     * @param Clock $clock
-     * @param \DateInterval $ttl
-     */
     public function __construct(private Configuration $configuration, private Clock $clock, private \DateInterval $ttl)
     {
     }

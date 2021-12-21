@@ -19,12 +19,7 @@ final class CardListQuery extends PaginatedQuery
     private array $cards;
 
     /**
-     * @param string $boardId
-     * @param string $userId
-     * @param int $pageIndex
-     * @param int $pageSize
      * @param array<string> $categories
-     * @param string ...$cards
      */
     public function __construct(
         private string $boardId,
@@ -56,17 +51,11 @@ final class CardListQuery extends PaginatedQuery
         return $this->cards;
     }
 
-    /**
-     * @return string
-     */
     public function getBoardId(): string
     {
         return $this->boardId;
     }
 
-    /**
-     * @return string
-     */
     public function getUserId(): string
     {
         return $this->userId;

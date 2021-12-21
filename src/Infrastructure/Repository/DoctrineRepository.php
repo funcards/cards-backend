@@ -11,9 +11,6 @@ use FC\Domain\ValueObject\Id;
 
 abstract class DoctrineRepository
 {
-    /**
-     * @param EntityManagerInterface $entityManager
-     */
     public function __construct(protected EntityManagerInterface $entityManager)
     {
     }
@@ -21,12 +18,7 @@ abstract class DoctrineRepository
     /**
      * @template T of AggregateRoot
      *
-     * @param string $className
-     * @param Id $id
      * @psalm-param class-string<T> $className
-     *
-     * @return AggregateRoot
-     * @psalm-return T
      *
      * @throws NotFoundException
      */
@@ -39,17 +31,11 @@ abstract class DoctrineRepository
         return $entity;
     }
 
-    /**
-     * @param AggregateRoot $entity
-     */
     protected function persist(AggregateRoot $entity): void
     {
         $this->entityManager->persist($entity);
     }
 
-    /**
-     * @param AggregateRoot $entity
-     */
     protected function delete(AggregateRoot $entity): void
     {
         $this->entityManager->remove($entity);

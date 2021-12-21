@@ -21,28 +21,16 @@ final class Roles implements \Countable, \Stringable
         $this->roles = \array_unique(\array_map(static fn($role) => (string)$role, $roles));
     }
 
-    /**
-     * @param Role ...$roles
-     * @return static
-     */
     public static function from(Role ...$roles): self
     {
         return new self($roles);
     }
 
-    /**
-     * @param string ...$roles
-     * @return static
-     */
     public static function fromString(string ...$roles): self
     {
         return self::from(...\array_map(static fn($role) => Role::fromString($role), $roles));
     }
 
-    /**
-     * @param Role|string ...$roles
-     * @return static
-     */
     public function add(Role|string ...$roles): self
     {
         return new self(\array_merge($this->roles, \array_map(static fn($role) => (string)$role, $roles)));
@@ -61,12 +49,9 @@ final class Roles implements \Countable, \Stringable
      */
     final public function __toString(): string
     {
-        return \json_encode($this->toArray());
+        return \json_encode($this->toArray(), JSON_THROW_ON_ERROR);
     }
 
-    /**
-     * @return bool
-     */
     #[Pure]
     public function isEmpty(): bool
     {
@@ -82,11 +67,6 @@ final class Roles implements \Countable, \Stringable
     }
 
 
-    /**
-     * @param Role $role
-     * @param Role ...$roles
-     * @return bool
-     */
     #[Pure]
     public function contains(Role $role, Role ...$roles): bool
     {
@@ -103,10 +83,6 @@ final class Roles implements \Countable, \Stringable
         return true;
     }
 
-    /**
-     * @param Roles $roles
-     * @return bool
-     */
     #[Pure]
     public function isEqualTo(self $roles): bool
     {

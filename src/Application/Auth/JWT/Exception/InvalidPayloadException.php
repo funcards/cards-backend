@@ -9,9 +9,6 @@ use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
 final class InvalidPayloadException extends AuthenticationException implements JWTException
 {
-    /**
-     * @return static
-     */
     #[Pure]
     public static function new(): self
     {

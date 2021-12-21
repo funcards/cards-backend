@@ -12,9 +12,6 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 final class WebsocketsController
 {
-    /**
-     * @param LoggerInterface $logger
-     */
     public function __construct(private LoggerInterface $logger)
     {
     }
@@ -46,21 +43,12 @@ final class WebsocketsController
         throw new AccessDeniedException('Access Denied.');
     }
 
-    /**
-     * @param Request $request
-     * @return bool
-     */
     private function authorizeServer(Request $request): bool
     {
         // TODO
         return true;
     }
 
-    /**
-     * @param Request $request
-     * @param string $topic
-     * @return bool
-     */
     private function authorizeTopic(Request $request, string $topic): bool
     {
         // TODO

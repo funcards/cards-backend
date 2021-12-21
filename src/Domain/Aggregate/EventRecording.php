@@ -13,9 +13,6 @@ trait EventRecording
      */
     private array $events = [];
 
-    /**
-     * @param DomainEvent $event
-     */
     final protected function recordThat(DomainEvent $event): void
     {
         $this->events[] = $event;

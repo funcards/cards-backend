@@ -9,13 +9,6 @@ use FC\Domain\ValueObject\Roles;
 
 final class Member implements Entity
 {
-    /**
-     * @param MemberId $id
-     * @param UserId $userId
-     * @param Roles $roles
-     * @param CreatedAt $createdAt
-     * @param Board $board
-     */
     public function __construct(
         private MemberId $id,
         private UserId $userId,
@@ -25,33 +18,21 @@ final class Member implements Entity
     ) {
     }
 
-    /**
-     * @return MemberId
-     */
     public function id(): MemberId
     {
         return $this->id;
     }
 
-    /**
-     * @return UserId
-     */
     public function userId(): UserId
     {
         return $this->userId;
     }
 
-    /**
-     * @return Roles
-     */
     public function roles(): Roles
     {
         return $this->roles;
     }
 
-    /**
-     * @param Roles $newRoles
-     */
     public function changeRoles(Roles $newRoles): void
     {
         if ($this->roles->isEqualTo($newRoles)) {

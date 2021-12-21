@@ -11,16 +11,11 @@ use FC\Application\Bus\Query\QueryHandler;
 
 final class UserListQueryHandler implements QueryHandler
 {
-    /**
-     * @param Connection $connection
-     */
     public function __construct(private Connection $connection)
     {
     }
 
     /**
-     * @param UserListQuery $query
-     * @return PaginatedResponse
      * @throws Exception
      */
     public function __invoke(UserListQuery $query): PaginatedResponse
@@ -32,13 +27,13 @@ final class UserListQueryHandler implements QueryHandler
             ->setFirstResult($query->getPageIndex())
             ->setMaxResults($query->getPageSize());
 
-        if (0 < \count($query->getUsers())) {
+        if ([] !== $query->getUsers()) {
             $qb
                 ->andWhere('u.id IN(:users)')
                 ->setParameter('users', $query->getUsers(), Connection::PARAM_STR_ARRAY);
         }
 
-        if (0 < \count($query->getEmails())) {
+        if ([] !== $query->getEmails()) {
             $qb
                 ->andWhere('u.email IN(:emails)')
                 ->setParameter('emails', \array_map('strtolower', $query->getEmails()), Connection::PARAM_STR_ARRAY);

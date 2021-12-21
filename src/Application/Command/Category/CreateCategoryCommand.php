@@ -19,13 +19,6 @@ final class CreateCategoryCommand implements Command
 {
     public const DEFAULT = ['name' => '', 'position' => 0];
 
-    /**
-     * @param string $boardId
-     * @param string $userId
-     * @param string $categoryId
-     * @param string $name
-     * @param int $position
-     */
     public function __construct(
         #[SerializedName('board_id')] #[NotBlank, Uuid(versions: [Uuid::V4_RANDOM])] private string $boardId,
         #[SerializedName('user_id')] #[NotBlank, Uuid(versions: [Uuid::V4_RANDOM])] private string $userId,
@@ -35,41 +28,26 @@ final class CreateCategoryCommand implements Command
     ) {
     }
 
-    /**
-     * @return string
-     */
     public function getBoardId(): string
     {
         return $this->boardId;
     }
 
-    /**
-     * @return string
-     */
     public function getUserId(): string
     {
         return $this->userId;
     }
 
-    /**
-     * @return string
-     */
     public function getCategoryId(): string
     {
         return $this->categoryId;
     }
 
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * @return int
-     */
     public function getPosition(): int
     {
         return $this->position;

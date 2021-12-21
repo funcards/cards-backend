@@ -40,7 +40,6 @@ final class UserController extends ApiController
      *     }
      * )
      *
-     * @return Response
      */
     #[Route('/me', methods: 'GET')]
     public function me(): Response
@@ -50,7 +49,7 @@ final class UserController extends ApiController
         /** @var PaginatedResponse $response */
         $response = $this->ask(new UserListQuery(0, 1, [$this->getUserId()]));
 
-        if (0 === \count($response->getData())) {
+        if ([] === $response->getData()) {
             throw $this->createNotFoundException();
         }
 
@@ -78,8 +77,6 @@ final class UserController extends ApiController
      *     }
      * )
      *
-     * @param string $userId
-     * @return Response
      */
     #[Route('/{userId}', 'user', ['userId' => self::UUID_REGEX], methods: 'GET')]
     public function get(string $userId): Response
@@ -89,7 +86,7 @@ final class UserController extends ApiController
         /** @var PaginatedResponse $response */
         $response = $this->ask(new UserListQuery(0, 1, [$userId]));
 
-        if (0 === \count($response->getData())) {
+        if ([] === $response->getData()) {
             throw $this->createNotFoundException();
         }
 
@@ -124,8 +121,6 @@ final class UserController extends ApiController
      *     }
      * )
      *
-     * @param Request $request
-     * @return Response
      */
     #[Route(methods: 'GET')]
     public function list(Request $request): Response

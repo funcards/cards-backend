@@ -9,8 +9,6 @@ use FC\Domain\Event\DomainEvent;
 final class CardTagsWasChanged extends DomainEvent
 {
     /**
-     * @param string $aggregateId
-     * @param string $boardId
      * @param array<string> $tags
      */
     public function __construct(string $aggregateId, private string $boardId, private array $tags)
@@ -18,9 +16,6 @@ final class CardTagsWasChanged extends DomainEvent
         parent::__construct($aggregateId);
     }
 
-    /**
-     * @return string
-     */
     public function getBoardId(): string
     {
         return $this->boardId;

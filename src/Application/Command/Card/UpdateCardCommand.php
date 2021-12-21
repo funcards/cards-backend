@@ -19,13 +19,6 @@ use Symfony\Component\Validator\Constraints\Uuid;
 final class UpdateCardCommand implements Command
 {
     /**
-     * @param string $boardId
-     * @param string $userId
-     * @param string $cardId
-     * @param string|null $categoryId
-     * @param string|null $name
-     * @param string|null $content
-     * @param int|null $position
      * @param array<string>|null $tags
      */
     public function __construct(
@@ -41,57 +34,36 @@ final class UpdateCardCommand implements Command
     ) {
     }
 
-    /**
-     * @return string
-     */
     public function getBoardId(): string
     {
         return $this->boardId;
     }
 
-    /**
-     * @return string
-     */
     public function getUserId(): string
     {
         return $this->userId;
     }
 
-    /**
-     * @return string
-     */
     public function getCardId(): string
     {
         return $this->cardId;
     }
 
-    /**
-     * @return string|null
-     */
     public function getCategoryId(): ?string
     {
         return $this->categoryId;
     }
 
-    /**
-     * @return string|null
-     */
     public function getName(): ?string
     {
         return $this->name;
     }
 
-    /**
-     * @return string|null
-     */
     public function getContent(): ?string
     {
         return $this->content;
     }
 
-    /**
-     * @return int|null
-     */
     public function getPosition(): ?int
     {
         return $this->position;

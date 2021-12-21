@@ -9,10 +9,6 @@ use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
 final class InvalidTokenException extends AuthenticationException implements JWTException
 {
-    /**
-     * @param \Throwable $previous
-     * @return static
-     */
     #[Pure]
     public static function new(\Throwable $previous): self
     {

@@ -9,11 +9,6 @@ use JetBrains\PhpStorm\Pure;
 
 final class CommandHandlerNotFoundException extends \RuntimeException implements CommandBusException
 {
-    /**
-     * @param Command $command
-     * @param \Throwable|null $previous
-     * @return static
-     */
     #[Pure]
     public static function create(Command $command, ?\Throwable $previous = null): self
     {

@@ -46,9 +46,6 @@ final class CategoryController extends ApiController
      *     }
      * )
      *
-     * @param string $boardId
-     * @param string $categoryId
-     * @return Response
      */
     #[Route('/{categoryId}', 'category', ['categoryId' => self::UUID_REGEX], methods: 'GET')]
     public function get(string $boardId, string $categoryId): Response
@@ -58,7 +55,7 @@ final class CategoryController extends ApiController
         /** @var PaginatedResponse $response */
         $response = $this->ask(new CategoryListQuery($boardId, $this->getUserId(), 0, 1, $categoryId));
 
-        if (0 === \count($response->getData())) {
+        if ([] === $response->getData()) {
             throw $this->createNotFoundException();
         }
 
@@ -92,9 +89,6 @@ final class CategoryController extends ApiController
      *     }
      * )
      *
-     * @param Request $request
-     * @param string $boardId
-     * @return Response
      */
     #[Route(methods: 'GET')]
     public function list(Request $request, string $boardId): Response
@@ -139,9 +133,6 @@ final class CategoryController extends ApiController
      *     }
      * )
      *
-     * @param Request $request
-     * @param string $boardId
-     * @return Response
      */
     #[Route(methods: 'POST')]
     public function create(Request $request, string $boardId): Response
@@ -184,9 +175,6 @@ final class CategoryController extends ApiController
      *     }
      * )
      *
-     * @param Request $request
-     * @param string $boardId
-     * @return Response
      */
     #[Route(methods: 'PATCH')]
     public function batchUpdate(Request $request, string $boardId): Response
@@ -232,10 +220,6 @@ final class CategoryController extends ApiController
      *     }
      * )
      *
-     * @param Request $request
-     * @param string $boardId
-     * @param string $categoryId
-     * @return Response
      */
     #[Route('/{categoryId}', requirements: ['categoryId' => self::UUID_REGEX], methods: 'PATCH')]
     public function update(Request $request, string $boardId, string $categoryId): Response
@@ -268,9 +252,6 @@ final class CategoryController extends ApiController
      *     }
      * )
      *
-     * @param string $boardId
-     * @param string $categoryId
-     * @return Response
      */
     #[Route('/{categoryId}', requirements: ['categoryId' => self::UUID_REGEX], methods: 'DELETE')]
     public function remove(string $boardId, string $categoryId): Response

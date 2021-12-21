@@ -44,8 +44,6 @@ final class BoardController extends ApiController
      *     }
      * )
      *
-     * @param string $boardId
-     * @return Response
      */
     #[Route('/{boardId}', 'board', ['boardId' => self::UUID_REGEX], methods: 'GET')]
     public function get(string $boardId): Response
@@ -55,7 +53,7 @@ final class BoardController extends ApiController
         /** @var PaginatedResponse $response */
         $response = $this->ask(new BoardListQuery($this->getUserId(), 0, 1, $boardId));
 
-        if (0 === \count($response->getData())) {
+        if ([] === $response->getData()) {
             throw $this->createNotFoundException();
         }
 
@@ -88,8 +86,6 @@ final class BoardController extends ApiController
      *     }
      * )
      *
-     * @param Request $request
-     * @return Response
      */
     #[Route(methods: 'GET')]
     public function list(Request $request): Response
@@ -132,8 +128,6 @@ final class BoardController extends ApiController
      *     }
      * )
      *
-     * @param Request $request
-     * @return Response
      */
     #[Route(methods: 'POST')]
     public function create(Request $request): Response
@@ -170,9 +164,6 @@ final class BoardController extends ApiController
      *     }
      * )
      *
-     * @param Request $request
-     * @param string $boardId
-     * @return Response
      */
     #[Route('/{boardId}', requirements: ['boardId' => self::UUID_REGEX], methods: 'PATCH')]
     public function update(Request $request, string $boardId): Response
@@ -203,8 +194,6 @@ final class BoardController extends ApiController
      *     }
      * )
      *
-     * @param string $boardId
-     * @return Response
      */
     #[Route('/{boardId}', requirements: ['boardId' => self::UUID_REGEX], methods: 'DELETE')]
     public function remove(string $boardId): Response

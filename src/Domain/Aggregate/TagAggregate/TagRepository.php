@@ -9,19 +9,11 @@ use FC\Domain\Exception\NotFoundException;
 interface TagRepository
 {
     /**
-     * @param TagId $id
-     * @return Tag
      * @throws NotFoundException
      */
     public function get(TagId $id): Tag;
 
-    /**
-     * @param Tag $tag
-     */
     public function save(Tag $tag): void;
 
-    /**
-     * @param Tag $tag
-     */
     public function remove(Tag $tag): void;
 }

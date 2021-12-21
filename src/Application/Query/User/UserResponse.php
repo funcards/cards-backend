@@ -13,11 +13,6 @@ use Symfony\Component\Serializer\Annotation\SerializedName;
  */
 final class UserResponse implements Response
 {
-    /**
-     * @param string $userId
-     * @param string $name
-     * @param string $email
-     */
     public function __construct(
         /** @OA\Property(property="user_id", format="uuid") */ #[SerializedName('user_id')] private string $userId,
         /** @OA\Property() */ private string $name,
@@ -25,25 +20,16 @@ final class UserResponse implements Response
     ) {
     }
 
-    /**
-     * @return string
-     */
     public function getUserId(): string
     {
         return $this->userId;
     }
 
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * @return string
-     */
     public function getEmail(): string
     {
         return $this->email;

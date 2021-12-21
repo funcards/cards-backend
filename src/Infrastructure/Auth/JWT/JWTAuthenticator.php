@@ -21,9 +21,6 @@ final class JWTAuthenticator extends AbstractAuthenticator
     private const HEADER = 'Authorization';
     private const SCHEME = 'Bearer';
 
-    /**
-     * @param JWTManagerInterface $jwtManager
-     */
     public function __construct(private JWTManagerInterface $jwtManager)
     {
     }
@@ -73,10 +70,6 @@ final class JWTAuthenticator extends AbstractAuthenticator
         return new JsonResponse(['code' => $code, 'message' => $exception->getMessageKey()], $code);
     }
 
-    /**
-     * @param Request $request
-     * @return string|null
-     */
     private function extract(Request $request): ?string
     {
         if (!$request->headers->has(self::HEADER)) {

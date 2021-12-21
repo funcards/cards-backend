@@ -13,10 +13,6 @@ use FC\Domain\ValueObject\Role;
 
 final class AuthorizationChecker implements AuthorizationCheckerInterface
 {
-    /**
-     * @param UserRepository $userRepository
-     * @param BoardRepository $boardRepository
-     */
     public function __construct(private UserRepository $userRepository, private BoardRepository $boardRepository)
     {
     }

@@ -16,11 +16,6 @@ use FC\Domain\ValueObject\Roles;
 
 final class AddMemberCommandHandler implements CommandHandler
 {
-    /**
-     * @param BoardRepository $boardRepository
-     * @param AuthorizationCheckerInterface $authorizationChecker
-     * @param EventBus $eventBus
-     */
     public function __construct(
         private BoardRepository $boardRepository,
         private AuthorizationCheckerInterface $authorizationChecker,
@@ -28,15 +23,12 @@ final class AddMemberCommandHandler implements CommandHandler
     ) {
     }
 
-    /**
-     * @param AddMemberCommand $command
-     */
     public function __invoke(AddMemberCommand $command): void
     {
         $boardId = BoardId::fromString($command->getBoardId());
         $userId = UserId::fromString($command->getUserId());
 
-        if (false === $this->authorizationChecker->isGranted($boardId, $userId, Role::boardAddMember())) {
+        if (!$this->authorizationChecker->isGranted($boardId, $userId, Role::boardAddMember())) {
             throw AccessDeniedException::new();
         }
 

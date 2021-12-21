@@ -14,11 +14,6 @@ use Symfony\Component\Serializer\Annotation\SerializedName;
 final class BoardResponse implements Response
 {
     /**
-     * @param string $boardId
-     * @param string $name
-     * @param string $color
-     * @param string $description
-     * @param string $createdAt
      * @param array<string, MemberResponse> $members
      */
     public function __construct(
@@ -32,41 +27,26 @@ final class BoardResponse implements Response
     ) {
     }
 
-    /**
-     * @return string
-     */
     public function getBoardId(): string
     {
         return $this->boardId;
     }
 
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * @return string
-     */
     public function getColor(): string
     {
         return $this->color;
     }
 
-    /**
-     * @return string
-     */
     public function getDescription(): string
     {
         return $this->description;
     }
 
-    /**
-     * @return string
-     */
     public function getCreatedAt(): string
     {
         return $this->createdAt;

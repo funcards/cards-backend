@@ -9,16 +9,11 @@ use FC\Application\Bus\Command\CommandHandler;
 
 final class BatchUpdateCardCommandHandler implements CommandHandler
 {
-    /**
-     * @param CommandBus $commandBus
-     */
     public function __construct(private CommandBus $commandBus)
     {
     }
 
     /**
-     * @param BatchUpdateCardCommand $batchCommand
-     * @return void
      * @throws \Throwable
      */
     public function __invoke(BatchUpdateCardCommand $batchCommand): void

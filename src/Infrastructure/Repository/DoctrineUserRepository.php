@@ -32,10 +32,6 @@ final class DoctrineUserRepository extends DoctrineRepository implements UserRep
         $this->persist($user);
     }
 
-    /**
-     * @param UserEmail $email
-     * @return User
-     */
     private function findByEmail(UserEmail $email): User
     {
         $finder = $this->entityManager->getRepository(User::class);

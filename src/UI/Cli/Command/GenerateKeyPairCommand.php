@@ -30,13 +30,6 @@ class GenerateKeyPairCommand extends Command
     protected static $defaultName = 'jwt:generate-keypair';
     protected static $defaultDescription = 'Generate public/private keys for an application.';
 
-    /**
-     * @param Filesystem $filesystem
-     * @param Signer $signer
-     * @param string $secretKey
-     * @param string $publicKey
-     * @param string $passphrase
-     */
     public function __construct(
         protected Filesystem $filesystem,
         protected Signer $signer,
@@ -133,7 +126,6 @@ EOF
     }
 
     /**
-     * @param string $passphrase
      * @return string[]
      */
     protected function generateKeyPair(string $passphrase): array
@@ -147,7 +139,7 @@ EOF
 
         $success = \openssl_pkey_export($resource, $privateKey, $passphrase);
 
-        if (false === $success) {
+        if (!$success) {
             throw new \RuntimeException(\openssl_error_string());
         }
 

@@ -15,12 +15,6 @@ final class Tag implements AggregateRoot
 {
     use EventRecording;
 
-    /**
-     * @param TagId $id
-     * @param BoardId $boardId
-     * @param TagName $name
-     * @param TagColor $color
-     */
     public function __construct(
         private TagId $id,
         private BoardId $boardId,
@@ -29,13 +23,6 @@ final class Tag implements AggregateRoot
     ) {
     }
 
-    /**
-     * @param TagId $tagId
-     * @param BoardId $boardId
-     * @param TagName $name
-     * @param TagColor $color
-     * @return static
-     */
     public static function create(TagId $tagId, BoardId $boardId, TagName $name, TagColor $color): self
     {
         $tag = new self($tagId, $boardId, $name, $color);
@@ -45,17 +32,11 @@ final class Tag implements AggregateRoot
         return $tag;
     }
 
-    /**
-     * @return TagId
-     */
     public function id(): TagId
     {
         return $this->id;
     }
 
-    /**
-     * @param TagName $newName
-     */
     public function changeName(TagName $newName): void
     {
         if ($this->name->isEqualTo($newName)) {
@@ -69,9 +50,6 @@ final class Tag implements AggregateRoot
         );
     }
 
-    /**
-     * @param TagColor $newColor
-     */
     public function changeColor(TagColor $newColor): void
     {
         if ($this->color->isEqualTo($newColor)) {

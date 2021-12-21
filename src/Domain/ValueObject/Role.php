@@ -63,27 +63,19 @@ final class Role implements \Stringable
      */
     private static array $cache = [];
 
-    /**
-     * @param string $value
-     */
     public function __construct(private string $value)
     {
         Assert::that($value)->notEmpty()->startsWith('ROLE_');
     }
 
     /**
-     * @param string $name
      * @param array<mixed> $arguments
-     * @return static
      */
     public static function __callStatic(string $name, array $arguments): self
     {
         return self::cache()[$name];
     }
 
-    /**
-     * @return Roles
-     */
     public static function all(): Roles
     {
         return Roles::from(...self::values());
@@ -97,17 +89,12 @@ final class Role implements \Stringable
         return \array_values(self::cache());
     }
 
-    /**
-     * @param string $value
-     * @return static
-     */
     public static function fromString(string $value): self
     {
         return self::cache()[self::toCamelCase($value)];
     }
 
     /**
-     * @param string $value
      * @return static|null
      */
     public static function safeFromString(string $value): ?self
@@ -115,9 +102,6 @@ final class Role implements \Stringable
         return self::cache()[self::toCamelCase($value)] ?? null;
     }
 
-    /**
-     * @return string
-     */
     public function asString(): string
     {
         return $this->value;
@@ -132,13 +116,9 @@ final class Role implements \Stringable
         return $this->asString();
     }
 
-    /**
-     * @param object|null $other
-     * @return bool
-     */
     public function isEqualTo(?object $other): bool
     {
-        return \get_class($other) === \get_class($this) && (string)$this === (string)$other;
+        return $other::class === $this::class && (string)$this === (string)$other;
     }
 
     /**
@@ -146,7 +126,7 @@ final class Role implements \Stringable
      */
     private static function cache(): array
     {
-        if (0 === \count(self::$cache)) {
+        if ([] === self::$cache) {
             $reflected = new \ReflectionClass(self::class);
             foreach ($reflected->getConstants() as $name => $value) {
                 self::$cache[self::toCamelCase($name)] = new self($value);
@@ -156,10 +136,6 @@ final class Role implements \Stringable
         return self::$cache;
     }
 
-    /**
-     * @param string $value
-     * @return string
-     */
     private static function toCamelCase(string $value): string
     {
         $value = \str_replace('role_', '', \strtolower($value));

@@ -45,9 +45,6 @@ final class TagController extends ApiController
      *     }
      * )
      *
-     * @param string $boardId
-     * @param string $tagId
-     * @return Response
      */
     #[Route('/{tagId}', 'tag', ['tagId' => self::UUID_REGEX], methods: 'GET')]
     public function get(string $boardId, string $tagId): Response
@@ -57,7 +54,7 @@ final class TagController extends ApiController
         /** @var PaginatedResponse $response */
         $response = $this->ask(new TagListQuery($boardId, $this->getUserId(), 0, 1, $tagId));
 
-        if (0 === \count($response->getData())) {
+        if ([] === $response->getData()) {
             throw $this->createNotFoundException();
         }
 
@@ -91,9 +88,6 @@ final class TagController extends ApiController
      *     }
      * )
      *
-     * @param Request $request
-     * @param string $boardId
-     * @return Response
      */
     #[Route(methods: 'GET')]
     public function list(Request $request, string $boardId): Response
@@ -138,9 +132,6 @@ final class TagController extends ApiController
      *     }
      * )
      *
-     * @param Request $request
-     * @param string $boardId
-     * @return Response
      */
     #[Route(methods: 'POST')]
     public function create(Request $request, string $boardId): Response
@@ -179,10 +170,6 @@ final class TagController extends ApiController
      *     }
      * )
      *
-     * @param Request $request
-     * @param string $boardId
-     * @param string $tagId
-     * @return Response
      */
     #[Route('/{tagId}', requirements: ['tagId' => self::UUID_REGEX], methods: 'PATCH')]
     public function update(Request $request, string $boardId, string $tagId): Response
@@ -215,9 +202,6 @@ final class TagController extends ApiController
      *     }
      * )
      *
-     * @param string $boardId
-     * @param string $tagId
-     * @return Response
      */
     #[Route('/{tagId}', requirements: ['tagId' => self::UUID_REGEX], methods: 'DELETE')]
     public function remove(string $boardId, string $tagId): Response

@@ -14,25 +14,18 @@ use FC\Domain\ValueObject\Role;
 
 final class RemoveBoardCommandHandler implements CommandHandler
 {
-    /**
-     * @param BoardRepository $boardRepository
-     * @param AuthorizationCheckerInterface $authorizationChecker
-     */
     public function __construct(
         private BoardRepository $boardRepository,
         private AuthorizationCheckerInterface $authorizationChecker,
     ) {
     }
 
-    /**
-     * @param RemoveBoardCommand $command
-     */
     public function __invoke(RemoveBoardCommand $command): void
     {
         $boardId = BoardId::fromString($command->getBoardId());
         $userId = UserId::fromString($command->getUserId());
 
-        if (false === $this->authorizationChecker->isGranted($boardId, $userId, Role::boardOwner())) {
+        if (!$this->authorizationChecker->isGranted($boardId, $userId, Role::boardOwner())) {
             throw AccessDeniedException::new();
         }
 

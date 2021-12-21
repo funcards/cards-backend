@@ -9,8 +9,6 @@ use FC\Application\Bus\Query\Exception\QueryBusException;
 interface QueryBus
 {
     /**
-     * @param Query $query
-     * @return Response
      * @throws QueryBusException
      * @throws \Throwable
      */

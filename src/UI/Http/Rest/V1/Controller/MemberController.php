@@ -44,9 +44,6 @@ final class MemberController extends ApiController
      *     }
      * )
      *
-     * @param Request $request
-     * @param string $boardId
-     * @return Response
      */
     #[Route(methods: 'PUT')]
     public function add(Request $request, string $boardId): Response
@@ -78,9 +75,6 @@ final class MemberController extends ApiController
      *     }
      * )
      *
-     * @param string $boardId
-     * @param string $memberId
-     * @return Response
      */
     #[Route('/{memberId}', requirements: ['memberId' => self::UUID_REGEX], methods: 'DELETE')]
     public function remove(string $boardId, string $memberId): Response

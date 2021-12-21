@@ -16,10 +16,6 @@ use Twig\Environment;
 #[Route('/swagger')]
 final class SwaggerController
 {
-    /**
-     * @param OpenApi $openApi
-     * @param LoggerInterface $logger
-     */
     public function __construct(private OpenApi $openApi, private LoggerInterface $logger)
     {
     }
@@ -32,7 +28,7 @@ final class SwaggerController
         $this->openApi->servers = [$this->getServer($request)];
 
         $content = $twig->render('swagger/ui.html.twig', [
-            'swagger_data' => ['spec' => \json_decode($this->openApi->toJson(), true)],
+            'swagger_data' => ['spec' => \json_decode($this->openApi->toJson(), true, 512, JSON_THROW_ON_ERROR)],
         ]);
 
         return new Response($content);
@@ -58,10 +54,6 @@ final class SwaggerController
         return new Response($this->openApi->toYaml(), headers: ['Content-Type' => 'text/x-yaml; charset=UTF-8']);
     }
 
-    /**
-     * @param Request $request
-     * @return Server
-     */
     private function getServer(Request $request): Server
     {
         return new Server(['url' => $request->getSchemeAndHttpHost().$request->getBaseUrl()]);

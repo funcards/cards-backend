@@ -11,10 +11,6 @@ class PaginatedQuery implements Query
     public const MAX_PAGE_INDEX = 1000;
     public const MAX_PAGE_SIZE = 1000;
 
-    /**
-     * @param int $pageIndex
-     * @param int $pageSize
-     */
     public function __construct(private int $pageIndex = 0, private int $pageSize = 0)
     {
         if ($this->pageIndex < 0) {
@@ -29,17 +25,11 @@ class PaginatedQuery implements Query
         Assert::that($this->pageSize)->range(1, static::MAX_PAGE_SIZE);
     }
 
-    /**
-     * @return int
-     */
     public function getPageIndex(): int
     {
         return $this->pageIndex;
     }
 
-    /**
-     * @return int
-     */
     public function getPageSize(): int
     {
         return $this->pageSize;

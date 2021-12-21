@@ -9,11 +9,6 @@ use JetBrains\PhpStorm\Pure;
 
 final class QueryHandlerNotFoundException extends \RuntimeException implements QueryBusException
 {
-    /**
-     * @param Query $query
-     * @param \Throwable|null $previous
-     * @return static
-     */
     #[Pure]
     public static function create(Query $query, ?\Throwable $previous = null): self
     {

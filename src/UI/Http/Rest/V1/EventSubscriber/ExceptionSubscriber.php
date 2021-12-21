@@ -18,10 +18,6 @@ use Symfony\Component\Validator\ConstraintViolationInterface;
 
 final class ExceptionSubscriber implements EventSubscriberInterface
 {
-    /**
-     * @param LoggerInterface $logger
-     * @param bool $debug
-     */
     public function __construct(private LoggerInterface $logger, private bool $debug)
     {
     }
@@ -34,9 +30,6 @@ final class ExceptionSubscriber implements EventSubscriberInterface
         return [KernelEvents::EXCEPTION => 'onKernelException'];
     }
 
-    /**
-     * @param ExceptionEvent $event
-     */
     public function onKernelException(ExceptionEvent $event): void
     {
         if (!$event->isMainRequest()) {
@@ -114,7 +107,6 @@ final class ExceptionSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * @param \Throwable $exception
      * @return array<string, string|int>
      */
     private function formatExceptionFragment(\Throwable $exception): array

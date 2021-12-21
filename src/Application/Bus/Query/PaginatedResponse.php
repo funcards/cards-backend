@@ -13,9 +13,6 @@ use Symfony\Component\Serializer\Annotation\SerializedName;
 class PaginatedResponse implements Response
 {
     /**
-     * @param int $pageIndex
-     * @param int $pageSize
-     * @param int $count
      * @param array<Response> $data
      */
     public function __construct(
@@ -26,25 +23,16 @@ class PaginatedResponse implements Response
     ) {
     }
 
-    /**
-     * @return int
-     */
     public function getPageIndex(): int
     {
         return $this->pageIndex;
     }
 
-    /**
-     * @return int
-     */
     public function getPageSize(): int
     {
         return $this->pageSize;
     }
 
-    /**
-     * @return int
-     */
     public function getCount(): int
     {
         return $this->count;

@@ -18,11 +18,6 @@ use FC\Domain\ValueObject\Role;
 
 final class UpdateCategoryCommandHandler implements CommandHandler
 {
-    /**
-     * @param CategoryRepository $categoryRepository
-     * @param AuthorizationCheckerInterface $authorizationChecker
-     * @param EventBus $eventBus
-     */
     public function __construct(
         private CategoryRepository $categoryRepository,
         private AuthorizationCheckerInterface $authorizationChecker,
@@ -30,15 +25,12 @@ final class UpdateCategoryCommandHandler implements CommandHandler
     ) {
     }
 
-    /**
-     * @param UpdateCategoryCommand $command
-     */
     public function __invoke(UpdateCategoryCommand $command): void
     {
         $boardId = BoardId::fromString($command->getBoardId());
         $userId = UserId::fromString($command->getUserId());
 
-        if (false === $this->authorizationChecker->isGranted($boardId, $userId, Role::categoryEdit())) {
+        if (!$this->authorizationChecker->isGranted($boardId, $userId, Role::categoryEdit())) {
             throw AccessDeniedException::new();
         }
 

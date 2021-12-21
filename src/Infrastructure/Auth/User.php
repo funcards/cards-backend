@@ -11,8 +11,6 @@ use Symfony\Component\Security\Core\User\UserInterface;
 final class User implements UserInterface, PasswordAuthenticatedUserInterface, EquatableInterface
 {
     /**
-     * @param string $id
-     * @param string|null $password
      * @param array<string> $roles
      */
     public function __construct(private string $id, private ?string $password, private array $roles)

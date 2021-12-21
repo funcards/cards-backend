@@ -19,10 +19,7 @@ final class UserListQuery extends PaginatedQuery
     private array $emails;
 
     /**
-     * @param int $pageIndex
-     * @param int $pageSize
      * @param array<string> $users
-     * @param string ...$emails
      */
     public function __construct(int $pageIndex = 0, int $pageSize = 0, array $users = [], string ...$emails)
     {

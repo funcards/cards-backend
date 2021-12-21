@@ -25,19 +25,11 @@ final class CardTags implements \Countable, \Stringable
         Assert::thatAll($this->tags)->uuid();
     }
 
-    /**
-     * @param TagId|string ...$tags
-     * @return static
-     */
     public static function from(TagId|string ...$tags): self
     {
         return new self($tags);
     }
 
-    /**
-     * @param TagId|string $tagId
-     * @return $this
-     */
     public function add(TagId|string $tagId): self
     {
         $tagId = (string)$tagId;
@@ -51,10 +43,6 @@ final class CardTags implements \Countable, \Stringable
         return $cloned;
     }
 
-    /**
-     * @param TagId|string $tagId
-     * @return $this
-     */
     public function remove(TagId|string $tagId): self
     {
         $tagId = (string)$tagId;
@@ -76,9 +64,6 @@ final class CardTags implements \Countable, \Stringable
         return $this->tags;
     }
 
-    /**
-     * @return bool
-     */
     #[Pure]
     public function isEmpty(): bool
     {
@@ -98,23 +83,15 @@ final class CardTags implements \Countable, \Stringable
      */
     public function __toString(): string
     {
-        return \json_encode($this->toArray());
+        return \json_encode($this->toArray(), JSON_THROW_ON_ERROR);
     }
 
-    /**
-     * @param TagId $tagId
-     * @return bool
-     */
     #[Pure]
     public function contains(TagId $tagId): bool
     {
         return \in_array($tagId->asString(), $this->toArray(), true);
     }
 
-    /**
-     * @param CardTags $tags
-     * @return bool
-     */
     #[Pure]
     public function isEqualTo(self $tags): bool
     {

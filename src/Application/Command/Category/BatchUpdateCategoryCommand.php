@@ -13,9 +13,6 @@ final class BatchUpdateCategoryCommand implements Command
      */
     private array $commands;
 
-    /**
-     * @param UpdateCategoryCommand ...$commands
-     */
     public function __construct(UpdateCategoryCommand ...$commands)
     {
         $this->commands = $commands;

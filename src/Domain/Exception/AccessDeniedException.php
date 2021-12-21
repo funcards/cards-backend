@@ -8,10 +8,6 @@ use JetBrains\PhpStorm\Pure;
 
 final class AccessDeniedException extends \RuntimeException implements DomainException
 {
-    /**
-     * @param \Throwable|null $previous
-     * @return static
-     */
     #[Pure]
     public static function new(?\Throwable $previous = null): self
     {

@@ -13,9 +13,6 @@ final class BatchUpdateCardCommand implements Command
      */
     private array $commands;
 
-    /**
-     * @param UpdateCardCommand ...$commands
-     */
     public function __construct(UpdateCardCommand ...$commands)
     {
         $this->commands = $commands;

@@ -19,11 +19,6 @@ use FC\Domain\ValueObject\Role;
 
 final class CreateTagCommandHandler implements CommandHandler
 {
-    /**
-     * @param TagRepository $tagRepository
-     * @param AuthorizationCheckerInterface $authorizationChecker
-     * @param EventBus $eventBus
-     */
     public function __construct(
         private TagRepository $tagRepository,
         private AuthorizationCheckerInterface $authorizationChecker,
@@ -31,15 +26,12 @@ final class CreateTagCommandHandler implements CommandHandler
     ) {
     }
 
-    /**
-     * @param CreateTagCommand $command
-     */
     public function __invoke(CreateTagCommand $command): void
     {
         $boardId = BoardId::fromString($command->getBoardId());
         $userId = UserId::fromString($command->getUserId());
 
-        if (false === $this->authorizationChecker->isGranted($boardId, $userId, Role::tagAdd())) {
+        if (!$this->authorizationChecker->isGranted($boardId, $userId, Role::tagAdd())) {
             throw AccessDeniedException::new();
         }
 

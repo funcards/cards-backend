@@ -8,26 +8,16 @@ use JetBrains\PhpStorm\Pure;
 
 abstract class IntValue implements \Stringable
 {
-    /**
-     * @param int $value
-     */
     final public function __construct(protected int $value)
     {
         $this->assert($value);
     }
 
-    /**
-     * @return static
-     */
     final public static function zero(): static
     {
         return static::fromInt(0);
     }
 
-    /**
-     * @param int $value
-     * @return static
-     */
     final public static function fromInt(int $value): static
     {
         return new static($value);
@@ -42,35 +32,21 @@ abstract class IntValue implements \Stringable
         return \sprintf('%d', $this->asInt());
     }
 
-    /**
-     * @return int
-     */
     final public function asInt(): int
     {
         return $this->value;
     }
 
-    /**
-     * @param IntValue $other
-     * @return bool
-     */
     final public function isBiggerThan(IntValue $other): bool
     {
         return $this->value > $other->value;
     }
 
-    /**
-     * @param object|null $other
-     * @return bool
-     */
     final public function isEqualTo(?object $other): bool
     {
-        return \get_class($other) === \get_class($this) && (string)$this === (string)$other;
+        return $other::class === $this::class && (string)$this === (string)$other;
     }
 
-    /**
-     * @param int $value
-     */
     protected function assert(int $value): void
     {
     }

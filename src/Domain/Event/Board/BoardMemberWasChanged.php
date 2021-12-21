@@ -9,8 +9,6 @@ use FC\Domain\Event\DomainEvent;
 final class BoardMemberWasChanged extends DomainEvent
 {
     /**
-     * @param string $aggregateId
-     * @param string $userId
      * @param array<string> $roles
      */
     public function __construct(string $aggregateId, private string $userId, private array $roles)
@@ -18,9 +16,6 @@ final class BoardMemberWasChanged extends DomainEvent
         parent::__construct($aggregateId);
     }
 
-    /**
-     * @return string
-     */
     public function getUserId(): string
     {
         return $this->userId;

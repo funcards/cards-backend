@@ -14,18 +14,11 @@ final class Date implements \Stringable
     {
     }
 
-    /**
-     * @return static
-     */
     public static function now(): self
     {
         return new self(new \DateTimeImmutable('now', new \DateTimeZone('UTC')));
     }
 
-    /**
-     * @param string $date
-     * @return static
-     */
     public static function fromString(string $date): self
     {
         $dt = \DateTimeImmutable::createFromFormat(self::DATE_FORMAT, $date);
@@ -43,10 +36,6 @@ final class Date implements \Stringable
         return new self($dt);
     }
 
-    /**
-     * @param \DateTimeImmutable $dateTime
-     * @return static
-     */
     #[Pure]
     public static function fromDateTimeImmutable(\DateTimeImmutable $dateTime): self
     {
@@ -61,41 +50,26 @@ final class Date implements \Stringable
         return $this->asString();
     }
 
-    /**
-     * @return string
-     */
     public function asString(): string
     {
         return $this->dateTime->format(self::DATE_FORMAT);
     }
 
-    /**
-     * @return \DateTimeImmutable
-     */
     public function asDateTimeImmutable(): \DateTimeImmutable
     {
         return $this->dateTime;
     }
 
-    /**
-     * @return int
-     */
     public function year(): int
     {
         return (int)$this->dateTime->format('Y');
     }
 
-    /**
-     * @return int
-     */
     public function month(): int
     {
         return (int)$this->dateTime->format('m');
     }
 
-    /**
-     * @return int
-     */
     public function day(): int
     {
         return (int)$this->dateTime->format('d');

@@ -15,12 +15,6 @@ final class Category implements AggregateRoot
 {
     use EventRecording;
 
-    /**
-     * @param CategoryId $id
-     * @param BoardId $boardId
-     * @param CategoryName $name
-     * @param CategoryPosition $position
-     */
     public function __construct(
         private CategoryId $id,
         private BoardId $boardId,
@@ -29,13 +23,6 @@ final class Category implements AggregateRoot
     ) {
     }
 
-    /**
-     * @param CategoryId $categoryId
-     * @param BoardId $boardId
-     * @param CategoryName $name
-     * @param CategoryPosition $position
-     * @return static
-     */
     public static function create(
         CategoryId $categoryId,
         BoardId $boardId,
@@ -54,17 +41,11 @@ final class Category implements AggregateRoot
         return $category;
     }
 
-    /**
-     * @return CategoryId
-     */
     public function id(): CategoryId
     {
         return $this->id;
     }
 
-    /**
-     * @param CategoryName $newName
-     */
     public function changeName(CategoryName $newName): void
     {
         if ($this->name->isEqualTo($newName)) {
@@ -78,9 +59,6 @@ final class Category implements AggregateRoot
         );
     }
 
-    /**
-     * @param CategoryPosition $newPosition
-     */
     public function changePosition(CategoryPosition $newPosition): void
     {
         if ($this->position->isEqualTo($newPosition)) {

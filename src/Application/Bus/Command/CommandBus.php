@@ -9,8 +9,6 @@ use FC\Application\Bus\Command\Exception\CommandBusException;
 interface CommandBus
 {
     /**
-     * @param Command $command
-     * @return mixed
      * @throws CommandBusException
      * @throws \Throwable
      */

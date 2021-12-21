@@ -17,10 +17,6 @@ final class SignInCommand implements Command
 {
     public const DEFAULT = ['email' => '', 'password' => ''];
 
-    /**
-     * @param string $email
-     * @param string $password
-     */
     public function __construct(
         /** @OA\Property() */
         #[NotBlank, Length(max: 180), Email(mode: Email::VALIDATION_MODE_STRICT)] private string $email,
@@ -29,17 +25,11 @@ final class SignInCommand implements Command
     ) {
     }
 
-    /**
-     * @return string
-     */
     public function getEmail(): string
     {
         return $this->email;
     }
 
-    /**
-     * @return string
-     */
     public function getPassword(): string
     {
         return $this->password;

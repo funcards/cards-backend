@@ -9,8 +9,6 @@ use FC\Domain\Event\DomainEvent;
 final class UserRolesWasChanged extends DomainEvent
 {
     /**
-     * @param string $aggregateId
-     * @param string $occurredOn
      * @param array<string> $roles
      */
     public function __construct(string $aggregateId, string $occurredOn, private array $roles)

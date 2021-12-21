@@ -14,12 +14,6 @@ use Symfony\Component\Serializer\Annotation\SerializedName;
 final class CardResponse implements Response
 {
     /**
-     * @param string $cardId
-     * @param string $boardId
-     * @param string $categoryId
-     * @param string $name
-     * @param string $content
-     * @param int $position
      * @param array<string> $tags
      */
     public function __construct(
@@ -34,49 +28,31 @@ final class CardResponse implements Response
     ) {
     }
 
-    /**
-     * @return string
-     */
     public function getCardId(): string
     {
         return $this->cardId;
     }
 
-    /**
-     * @return string
-     */
     public function getBoardId(): string
     {
         return $this->boardId;
     }
 
-    /**
-     * @return string
-     */
     public function getCategoryId(): string
     {
         return $this->categoryId;
     }
 
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * @return string
-     */
     public function getContent(): string
     {
         return $this->content;
     }
 
-    /**
-     * @return int
-     */
     public function getPosition(): int
     {
         return $this->position;
