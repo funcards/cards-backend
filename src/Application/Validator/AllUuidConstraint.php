@@ -12,6 +12,7 @@ final class AllUuidConstraint extends All
 {
     public function __construct(array $groups = null, mixed $payload = null)
     {
+        parent::__construct([new Uuid(versions: [Uuid::V4_RANDOM])], $groups, $payload);
     }
 
     /**
