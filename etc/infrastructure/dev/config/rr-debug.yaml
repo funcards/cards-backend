@@ -9,7 +9,7 @@ server:
   env:
     APP_RUNTIME: Runtime\RoadRunnerSymfonyNyholm\Runtime
     XDEBUG_SESSION: 1
-    DATABASE_URL: pgsql://funcards:funcards@postgres:5432/funcards?serverVersion=13&charset=utf8"
+    DATABASE_URL: pgsql://funcards:funcards@postgres:5432/funcards?serverVersion=13&charset=utf8
 
 http:
   address: 0.0.0.0:8080
