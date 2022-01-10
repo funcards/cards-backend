@@ -151,7 +151,7 @@ final class CategoryController extends ApiController
         security: [['Bearer' => []]],
         requestBody: new RequestBody(
             required: true,
-            content: new JsonContent(items: new Items(allOf: [
+            content: new JsonContent(type: 'array', items: new Items(allOf: [
                 new Schema(properties: [new Property(property: 'category_id', type: 'string', format: 'uuid')]),
                 new Schema(ref: '#/components/schemas/UpdateCategory')
             ])),

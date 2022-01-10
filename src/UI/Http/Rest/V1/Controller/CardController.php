@@ -153,7 +153,7 @@ final class CardController extends ApiController
         security: [['Bearer' => []]],
         requestBody: new RequestBody(
             required: true,
-            content: new JsonContent(items: new Items(allOf: [
+            content: new JsonContent(type: 'array', items: new Items(allOf: [
                 new Schema(properties: [new Property(property: 'card_id', type: 'string', format: 'uuid')]),
                 new Schema(ref: '#/components/schemas/UpdateCard')
             ])),
