@@ -23,29 +23,29 @@ use FC\Domain\ValueObject\Role;
 final class CreateCardCommandHandler implements CommandHandler
 {
     public function __construct(
-        private CardRepository $cardRepository,
-        private AuthorizationCheckerInterface $authorizationChecker,
-        private EventBus $eventBus,
+        private readonly CardRepository $cardRepository,
+        private readonly AuthorizationCheckerInterface $authorizationChecker,
+        private readonly EventBus $eventBus,
     ) {
     }
 
     public function __invoke(CreateCardCommand $command): void
     {
-        $boardId = BoardId::fromString($command->getBoardId());
-        $userId = UserId::fromString($command->getUserId());
+        $boardId = BoardId::fromString($command->boardId);
+        $userId = UserId::fromString($command->userId);
 
-        if (!$this->authorizationChecker->isGranted($boardId, $userId, Role::cardAdd())) {
+        if (!$this->authorizationChecker->isGranted($boardId, $userId, Role::CardAdd)) {
             throw AccessDeniedException::new();
         }
 
         $card = Card::create(
-            CardId::fromString($command->getCardId()),
+            CardId::fromString($command->cardId),
             $boardId,
-            CategoryId::fromString($command->getCategoryId()),
-            CardName::fromString($command->getName()),
-            CardContent::fromString($command->getContent()),
-            CardPosition::fromInt($command->getPosition()),
-            CardTags::from(...$command->getTags()),
+            CategoryId::fromString($command->categoryId),
+            CardName::fromString($command->name),
+            CardContent::fromString($command->content),
+            CardPosition::fromInt($command->position),
+            CardTags::from(...$command->tags),
         );
 
         $this->cardRepository->save($card);

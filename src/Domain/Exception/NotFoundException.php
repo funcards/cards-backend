@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace FC\Domain\Exception;
 
 use FC\Domain\ValueObject\Id;

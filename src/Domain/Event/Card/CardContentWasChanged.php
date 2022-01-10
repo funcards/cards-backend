@@ -8,18 +8,8 @@ use FC\Domain\Event\DomainEvent;
 
 class CardContentWasChanged extends DomainEvent
 {
-    public function __construct(string $aggregateId, private string $boardId, private string $content)
+    public function __construct(string $aggregateId, public readonly string $boardId, public readonly string $content)
     {
         parent::__construct($aggregateId);
-    }
-
-    public function getBoardId(): string
-    {
-        return $this->boardId;
-    }
-
-    public function getContent(): string
-    {
-        return $this->content;
     }
 }

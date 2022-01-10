@@ -8,7 +8,7 @@ use JetBrains\PhpStorm\Pure;
 
 abstract class DateAndTime implements \Stringable
 {
-    public const DATE_TIME_FORMAT = 'Y-m-d\TH:i';
+    public final const DATE_TIME_FORMAT = 'Y-m-d\TH:i';
 
     final public function __construct(protected \DateTimeImmutable $dateTime)
     {

@@ -16,7 +16,7 @@ use Twig\Environment;
 #[Route('/swagger')]
 final class SwaggerController
 {
-    public function __construct(private OpenApi $openApi, private LoggerInterface $logger)
+    public function __construct(private readonly OpenApi $openApi, private readonly LoggerInterface $logger)
     {
     }
 

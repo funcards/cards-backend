@@ -11,37 +11,19 @@ final class UserListQuery extends PaginatedQuery
     /**
      * @var array<string>
      */
-    private array $users;
-
-    /**
-     * @var array<string>
-     */
-    private array $emails;
+    public readonly array $emails;
 
     /**
      * @param array<string> $users
      */
-    public function __construct(int $pageIndex = 0, int $pageSize = 0, array $users = [], string ...$emails)
-    {
+    public function __construct(
+        int $pageIndex = 0,
+        int $pageSize = 0,
+        public readonly array $users = [],
+        string ...$emails,
+    ) {
         parent::__construct($pageIndex, $pageSize);
 
-        $this->users = $users;
         $this->emails = $emails;
-    }
-
-    /**
-     * @return string[]
-     */
-    public function getUsers(): array
-    {
-        return $this->users;
-    }
-
-    /**
-     * @return string[]
-     */
-    public function getEmails(): array
-    {
-        return $this->emails;
     }
 }

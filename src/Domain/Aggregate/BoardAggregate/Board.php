@@ -27,22 +27,22 @@ final class Board implements AggregateRoot
     use EventRecording;
 
     private const DEFAULT_ROLES = [
-        Role::BOARD_VIEW,
-        Role::CATEGORY_VIEW,
-        Role::TAG_VIEW,
-        Role::CARD_VIEW,
+        Role::BoardView,
+        Role::CategoryView,
+        Role::TagView,
+        Role::CardView,
     ];
 
     /**
      * @param Collection<int, Member> $members
      */
     public function __construct(
-        private BoardId $id,
-        private UserId $ownerId,
+        private readonly BoardId $id,
+        private readonly UserId $ownerId,
         private BoardName $name,
         private BoardColor $color,
         private BoardDescription $description,
-        private CreatedAt $createdAt,
+        private readonly CreatedAt $createdAt,
         private Collection $members,
     ) {
     }
@@ -65,7 +65,7 @@ final class Board implements AggregateRoot
                 $description->asString(),
             )
         );
-        $board->addMember($ownerId, Roles::from(Role::boardOwner()));
+        $board->addMember($ownerId, Roles::from(Role::BoardOwner));
         return $board;
     }
 
@@ -128,7 +128,7 @@ final class Board implements AggregateRoot
 
     public function addMember(UserId $userId, Roles $roles): void
     {
-        if ($roles->contains(Role::boardOwner())) {
+        if ($roles->contains(Role::BoardOwner)) {
             if (!$this->ownerId->isEqualTo($userId)) {
                 return;
             }

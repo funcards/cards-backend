@@ -20,10 +20,10 @@ use Symfony\Component\PasswordHasher\PasswordHasherInterface;
 final class SignUpCommandHandler implements CommandHandler
 {
     public function __construct(
-        private UserRepository $userRepository,
-        private PasswordHasherInterface $passwordHasher,
-        private AuthSessionServiceInterface $authSessionService,
-        private EventBus $eventBus,
+        private readonly UserRepository $userRepository,
+        private readonly PasswordHasherInterface $passwordHasher,
+        private readonly AuthSessionServiceInterface $authSessionService,
+        private readonly EventBus $eventBus,
     ) {
     }
 
@@ -33,15 +33,15 @@ final class SignUpCommandHandler implements CommandHandler
     public function __invoke(SignUpCommand $command): Tokens
     {
         do {
-            $hashed = $this->passwordHasher->hash($command->getPassword());
+            $hashed = $this->passwordHasher->hash($command->password);
         } while ($this->passwordHasher->needsRehash($hashed));
 
         $user = User::create(
             UserId::random(),
-            UserName::fromString($command->getName()),
-            UserEmail::fromString($command->getEmail()),
+            UserName::fromString($command->name),
+            UserEmail::fromString($command->email),
             UserPassword::fromString($hashed),
-            Roles::fromString(...$command->getRoles()),
+            Roles::from(...$command->roles),
         );
 
         $this->userRepository->save($user);

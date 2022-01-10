@@ -8,13 +8,8 @@ use FC\Domain\Event\DomainEvent;
 
 final class BoardColorWasChanged extends DomainEvent
 {
-    public function __construct(string $aggregateId, private string $color)
+    public function __construct(string $aggregateId, public readonly string $color)
     {
         parent::__construct($aggregateId);
-    }
-
-    public function getColor(): string
-    {
-        return $this->color;
     }
 }

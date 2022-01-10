@@ -8,7 +8,7 @@ use FC\Application\Auth\JWT\Exception\InvalidPayloadException;
 
 final class JWTManager implements JWTManagerInterface
 {
-    public function __construct(private JWTEncoder $encoder, private string $identifierName)
+    public function __construct(private readonly JWTEncoder $encoder, private readonly string $identifierName)
     {
     }
 

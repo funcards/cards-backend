@@ -9,7 +9,7 @@ use FC\Application\Auth\RefreshToken\RefreshTokenService;
 
 final class AuthSessionService implements AuthSessionServiceInterface
 {
-    public function __construct(private JWTManagerInterface $manager, private RefreshTokenService $refreshTokenService)
+    public function __construct(private readonly JWTManagerInterface $manager, private readonly RefreshTokenService $refreshTokenService)
     {
     }
 

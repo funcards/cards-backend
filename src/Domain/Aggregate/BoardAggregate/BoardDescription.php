@@ -8,9 +8,6 @@ use FC\Domain\ValueObject\StringValue;
 
 final class BoardDescription extends StringValue
 {
-    /**
-     * {@inheritDoc}
-     */
     protected function assert(string $value): void
     {
     }

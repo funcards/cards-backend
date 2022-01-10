@@ -6,50 +6,28 @@ namespace FC\Application\Command\Board;
 
 use FC\Application\Bus\Command\Command;
 use FC\Application\Validator\RolesConstraint;
-use OpenApi\Annotations as OA;
+use OpenApi\Attributes\Items;
+use OpenApi\Attributes\Property;
+use OpenApi\Attributes\Schema;
 use Symfony\Component\Serializer\Annotation\SerializedName;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Uuid;
 
-/**
- * @OA\Schema(schema="AddMember", required={"member_id", "roles"})
- */
+#[Schema(schema: 'AddMember', required: ['member_id', 'roles'])]
 final class AddMemberCommand implements Command
 {
-    public const DEFAULT = ['member_id' => '', 'roles' => []];
+    public final const DEFAULT = ['member_id' => '', 'roles' => []];
 
     /**
      * @param array<string> $roles
      */
     public function __construct(
-        #[SerializedName('board_id')] #[NotBlank, Uuid(versions: [Uuid::V4_RANDOM])] private string $boardId,
-        #[SerializedName('user_id')] #[NotBlank, Uuid(versions: [Uuid::V4_RANDOM])] private string $userId,
-        /** @OA\Property(property="member_id", format="uuid") */
-        #[SerializedName('member_id')] #[NotBlank, Uuid(versions: [Uuid::V4_RANDOM])] private string $memberId,
-        /** @OA\Property(@OA\Items(type="string")) */ #[RolesConstraint] private array $roles,
+        #[SerializedName('board_id')] #[NotBlank, Uuid(versions: [Uuid::V4_RANDOM])] public readonly string $boardId,
+        #[SerializedName('user_id')] #[NotBlank, Uuid(versions: [Uuid::V4_RANDOM])] public readonly string $userId,
+        #[Property(property: 'member_id', format: 'uuid'), SerializedName('member_id')]
+        #[NotBlank, Uuid(versions: [Uuid::V4_RANDOM])]
+        public readonly string $memberId,
+        #[Property(items: new Items(type: 'string')), RolesConstraint] public readonly array $roles,
     ) {
-    }
-
-    public function getBoardId(): string
-    {
-        return $this->boardId;
-    }
-
-    public function getUserId(): string
-    {
-        return $this->userId;
-    }
-
-    public function getMemberId(): string
-    {
-        return $this->memberId;
-    }
-
-    /**
-     * @return array<string>
-     */
-    public function getRoles(): array
-    {
-        return $this->roles;
     }
 }

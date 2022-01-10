@@ -9,31 +9,34 @@ use JetBrains\PhpStorm\Pure;
 final class Roles implements \Countable, \Stringable
 {
     /**
-     * @var array<string>
+     * @var array<Role>
      */
-    private array $roles;
+    private readonly array $items;
 
     /**
      * @param array<Role|string> $roles
      */
     public function __construct(array $roles)
     {
-        $this->roles = \array_unique(\array_map(static fn($role) => (string)$role, $roles));
+        $this->items = \array_unique(
+            \array_map(static fn($role) => $role instanceof Role ? $role : Role::from($role), $roles),
+            \SORT_REGULAR,
+        );
     }
 
-    public static function from(Role ...$roles): self
+    public static function from(Role|string ...$roles): self
     {
         return new self($roles);
     }
 
-    public static function fromString(string ...$roles): self
-    {
-        return self::from(...\array_map(static fn($role) => Role::fromString($role), $roles));
-    }
-
     public function add(Role|string ...$roles): self
     {
-        return new self(\array_merge($this->roles, \array_map(static fn($role) => (string)$role, $roles)));
+        return new self(
+            \array_merge(
+                $this->items,
+                \array_map(static fn($role) => $role instanceof Role ? $role : Role::from($role), $roles)
+            )
+        );
     }
 
     /**
@@ -41,7 +44,7 @@ final class Roles implements \Countable, \Stringable
      */
     public function toArray(): array
     {
-        return $this->roles;
+        return \array_map(static fn($role) => $role->value, $this->items);
     }
 
     /**
@@ -63,19 +66,19 @@ final class Roles implements \Countable, \Stringable
      */
     public function count(): int
     {
-        return \count($this->roles);
+        return \count($this->items);
     }
 
 
     #[Pure]
     public function contains(Role $role, Role ...$roles): bool
     {
-        if (!\in_array($role->asString(), $this->toArray(), true)) {
+        if (!\in_array($role, $this->items, true)) {
             return false;
         }
 
         foreach ($roles as $r) {
-            if (!\in_array($r->asString(), $this->toArray(), true)) {
+            if (!\in_array($r, $this->items, true)) {
                 return false;
             }
         }
@@ -86,7 +89,7 @@ final class Roles implements \Countable, \Stringable
     #[Pure]
     public function isEqualTo(self $roles): bool
     {
-        return \count($this->roles) === \count($roles->toArray())
-            && \count($this->roles) === \count(\array_intersect($this->roles, $roles->toArray()));
+        return \count($this->items) === \count($roles->items)
+            && \count($this->items) === \count(\array_intersect($this->items, $roles->items));
     }
 }

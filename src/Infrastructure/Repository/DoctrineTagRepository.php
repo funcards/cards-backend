@@ -18,17 +18,11 @@ final class DoctrineTagRepository extends DoctrineRepository implements TagRepos
         return $this->find(Tag::class, $id);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function save(Tag $tag): void
     {
         $this->persist($tag);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function remove(Tag $tag): void
     {
         $this->delete($tag);

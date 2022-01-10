@@ -10,7 +10,7 @@ final class Date implements \Stringable
 {
     private const DATE_FORMAT = 'Y-m-d';
 
-    public function __construct(private \DateTimeImmutable $dateTime)
+    public function __construct(private readonly \DateTimeImmutable $dateTime)
     {
     }
 

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace FC\Application\Validator;
 
 use FC\Domain\ValueObject\Role;
+use FC\Domain\ValueObject\Roles;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\UnexpectedValueException;
@@ -32,14 +33,26 @@ final class RolesConstraintValidator extends ConstraintValidator
         /** @var RolesConstraint $rolesConstraint */
         $rolesConstraint = $constraint;
 
-        foreach ($value as $role) {
-            if (\in_array(\strtoupper($role), $rolesConstraint->notValid, true)
-                || null === Role::safeFromString($role)) {
-                $this->context->buildViolation($rolesConstraint->message)
-                    ->setParameter('{{ role }}', $role)
-                    ->addViolation();
-                break;
+        if (null !== ($role = $this->findNotValid($value, $rolesConstraint->notValid))) {
+            $this->context->buildViolation($rolesConstraint->message)
+                ->setParameter('{{ role }}', $role)
+                ->addViolation();
+        }
+    }
+
+    /**
+     * @param array<string> $value
+     */
+    private function findNotValid(array $value, Roles $notValid): ?string
+    {
+        foreach ($value as $item) {
+            $role = Role::tryFrom($item);
+
+            if (!$role instanceof Role || $notValid->contains($role)) {
+                return $item;
             }
         }
+
+        return null;
     }
 }

@@ -18,7 +18,7 @@ use Symfony\Component\Validator\ConstraintViolationInterface;
 
 final class ExceptionSubscriber implements EventSubscriberInterface
 {
-    public function __construct(private LoggerInterface $logger, private bool $debug)
+    public function __construct(private readonly LoggerInterface $logger, private readonly bool $debug)
     {
     }
 

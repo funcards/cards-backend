@@ -13,13 +13,10 @@ use FC\Domain\ValueObject\Role;
 
 final class AuthorizationChecker implements AuthorizationCheckerInterface
 {
-    public function __construct(private UserRepository $userRepository, private BoardRepository $boardRepository)
+    public function __construct(private readonly UserRepository $userRepository, private readonly BoardRepository $boardRepository)
     {
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function isGranted(BoardId|string $boardId, UserId|string $userId, Role $role): bool
     {
         if (\is_string($boardId)) {
@@ -31,7 +28,7 @@ final class AuthorizationChecker implements AuthorizationCheckerInterface
         }
 
         try {
-            if ($this->userRepository->get($userId)->isGranted(Role::superAdmin())) {
+            if ($this->userRepository->get($userId)->isGranted(Role::SuperAdmin)) {
                 return true;
             }
 

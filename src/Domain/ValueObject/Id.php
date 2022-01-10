@@ -11,7 +11,7 @@ use Symfony\Component\Uid\Uuid;
 
 abstract class Id implements \Stringable
 {
-    private function __construct(private Uuid $id)
+    private function __construct(private readonly Uuid $id)
     {
         Assert::that($id)->notIsInstanceOf(NilUuid::class);
     }

@@ -13,7 +13,7 @@ final class User implements UserInterface, PasswordAuthenticatedUserInterface, E
     /**
      * @param array<string> $roles
      */
-    public function __construct(private string $id, private ?string $password, private array $roles)
+    public function __construct(private readonly string $id, private ?string $password, private readonly array $roles)
     {
     }
 

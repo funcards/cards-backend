@@ -8,18 +8,8 @@ use FC\Domain\Event\DomainEvent;
 
 final class CardPositionWasChanged extends DomainEvent
 {
-    public function __construct(string $aggregateId, private string $boardId, private int $position)
+    public function __construct(string $aggregateId, public readonly string $boardId, public readonly int $position)
     {
         parent::__construct($aggregateId);
-    }
-
-    public function getBoardId(): string
-    {
-        return $this->boardId;
-    }
-
-    public function getPosition(): int
-    {
-        return $this->position;
     }
 }

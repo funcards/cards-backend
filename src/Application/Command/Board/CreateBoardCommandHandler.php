@@ -16,18 +16,18 @@ use FC\Domain\Aggregate\UserAggregate\UserId;
 
 final class CreateBoardCommandHandler implements CommandHandler
 {
-    public function __construct(private BoardRepository $boardRepository, private EventBus $eventBus)
+    public function __construct(private readonly BoardRepository $boardRepository, private readonly EventBus $eventBus)
     {
     }
 
     public function __invoke(CreateBoardCommand $command): void
     {
         $board = Board::create(
-            BoardId::fromString($command->getBoardId()),
-            UserId::fromString($command->getOwnerId()),
-            BoardName::fromString($command->getName()),
-            BoardColor::fromString($command->getColor()),
-            BoardDescription::fromString($command->getDescription()),
+            BoardId::fromString($command->boardId),
+            UserId::fromString($command->ownerId),
+            BoardName::fromString($command->name),
+            BoardColor::fromString($command->color),
+            BoardDescription::fromString($command->description),
         );
 
         $this->boardRepository->save($board);

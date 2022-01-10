@@ -10,25 +10,10 @@ final class CategoryWasCreated extends DomainEvent
 {
     public function __construct(
         string $aggregateId,
-        private string $boardId,
-        private string $name,
-        private int $position,
+        public readonly string $boardId,
+        public readonly string $name,
+        public readonly int $position,
     ) {
         parent::__construct($aggregateId);
-    }
-
-    public function getBoardId(): string
-    {
-        return $this->boardId;
-    }
-
-    public function getName(): string
-    {
-        return $this->name;
-    }
-
-    public function getPosition(): int
-    {
-        return $this->position;
     }
 }

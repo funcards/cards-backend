@@ -19,29 +19,29 @@ use FC\Domain\ValueObject\Role;
 final class UpdateTagCommandHandler implements CommandHandler
 {
     public function __construct(
-        private TagRepository $tagRepository,
-        private AuthorizationCheckerInterface $authorizationChecker,
-        private EventBus $eventBus,
+        private readonly TagRepository $tagRepository,
+        private readonly AuthorizationCheckerInterface $authorizationChecker,
+        private readonly EventBus $eventBus,
     ) {
     }
 
     public function __invoke(UpdateTagCommand $command): void
     {
-        $boardId = BoardId::fromString($command->getBoardId());
-        $userId = UserId::fromString($command->getUserId());
+        $boardId = BoardId::fromString($command->boardId);
+        $userId = UserId::fromString($command->userId);
 
-        if (!$this->authorizationChecker->isGranted($boardId, $userId, Role::tagEdit())) {
+        if (!$this->authorizationChecker->isGranted($boardId, $userId, Role::TagEdit)) {
             throw AccessDeniedException::new();
         }
 
-        $tag = $this->tagRepository->get(TagId::fromString($command->getTagId()));
+        $tag = $this->tagRepository->get(TagId::fromString($command->tagId));
 
-        if (null !== $command->getName()) {
-            $tag->changeName(TagName::fromString($command->getName()));
+        if (null !== $command->name) {
+            $tag->changeName(TagName::fromString($command->name));
         }
 
-        if (null !== $command->getColor()) {
-            $tag->changeColor(TagColor::fromString($command->getColor()));
+        if (null !== $command->color) {
+            $tag->changeColor(TagColor::fromString($command->color));
         }
 
         $this->tagRepository->save($tag);

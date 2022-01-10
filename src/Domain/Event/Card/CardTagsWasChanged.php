@@ -11,21 +11,8 @@ final class CardTagsWasChanged extends DomainEvent
     /**
      * @param array<string> $tags
      */
-    public function __construct(string $aggregateId, private string $boardId, private array $tags)
+    public function __construct(string $aggregateId, public readonly string $boardId, public readonly array $tags)
     {
         parent::__construct($aggregateId);
-    }
-
-    public function getBoardId(): string
-    {
-        return $this->boardId;
-    }
-
-    /**
-     * @return string[]
-     */
-    public function getTags(): array
-    {
-        return $this->tags;
     }
 }

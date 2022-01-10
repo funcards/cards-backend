@@ -9,7 +9,7 @@ use FC\Application\Bus\Command\CommandHandler;
 
 final class BatchUpdateCategoryCommandHandler implements CommandHandler
 {
-    public function __construct(private CommandBus $commandBus)
+    public function __construct(private readonly CommandBus $commandBus)
     {
     }
 
@@ -18,7 +18,7 @@ final class BatchUpdateCategoryCommandHandler implements CommandHandler
      */
     public function __invoke(BatchUpdateCategoryCommand $batchCommand): void
     {
-        foreach ($batchCommand->getCommands() as $command) {
+        foreach ($batchCommand->commands as $command) {
             $this->commandBus->send($command);
         }
     }

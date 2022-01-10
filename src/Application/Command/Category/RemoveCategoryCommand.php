@@ -12,24 +12,9 @@ use Symfony\Component\Validator\Constraints\Uuid;
 final class RemoveCategoryCommand implements Command
 {
     public function __construct(
-        #[SerializedName('board_id')] #[NotBlank, Uuid(versions: [Uuid::V4_RANDOM])] private string $boardId,
-        #[SerializedName('user_id')] #[NotBlank, Uuid(versions: [Uuid::V4_RANDOM])] private string $userId,
-        #[SerializedName('category_id')] #[NotBlank, Uuid(versions: [Uuid::V4_RANDOM])] private string $categoryId,
+        #[SerializedName('board_id')] #[NotBlank, Uuid(versions: [Uuid::V4_RANDOM])] public readonly string $boardId,
+        #[SerializedName('user_id')] #[NotBlank, Uuid(versions: [Uuid::V4_RANDOM])] public readonly string $userId,
+        #[SerializedName('category_id')] #[NotBlank, Uuid(versions: [Uuid::V4_RANDOM])] public readonly string $categoryId,
     ) {
-    }
-
-    public function getBoardId(): string
-    {
-        return $this->boardId;
-    }
-
-    public function getUserId(): string
-    {
-        return $this->userId;
-    }
-
-    public function getCategoryId(): string
-    {
-        return $this->categoryId;
     }
 }

@@ -6,45 +6,40 @@ namespace FC\UI\Http\Rest\V1\Controller;
 
 use FC\Application\Command\Board\AddMemberCommand;
 use FC\Application\Command\Board\RemoveMemberCommand;
+use FC\UI\Http\Rest\OpenApi\OAResponse;
+use OpenApi\Attributes\Delete;
+use OpenApi\Attributes\JsonContent;
+use OpenApi\Attributes\Parameter;
+use OpenApi\Attributes\Put;
+use OpenApi\Attributes\RequestBody;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use OpenApi\Annotations as OA;
 
-/**
- * @OA\Tag(
- *     name="Members",
- *     description="Members API"
- * )
- */
 #[Route('/api/v1/boards/{boardId}/members', requirements: ['boardId' => self::UUID_REGEX])]
 final class MemberController extends ApiController
 {
-    /**
-     * @OA\Put(
-     *     path="/api/v1/boards/{board-id}/members",
-     *     tags={"Members"},
-     *     operationId="addMember",
-     *     @OA\Parameter(name="board-id", in="path", required=true, @OA\Schema(ref="#/components/schemas/boardId")),
-     *     @OA\RequestBody(
-     *          request="AddMember",
-     *          required=true,
-     *          @OA\JsonContent(ref="#/components/schemas/AddMember")
-     *     ),
-     *     @OA\Response(response=204, description="Board member added successfully"),
-     *     @OA\Response(response=400, description="Bad Request", @OA\JsonContent(ref="#/components/schemas/error")),
-     *     @OA\Response(response=401, description="Unauthorized", @OA\JsonContent(ref="#/components/schemas/error")),
-     *     @OA\Response(response=403, description="Forbidden", @OA\JsonContent(ref="#/components/schemas/error")),
-     *     @OA\Response(response=404, description="Not Found", @OA\JsonContent(ref="#/components/schemas/error")),
-     *     @OA\Response(response=409, description="Conflict", @OA\JsonContent(ref="#/components/schemas/error")),
-     *     @OA\Response(response=422, description="Unprocessable Entity", @OA\JsonContent(ref="#/components/schemas/validationError")),
-     *     @OA\Response(response=500, description="Internal Server Error", @OA\JsonContent(ref="#/components/schemas/error")),
-     *     security={
-     *         {"bearerAuth": {}}
-     *     }
-     * )
-     *
-     */
+    #[Put(
+        path: '/api/v1/boards/{board-id}/members',
+        operationId: 'addMember',
+        security: [['Bearer' => []]],
+        requestBody: new RequestBody(
+            required: true,
+            content: new JsonContent(ref: '#/components/schemas/AddMember'),
+        ),
+        tags: ['Members'],
+        parameters: [new Parameter(ref: '#/components/parameters/boardId')],
+        responses: [
+            new OAResponse(ref: '#/components/responses/NoContent', response: 204),
+            new OAResponse(ref: '#/components/responses/BadRequest', response: 400),
+            new OAResponse(ref: '#/components/responses/Unauthorized', response: 401),
+            new OAResponse(ref: '#/components/responses/Forbidden', response: 403),
+            new OAResponse(ref: '#/components/responses/NotFound', response: 404),
+            new OAResponse(ref: '#/components/responses/Conflict', response: 409),
+            new OAResponse(ref: '#/components/responses/UnprocessableEntity', response: 422),
+            new OAResponse(ref: '#/components/responses/InternalServer', response: 500),
+        ],
+    )]
     #[Route(methods: 'PUT')]
     public function add(Request $request, string $boardId): Response
     {
@@ -57,25 +52,24 @@ final class MemberController extends ApiController
         return $this->noContent();
     }
 
-    /**
-     * @OA\Delete(
-     *     path="/api/v1/boards/{board-id}/members/{member-id}",
-     *     tags={"Members"},
-     *     operationId="removeMember",
-     *     @OA\Parameter(name="board-id", in="path", required=true, @OA\Schema(ref="#/components/schemas/boardId")),
-     *     @OA\Parameter(name="member-id", in="path", required=true, @OA\Schema(ref="#/components/schemas/userId")),
-     *     @OA\Response(response=204, description="Board member removed successfully"),
-     *     @OA\Response(response=400, description="Bad Request", @OA\JsonContent(ref="#/components/schemas/error")),
-     *     @OA\Response(response=401, description="Unauthorized", @OA\JsonContent(ref="#/components/schemas/error")),
-     *     @OA\Response(response=403, description="Forbidden", @OA\JsonContent(ref="#/components/schemas/error")),
-     *     @OA\Response(response=404, description="Not Found", @OA\JsonContent(ref="#/components/schemas/error")),
-     *     @OA\Response(response=500, description="Internal Server Error", @OA\JsonContent(ref="#/components/schemas/error")),
-     *     security={
-     *         {"bearerAuth": {}}
-     *     }
-     * )
-     *
-     */
+    #[Delete(
+        path: '/api/v1/boards/{board-id}/members/{member-id}',
+        operationId: 'removeMember',
+        security: [['Bearer' => []]],
+        tags: ['Members'],
+        parameters: [
+            new Parameter(ref: '#/components/parameters/boardId'),
+            new Parameter(ref: '#/components/parameters/memberId'),
+        ],
+        responses: [
+            new OAResponse(ref: '#/components/responses/NoContent', response: 204),
+            new OAResponse(ref: '#/components/responses/BadRequest', response: 400),
+            new OAResponse(ref: '#/components/responses/Unauthorized', response: 401),
+            new OAResponse(ref: '#/components/responses/Forbidden', response: 403),
+            new OAResponse(ref: '#/components/responses/NotFound', response: 404),
+            new OAResponse(ref: '#/components/responses/InternalServer', response: 500),
+        ],
+    )]
     #[Route('/{memberId}', requirements: ['memberId' => self::UUID_REGEX], methods: 'DELETE')]
     public function remove(string $boardId, string $memberId): Response
     {

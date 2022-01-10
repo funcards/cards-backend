@@ -15,8 +15,8 @@ use FC\Domain\ValueObject\Role;
 final class CardListQueryHandler implements QueryHandler
 {
     public function __construct(
-        private Connection $connection,
-        private AuthorizationCheckerInterface $authorizationChecker,
+        private readonly Connection $connection,
+        private readonly AuthorizationCheckerInterface $authorizationChecker,
     ) {
     }
 
@@ -26,9 +26,9 @@ final class CardListQueryHandler implements QueryHandler
     public function __invoke(CardListQuery $query): PaginatedResponse
     {
         if (!$this->authorizationChecker->isGranted(
-                $query->getBoardId(),
-                $query->getUserId(),
-                Role::cardView()
+                $query->boardId,
+                $query->userId,
+                Role::CardView,
             )) {
             throw AccessDeniedException::new();
         }
@@ -38,20 +38,20 @@ final class CardListQueryHandler implements QueryHandler
             ->from('cards', 'c')
             ->where('c.board_id = :boardId')
             ->orderBy('c.position', 'ASC')
-            ->setFirstResult($query->getPageIndex())
-            ->setMaxResults($query->getPageSize())
-            ->setParameter('boardId', $query->getBoardId());
+            ->setFirstResult($query->pageIndex)
+            ->setMaxResults($query->pageSize)
+            ->setParameter('boardId', $query->boardId);
 
-        if ([] !== $query->getCategories()) {
+        if ([] !== $query->categories) {
             $qb
                 ->andWhere('c.category_id IN(:categories)')
-                ->setParameter('categories', $query->getCategories(), Connection::PARAM_STR_ARRAY);
+                ->setParameter('categories', $query->categories, Connection::PARAM_STR_ARRAY);
         }
 
-        if ([] !== $query->getCards()) {
+        if ([] !== $query->cards) {
             $qb
                 ->andWhere('c.id IN(:cards)')
-                ->setParameter('cards', $query->getCards(), Connection::PARAM_STR_ARRAY);
+                ->setParameter('cards', $query->cards, Connection::PARAM_STR_ARRAY);
         }
 
         $data = [];
@@ -70,10 +70,10 @@ final class CardListQueryHandler implements QueryHandler
 
         $count = \count($data);
 
-        if ($query->getPageSize() > 1) {
+        if ($query->pageSize > 1) {
             $count = (int)$qb->select('COUNT(c.id)')->resetQueryPart('orderBy')->fetchOne();
         }
 
-        return new PaginatedResponse($query->getPageIndex(), $query->getPageSize(), $count, $data);
+        return new PaginatedResponse($query->pageIndex, $query->pageSize, $count, $data);
     }
 }

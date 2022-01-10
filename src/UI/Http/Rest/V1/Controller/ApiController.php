@@ -131,7 +131,7 @@ abstract class ApiController implements ServiceSubscriberInterface
         $json = $this->container->get('serializer')->serialize(
             $data,
             'json',
-            \array_merge(['json_encode_options' => JsonResponse::DEFAULT_ENCODING_OPTIONS], $context)
+            [...['json_encode_options' => JsonResponse::DEFAULT_ENCODING_OPTIONS], ...$context]
         );
 
         return new JsonResponse($json, $status, $headers, true);

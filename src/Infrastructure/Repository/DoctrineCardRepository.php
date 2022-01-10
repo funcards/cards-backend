@@ -18,17 +18,11 @@ final class DoctrineCardRepository extends DoctrineRepository implements CardRep
         return $this->find(Card::class, $id);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function save(Card $card): void
     {
         $this->persist($card);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function remove(Card $card): void
     {
         $this->delete($card);

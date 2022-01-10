@@ -16,8 +16,8 @@ final class Tag implements AggregateRoot
     use EventRecording;
 
     public function __construct(
-        private TagId $id,
-        private BoardId $boardId,
+        private readonly TagId $id,
+        private readonly BoardId $boardId,
         private TagName $name,
         private TagColor $color,
     ) {

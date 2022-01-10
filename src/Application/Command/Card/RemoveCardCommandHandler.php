@@ -16,21 +16,21 @@ use FC\Domain\ValueObject\Role;
 final class RemoveCardCommandHandler implements CommandHandler
 {
     public function __construct(
-        private CardRepository $cardRepository,
-        private AuthorizationCheckerInterface $authorizationChecker,
+        private readonly CardRepository $cardRepository,
+        private readonly AuthorizationCheckerInterface $authorizationChecker,
     ) {
     }
 
     public function __invoke(RemoveCardCommand $command): void
     {
-        $boardId = BoardId::fromString($command->getBoardId());
-        $userId = UserId::fromString($command->getUserId());
+        $boardId = BoardId::fromString($command->boardId);
+        $userId = UserId::fromString($command->userId);
 
-        if (!$this->authorizationChecker->isGranted($boardId, $userId, Role::cardRemove())) {
+        if (!$this->authorizationChecker->isGranted($boardId, $userId, Role::CardRemove)) {
             throw AccessDeniedException::new();
         }
 
-        $card = $this->cardRepository->get(CardId::fromString($command->getCardId()));
+        $card = $this->cardRepository->get(CardId::fromString($command->cardId));
 
         $this->cardRepository->remove($card);
     }

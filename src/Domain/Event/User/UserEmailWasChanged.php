@@ -8,13 +8,8 @@ use FC\Domain\Event\DomainEvent;
 
 final class UserEmailWasChanged extends DomainEvent
 {
-    public function __construct(string $aggregateId, string $occurredOn, private string $email)
+    public function __construct(string $aggregateId, string $occurredOn, public readonly string $email)
     {
         parent::__construct($aggregateId, $occurredOn);
-    }
-
-    public function getEmail(): string
-    {
-        return $this->email;
     }
 }

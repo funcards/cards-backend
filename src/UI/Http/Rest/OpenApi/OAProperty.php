@@ -1,0 +1,80 @@
+<?php
+
+declare(strict_types=1);
+
+namespace FC\UI\Http\Rest\OpenApi;
+
+use OpenApi\Attributes\AdditionalProperties;
+use OpenApi\Attributes\Discriminator;
+use OpenApi\Attributes\ExternalDocumentation;
+use OpenApi\Attributes\Items;
+use OpenApi\Attributes\Property;
+use OpenApi\Attributes\Xml;
+use OpenApi\Generator;
+
+#[\Attribute(\Attribute::TARGET_METHOD | \Attribute::TARGET_PROPERTY)]
+class OAProperty extends Property
+{
+    public function __construct(
+        ?string $property = null,
+        object|string|null $ref = null,
+        ?string $schema = null,
+        ?string $title = null,
+        ?string $description = null,
+        ?array $required = null,
+        ?array $properties = null,
+        ?string $type = null,
+        ?string $format = null,
+        ?Items $items = null,
+        ?string $collectionFormat = null,
+        $default = null,
+        ?string $pattern = null,
+        ?array $enum = null,
+        ?Discriminator $discriminator = null,
+        ?bool $readOnly = null,
+        ?bool $writeOnly = null,
+        ?Xml $xml = null,
+        ?ExternalDocumentation $externalDocs = null,
+        $example = null,
+        ?bool $nullable = null,
+        ?bool $deprecated = null,
+        ?array $allOf = null,
+        ?array $anyOf = null,
+        ?array $oneOf = null,
+        AdditionalProperties|string $additionalProperties = Generator::UNDEFINED,
+        ?array $x = null,
+        ?array $attachables = null
+    ) {
+        parent::__construct(
+            $property,
+            $ref,
+            $schema,
+            $title,
+            $description,
+            $required,
+            $properties,
+            $type,
+            $format,
+            $items,
+            $collectionFormat,
+            $default,
+            $pattern,
+            $enum,
+            $discriminator,
+            $readOnly,
+            $writeOnly,
+            $xml,
+            $externalDocs,
+            $example,
+            $nullable,
+            $deprecated,
+            $allOf,
+            $anyOf,
+            $oneOf,
+            $x,
+            $attachables
+        );
+
+        $this->additionalProperties = $additionalProperties;
+    }
+}

@@ -8,18 +8,8 @@ use FC\Domain\Event\DomainEvent;
 
 final class CategoryNameWasChanged extends DomainEvent
 {
-    public function __construct(string $aggregateId, private string $boardId, private string $name)
+    public function __construct(string $aggregateId, public readonly string $boardId, public readonly string $name)
     {
         parent::__construct($aggregateId);
-    }
-
-    public function getBoardId(): string
-    {
-        return $this->boardId;
-    }
-
-    public function getName(): string
-    {
-        return $this->name;
     }
 }

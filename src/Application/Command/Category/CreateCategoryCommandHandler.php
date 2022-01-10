@@ -20,26 +20,26 @@ use FC\Domain\ValueObject\Role;
 final class CreateCategoryCommandHandler implements CommandHandler
 {
     public function __construct(
-        private CategoryRepository $categoryRepository,
-        private AuthorizationCheckerInterface $authorizationChecker,
-        private EventBus $eventBus,
+        private readonly CategoryRepository $categoryRepository,
+        private readonly AuthorizationCheckerInterface $authorizationChecker,
+        private readonly EventBus $eventBus,
     ) {
     }
 
     public function __invoke(CreateCategoryCommand $command): void
     {
-        $boardId = BoardId::fromString($command->getBoardId());
-        $userId = UserId::fromString($command->getUserId());
+        $boardId = BoardId::fromString($command->boardId);
+        $userId = UserId::fromString($command->userId);
 
-        if (!$this->authorizationChecker->isGranted($boardId, $userId, Role::categoryAdd())) {
+        if (!$this->authorizationChecker->isGranted($boardId, $userId, Role::CategoryAdd)) {
             throw AccessDeniedException::new();
         }
 
         $category = Category::create(
-            CategoryId::fromString($command->getCategoryId()),
+            CategoryId::fromString($command->categoryId),
             $boardId,
-            CategoryName::fromString($command->getName()),
-            CategoryPosition::fromInt($command->getPosition()),
+            CategoryName::fromString($command->name),
+            CategoryPosition::fromInt($command->position),
         );
 
         $this->categoryRepository->save($category);

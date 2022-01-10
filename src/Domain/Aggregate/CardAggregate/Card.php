@@ -21,8 +21,8 @@ final class Card implements AggregateRoot
     use EventRecording;
 
     public function __construct(
-        private CardId $id,
-        private BoardId $boardId,
+        private readonly CardId $id,
+        private readonly BoardId $boardId,
         private CategoryId $categoryId,
         private CardName $name,
         private CardContent $content,

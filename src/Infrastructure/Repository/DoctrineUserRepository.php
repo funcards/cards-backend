@@ -24,9 +24,6 @@ final class DoctrineUserRepository extends DoctrineRepository implements UserRep
         return $this->find(User::class, $key);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function save(User $user): void
     {
         $this->persist($user);

@@ -9,43 +9,46 @@ use FC\Application\Command\Tag\CreateTagCommand;
 use FC\Application\Command\Tag\RemoveTagCommand;
 use FC\Application\Command\Tag\UpdateTagCommand;
 use FC\Application\Query\Tag\TagListQuery;
+use FC\UI\Http\Rest\OpenApi\OAResponse;
+use OpenApi\Attributes\Delete;
+use OpenApi\Attributes\Get;
+use OpenApi\Attributes\Items;
+use OpenApi\Attributes\JsonContent;
+use OpenApi\Attributes\Parameter;
+use OpenApi\Attributes\Patch;
+use OpenApi\Attributes\Post;
+use OpenApi\Attributes\Property;
+use OpenApi\Attributes\RequestBody;
+use OpenApi\Attributes\Schema;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use OpenApi\Annotations as OA;
 
-/**
- * @OA\Tag(
- *     name="Tags",
- *     description="Tags API"
- * )
- */
 #[Route('/api/v1/boards/{boardId}/tags', requirements: ['boardId' => self::UUID_REGEX])]
 final class TagController extends ApiController
 {
-    /**
-     * @OA\Get(
-     *     path="/api/v1/boards/{board-id}/tags/{tag-id}",
-     *     tags={"Tags"},
-     *     operationId="getTag",
-     *     @OA\Parameter(name="board-id", in="path", required=true, @OA\Schema(ref="#/components/schemas/boardId")),
-     *     @OA\Parameter(name="tag-id", in="path", required=true, @OA\Schema(ref="#/components/schemas/tagId")),
-     *     @OA\Response(
-     *          response=200,
-     *          description="Tag",
-     *          @OA\JsonContent(ref="#/components/schemas/TagResponse")
-     *     ),
-     *     @OA\Response(response=400, description="Bad Request", @OA\JsonContent(ref="#/components/schemas/error")),
-     *     @OA\Response(response=401, description="Unauthorized", @OA\JsonContent(ref="#/components/schemas/error")),
-     *     @OA\Response(response=403, description="Forbidden", @OA\JsonContent(ref="#/components/schemas/error")),
-     *     @OA\Response(response=404, description="Not Found", @OA\JsonContent(ref="#/components/schemas/error")),
-     *     @OA\Response(response=500, description="Internal Server Error", @OA\JsonContent(ref="#/components/schemas/error")),
-     *     security={
-     *         {"bearerAuth": {}}
-     *     }
-     * )
-     *
-     */
+    #[Get(
+        path: '/api/v1/boards/{board-id}/tags/{tag-id}',
+        operationId: 'getTag',
+        security: [['Bearer' => []]],
+        tags: ['Tags'],
+        parameters: [
+            new Parameter(ref: '#/components/parameters/boardId'),
+            new Parameter(ref: '#/components/parameters/tagId'),
+        ],
+        responses: [
+            new OAResponse(
+                response: 200,
+                description: 'Tag',
+                content: new JsonContent(ref: '#/components/schemas/TagResponse'),
+            ),
+            new OAResponse(ref: '#/components/responses/BadRequest', response: 400),
+            new OAResponse(ref: '#/components/responses/Unauthorized', response: 401),
+            new OAResponse(ref: '#/components/responses/Forbidden', response: 403),
+            new OAResponse(ref: '#/components/responses/NotFound', response: 404),
+            new OAResponse(ref: '#/components/responses/InternalServer', response: 500),
+        ],
+    )]
     #[Route('/{tagId}', 'tag', ['tagId' => self::UUID_REGEX], methods: 'GET')]
     public function get(string $boardId, string $tagId): Response
     {
@@ -54,41 +57,44 @@ final class TagController extends ApiController
         /** @var PaginatedResponse $response */
         $response = $this->ask(new TagListQuery($boardId, $this->getUserId(), 0, 1, $tagId));
 
-        if ([] === $response->getData()) {
+        if ([] === $response->data) {
             throw $this->createNotFoundException();
         }
 
-        return $this->json($response->getData()[0]);
+        return $this->json($response->data[0]);
     }
 
-    /**
-     * @OA\Get(
-     *     path="/api/v1/boards/{board-id}/tags",
-     *     tags={"Tags"},
-     *     operationId="tagList",
-     *     @OA\Parameter(name="board-id", in="path", required=true, @OA\Schema(ref="#/components/schemas/boardId")),
-     *     @OA\Parameter(name="page-index", in="query", @OA\Schema(ref="#/components/schemas/pageIndex")),
-     *     @OA\Parameter(name="page-size", in="query", @OA\Schema(ref="#/components/schemas/pageSize")),
-     *     @OA\Response(
-     *          response=200,
-     *          description="Tags",
-     *          @OA\JsonContent(allOf={
-     *              @OA\Schema(ref="#/components/schemas/PaginatedResponse"),
-     *              @OA\Schema(
-     *                  @OA\Property(property="data", type="array", @OA\Items(ref="#/components/schemas/TagResponse"))
-     *              )
-     *          })
-     *     ),
-     *     @OA\Response(response=400, description="Bad Request", @OA\JsonContent(ref="#/components/schemas/error")),
-     *     @OA\Response(response=401, description="Unauthorized", @OA\JsonContent(ref="#/components/schemas/error")),
-     *     @OA\Response(response=403, description="Forbidden", @OA\JsonContent(ref="#/components/schemas/error")),
-     *     @OA\Response(response=500, description="Internal Server Error", @OA\JsonContent(ref="#/components/schemas/error")),
-     *     security={
-     *         {"bearerAuth": {}}
-     *     }
-     * )
-     *
-     */
+    #[Get(
+        path: '/api/v1/boards/{board-id}/tags',
+        operationId: 'tagList',
+        security: [['Bearer' => []]],
+        tags: ['Tags'],
+        parameters: [
+            new Parameter(ref: '#/components/parameters/boardId'),
+            new Parameter(ref: '#/components/parameters/pageIndex'),
+            new Parameter(ref: '#/components/parameters/pageSize'),
+        ],
+        responses: [
+            new OAResponse(
+                response: 200,
+                description: 'Tags',
+                content: new JsonContent(allOf: [
+                    new Schema(ref: '#/components/schemas/PaginatedResponse'),
+                    new Schema(required: ['data'], properties: [
+                        new Property(
+                            property: 'data',
+                            type: 'array',
+                            items: new Items(ref: '#/components/schemas/TagResponse'),
+                        ),
+                    ]),
+                ]),
+            ),
+            new OAResponse(ref: '#/components/responses/BadRequest', response: 400),
+            new OAResponse(ref: '#/components/responses/Unauthorized', response: 401),
+            new OAResponse(ref: '#/components/responses/Forbidden', response: 403),
+            new OAResponse(ref: '#/components/responses/InternalServer', response: 500),
+        ],
+    )]
     #[Route(methods: 'GET')]
     public function list(Request $request, string $boardId): Response
     {
@@ -106,33 +112,25 @@ final class TagController extends ApiController
         return $this->json($response);
     }
 
-    /**
-     * @OA\Post(
-     *     path="/api/v1/boards/{board-id}/tags",
-     *     tags={"Tags"},
-     *     operationId="createTag",
-     *     @OA\Parameter(name="board-id", in="path", required=true, @OA\Schema(ref="#/components/schemas/boardId")),
-     *     @OA\RequestBody(
-     *          request="CreateTag",
-     *          required=true,
-     *          @OA\JsonContent(ref="#/components/schemas/CreateTag")
-     *     ),
-     *     @OA\Response(
-     *          response=201,
-     *          description="Board tag added successfully",
-     *          @OA\Header(header="Location", description="Tag URL", @OA\Schema(type="string", format="uri"))
-     *     ),
-     *     @OA\Response(response=400, description="Bad Request", @OA\JsonContent(ref="#/components/schemas/error")),
-     *     @OA\Response(response=401, description="Unauthorized", @OA\JsonContent(ref="#/components/schemas/error")),
-     *     @OA\Response(response=403, description="Forbidden", @OA\JsonContent(ref="#/components/schemas/error")),
-     *     @OA\Response(response=422, description="Unprocessable Entity", @OA\JsonContent(ref="#/components/schemas/validationError")),
-     *     @OA\Response(response=500, description="Internal Server Error", @OA\JsonContent(ref="#/components/schemas/error")),
-     *     security={
-     *         {"bearerAuth": {}}
-     *     }
-     * )
-     *
-     */
+    #[Post(
+        path: '/api/v1/boards/{board-id}/tags',
+        operationId: 'createTag',
+        security: [['Bearer' => []]],
+        requestBody: new RequestBody(
+            required: true,
+            content: new JsonContent(ref: '#/components/schemas/CreateTag'),
+        ),
+        tags: ['Tags'],
+        parameters: [new Parameter(ref: '#/components/parameters/boardId')],
+        responses: [
+            new OAResponse(ref: '#/components/responses/Created', response: 201),
+            new OAResponse(ref: '#/components/responses/BadRequest', response: 400),
+            new OAResponse(ref: '#/components/responses/Unauthorized', response: 401),
+            new OAResponse(ref: '#/components/responses/Forbidden', response: 403),
+            new OAResponse(ref: '#/components/responses/UnprocessableEntity', response: 422),
+            new OAResponse(ref: '#/components/responses/InternalServer', response: 500),
+        ],
+    )]
     #[Route(methods: 'POST')]
     public function create(Request $request, string $boardId): Response
     {
@@ -146,31 +144,29 @@ final class TagController extends ApiController
         return $this->created('tag', ['boardId' => $boardId, 'tagId' => $data['tag_id']]);
     }
 
-    /**
-     * @OA\Patch(
-     *     path="/api/v1/boards/{board-id}/tags/{tag-id}",
-     *     tags={"Tags"},
-     *     operationId="updateTag",
-     *     @OA\Parameter(name="board-id", in="path", required=true, @OA\Schema(ref="#/components/schemas/boardId")),
-     *     @OA\Parameter(name="tag-id", in="path", required=true, @OA\Schema(ref="#/components/schemas/tagId")),
-     *     @OA\RequestBody(
-     *          request="UpdateTag",
-     *          required=true,
-     *          @OA\JsonContent(ref="#/components/schemas/UpdateTag")
-     *     ),
-     *     @OA\Response(response=204, description="Board tag updated successfully"),
-     *     @OA\Response(response=400, description="Bad Request", @OA\JsonContent(ref="#/components/schemas/error")),
-     *     @OA\Response(response=401, description="Unauthorized", @OA\JsonContent(ref="#/components/schemas/error")),
-     *     @OA\Response(response=403, description="Forbidden", @OA\JsonContent(ref="#/components/schemas/error")),
-     *     @OA\Response(response=404, description="Not Found", @OA\JsonContent(ref="#/components/schemas/error")),
-     *     @OA\Response(response=422, description="Unprocessable Entity", @OA\JsonContent(ref="#/components/schemas/validationError")),
-     *     @OA\Response(response=500, description="Internal Server Error", @OA\JsonContent(ref="#/components/schemas/error")),
-     *     security={
-     *         {"bearerAuth": {}}
-     *     }
-     * )
-     *
-     */
+    #[Patch(
+        path: '/api/v1/boards/{board-id}/tags/{tag-id}',
+        operationId: 'updateTag',
+        security: [['Bearer' => []]],
+        requestBody: new RequestBody(
+            required: true,
+            content: new JsonContent(ref: '#/components/schemas/UpdateTag'),
+        ),
+        tags: ['Tags'],
+        parameters: [
+            new Parameter(ref: '#/components/parameters/boardId'),
+            new Parameter(ref: '#/components/parameters/tagId'),
+        ],
+        responses: [
+            new OAResponse(ref: '#/components/responses/NoContent', response: 204),
+            new OAResponse(ref: '#/components/responses/BadRequest', response: 400),
+            new OAResponse(ref: '#/components/responses/Unauthorized', response: 401),
+            new OAResponse(ref: '#/components/responses/Forbidden', response: 403),
+            new OAResponse(ref: '#/components/responses/NotFound', response: 404),
+            new OAResponse(ref: '#/components/responses/UnprocessableEntity', response: 422),
+            new OAResponse(ref: '#/components/responses/InternalServer', response: 500),
+        ],
+    )]
     #[Route('/{tagId}', requirements: ['tagId' => self::UUID_REGEX], methods: 'PATCH')]
     public function update(Request $request, string $boardId, string $tagId): Response
     {
@@ -184,25 +180,24 @@ final class TagController extends ApiController
         return $this->noContent();
     }
 
-    /**
-     * @OA\Delete(
-     *     path="/api/v1/boards/{board-id}/tags/{tag-id}",
-     *     tags={"Tags"},
-     *     operationId="removeTag",
-     *     @OA\Parameter(name="board-id", in="path", required=true, @OA\Schema(ref="#/components/schemas/boardId")),
-     *     @OA\Parameter(name="tag-id", in="path", required=true, @OA\Schema(ref="#/components/schemas/tagId")),
-     *     @OA\Response(response=204, description="Board tag removed successfully"),
-     *     @OA\Response(response=400, description="Bad Request", @OA\JsonContent(ref="#/components/schemas/error")),
-     *     @OA\Response(response=401, description="Unauthorized", @OA\JsonContent(ref="#/components/schemas/error")),
-     *     @OA\Response(response=403, description="Forbidden", @OA\JsonContent(ref="#/components/schemas/error")),
-     *     @OA\Response(response=404, description="Not Found", @OA\JsonContent(ref="#/components/schemas/error")),
-     *     @OA\Response(response=500, description="Internal Server Error", @OA\JsonContent(ref="#/components/schemas/error")),
-     *     security={
-     *         {"bearerAuth": {}}
-     *     }
-     * )
-     *
-     */
+    #[Delete(
+        path: '/api/v1/boards/{board-id}/tags/{tag-id}',
+        operationId: 'removeTag',
+        security: [['Bearer' => []]],
+        tags: ['Tags'],
+        parameters: [
+            new Parameter(ref: '#/components/parameters/boardId'),
+            new Parameter(ref: '#/components/parameters/tagId'),
+        ],
+        responses: [
+            new OAResponse(ref: '#/components/responses/NoContent', response: 204),
+            new OAResponse(ref: '#/components/responses/BadRequest', response: 400),
+            new OAResponse(ref: '#/components/responses/Unauthorized', response: 401),
+            new OAResponse(ref: '#/components/responses/Forbidden', response: 403),
+            new OAResponse(ref: '#/components/responses/NotFound', response: 404),
+            new OAResponse(ref: '#/components/responses/InternalServer', response: 500),
+        ],
+    )]
     #[Route('/{tagId}', requirements: ['tagId' => self::UUID_REGEX], methods: 'DELETE')]
     public function remove(string $boardId, string $tagId): Response
     {

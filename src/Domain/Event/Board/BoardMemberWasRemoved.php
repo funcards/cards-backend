@@ -8,13 +8,8 @@ use FC\Domain\Event\DomainEvent;
 
 final class BoardMemberWasRemoved extends DomainEvent
 {
-    public function __construct(string $aggregateId, private string $userId)
+    public function __construct(string $aggregateId, public readonly string $userId)
     {
         parent::__construct($aggregateId);
-    }
-
-    public function getUserId(): string
-    {
-        return $this->userId;
     }
 }

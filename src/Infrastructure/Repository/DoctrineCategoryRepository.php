@@ -18,17 +18,11 @@ final class DoctrineCategoryRepository extends DoctrineRepository implements Cat
         return $this->find(Category::class, $id);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function save(Category $category): void
     {
         $this->persist($category);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function remove(Category $category): void
     {
         $this->delete($category);

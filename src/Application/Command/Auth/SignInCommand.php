@@ -8,30 +8,17 @@ use FC\Application\Bus\Command\Command;
 use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
-use OpenApi\Annotations as OA;
+use OpenApi\Attributes as OA;
 
-/**
- * @OA\Schema(schema="SignIn", required={"email", "password"})
- */
+#[OA\Schema(schema: 'SignIn', required: ['email', 'password'])]
 final class SignInCommand implements Command
 {
-    public const DEFAULT = ['email' => '', 'password' => ''];
+    public final const DEFAULT = ['email' => '', 'password' => ''];
 
     public function __construct(
-        /** @OA\Property() */
-        #[NotBlank, Length(max: 180), Email(mode: Email::VALIDATION_MODE_STRICT)] private string $email,
-        /** @OA\Property() */
-        #[Length(min: 8, max: 64)] private string $password
+        #[OA\Property, NotBlank, Length(max: 180), Email(mode: Email::VALIDATION_MODE_STRICT)]
+        public readonly string $email,
+        #[OA\Property, NotBlank, Length(min: 8, max: 64)] public readonly string $password,
     ) {
-    }
-
-    public function getEmail(): string
-    {
-        return $this->email;
-    }
-
-    public function getPassword(): string
-    {
-        return $this->password;
     }
 }

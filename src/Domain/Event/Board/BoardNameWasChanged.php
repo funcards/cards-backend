@@ -8,13 +8,8 @@ use FC\Domain\Event\DomainEvent;
 
 final class BoardNameWasChanged extends DomainEvent
 {
-    public function __construct(string $aggregateId, private string $name)
+    public function __construct(string $aggregateId, public readonly string $name)
     {
         parent::__construct($aggregateId);
-    }
-
-    public function getName(): string
-    {
-        return $this->name;
     }
 }

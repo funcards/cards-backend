@@ -10,11 +10,11 @@ use FC\Domain\ValueObject\Roles;
 final class Member implements Entity
 {
     public function __construct(
-        private MemberId $id,
-        private UserId $userId,
+        private readonly MemberId $id,
+        private readonly UserId $userId,
         private Roles $roles,
-        private CreatedAt $createdAt,
-        private Board $board,
+        private readonly CreatedAt $createdAt,
+        private readonly Board $board,
     ) {
     }
 

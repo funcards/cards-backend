@@ -14,14 +14,14 @@ abstract class DomainEvent
     /**
      * @var string
      */
-    private string $eventId;
+    public readonly string $eventId;
 
     /**
      * @var string
      */
-    private string $occurredOn;
+    public readonly string $occurredOn;
 
-    public function __construct(private string $aggregateId, ?string $occurredOn = null)
+    public function __construct(public readonly string $aggregateId, ?string $occurredOn = null)
     {
         Assert::that($aggregateId)->uuid();
         Assert::thatNullOr($occurredOn)->notEmpty();
@@ -33,21 +33,6 @@ abstract class DomainEvent
     public static function eventName(): string
     {
         return static::class;
-    }
-
-    public function aggregateId(): string
-    {
-        return $this->aggregateId;
-    }
-
-    public function eventId(): string
-    {
-        return $this->eventId;
-    }
-
-    public function occurredOn(): string
-    {
-        return $this->occurredOn;
     }
 
     private static function now(): string

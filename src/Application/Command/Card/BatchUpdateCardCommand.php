@@ -11,18 +11,10 @@ final class BatchUpdateCardCommand implements Command
     /**
      * @var UpdateCardCommand[]
      */
-    private array $commands;
+    public readonly array $commands;
 
     public function __construct(UpdateCardCommand ...$commands)
     {
         $this->commands = $commands;
-    }
-
-    /**
-     * @return UpdateCardCommand[]
-     */
-    public function getCommands(): array
-    {
-        return $this->commands;
     }
 }

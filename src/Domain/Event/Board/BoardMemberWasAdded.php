@@ -11,21 +11,8 @@ final class BoardMemberWasAdded extends DomainEvent
     /**
      * @param array<string> $roles
      */
-    public function __construct(string $aggregateId, private string $userId, private array $roles)
+    public function __construct(string $aggregateId, public readonly string $userId, public readonly array $roles)
     {
         parent::__construct($aggregateId);
-    }
-
-    public function getUserId(): string
-    {
-        return $this->userId;
-    }
-
-    /**
-     * @return string[]
-     */
-    public function getRoles(): array
-    {
-        return $this->roles;
     }
 }

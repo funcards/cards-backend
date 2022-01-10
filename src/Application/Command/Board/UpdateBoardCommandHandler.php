@@ -19,33 +19,33 @@ use FC\Domain\ValueObject\Role;
 final class UpdateBoardCommandHandler implements CommandHandler
 {
     public function __construct(
-        private BoardRepository $boardRepository,
-        private AuthorizationCheckerInterface $authorizationChecker,
-        private EventBus $eventBus,
+        private readonly BoardRepository $boardRepository,
+        private readonly AuthorizationCheckerInterface $authorizationChecker,
+        private readonly EventBus $eventBus,
     ) {
     }
 
     public function __invoke(UpdateBoardCommand $command): void
     {
-        $boardId = BoardId::fromString($command->getBoardId());
-        $userId = UserId::fromString($command->getUserId());
+        $boardId = BoardId::fromString($command->boardId);
+        $userId = UserId::fromString($command->userId);
 
-        if (!$this->authorizationChecker->isGranted($boardId, $userId, Role::boardEdit())) {
+        if (!$this->authorizationChecker->isGranted($boardId, $userId, Role::BoardEdit)) {
             throw AccessDeniedException::new();
         }
 
         $board = $this->boardRepository->get($boardId);
 
-        if (null !== $command->getName()) {
-            $board->changeName(BoardName::fromString($command->getName()));
+        if (null !== $command->name) {
+            $board->changeName(BoardName::fromString($command->name));
         }
 
-        if (null !== $command->getColor()) {
-            $board->changeColor(BoardColor::fromString($command->getColor()));
+        if (null !== $command->color) {
+            $board->changeColor(BoardColor::fromString($command->color));
         }
 
-        if (null !== $command->getDescription()) {
-            $board->changeDescription(BoardDescription::fromString($command->getDescription()));
+        if (null !== $command->description) {
+            $board->changeDescription(BoardDescription::fromString($command->description));
         }
 
         $this->boardRepository->save($board);

@@ -13,7 +13,7 @@ final class Psr16RefreshTokenService implements RefreshTokenService
 {
     private const KEY_PREFIX = 'refresh';
 
-    public function __construct(private CacheInterface $cache, private \DateInterval $ttl)
+    public function __construct(private readonly CacheInterface $cache, private readonly \DateInterval $ttl)
     {
     }
 
@@ -37,17 +37,11 @@ final class Psr16RefreshTokenService implements RefreshTokenService
         return $token;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function set(string $refreshToken, string $payload): void
     {
         $this->cache->set($this->key($refreshToken), $payload, $this->ttl);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function delete(string $refreshToken): void
     {
         $this->cache->delete($this->key($refreshToken));

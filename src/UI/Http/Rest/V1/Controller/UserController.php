@@ -6,41 +6,38 @@ namespace FC\UI\Http\Rest\V1\Controller;
 
 use FC\Application\Bus\Query\PaginatedResponse;
 use FC\Application\Query\User\UserListQuery;
+use FC\UI\Http\Rest\OpenApi\OAResponse;
+use OpenApi\Attributes\Get;
+use OpenApi\Attributes\Items;
+use OpenApi\Attributes\JsonContent;
+use OpenApi\Attributes\Parameter;
+use OpenApi\Attributes\Property;
+use OpenApi\Attributes\Schema;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use OpenApi\Annotations as OA;
 
-/**
- * @OA\Tag(
- *     name="Users",
- *     description="Users API"
- * )
- */
 #[Route('/api/v1/users')]
 final class UserController extends ApiController
 {
-    /**
-     * @OA\Get(
-     *     path="/api/v1/users/me",
-     *     tags={"Users"},
-     *     operationId="me",
-     *     @OA\Response(
-     *          response=200,
-     *          description="User",
-     *          @OA\JsonContent(ref="#/components/schemas/UserResponse")
-     *     ),
-     *     @OA\Response(response=400, description="Bad Request", @OA\JsonContent(ref="#/components/schemas/error")),
-     *     @OA\Response(response=401, description="Unauthorized", @OA\JsonContent(ref="#/components/schemas/error")),
-     *     @OA\Response(response=403, description="Forbidden", @OA\JsonContent(ref="#/components/schemas/error")),
-     *     @OA\Response(response=404, description="Not Found", @OA\JsonContent(ref="#/components/schemas/error")),
-     *     @OA\Response(response=500, description="Internal Server Error", @OA\JsonContent(ref="#/components/schemas/error")),
-     *     security={
-     *         {"bearerAuth": {}}
-     *     }
-     * )
-     *
-     */
+    #[Get(
+        path: '/api/v1/users/me',
+        operationId: 'me',
+        security: [['Bearer' => []]],
+        tags: ['Users'],
+        responses: [
+            new OAResponse(
+                response: 200,
+                description: 'User',
+                content: new JsonContent(ref: '#/components/schemas/UserResponse'),
+            ),
+            new OAResponse(ref: '#/components/responses/BadRequest', response: 400),
+            new OAResponse(ref: '#/components/responses/Unauthorized', response: 401),
+            new OAResponse(ref: '#/components/responses/Forbidden', response: 403),
+            new OAResponse(ref: '#/components/responses/NotFound', response: 404),
+            new OAResponse(ref: '#/components/responses/InternalServer', response: 500),
+        ],
+    )]
     #[Route('/me', methods: 'GET')]
     public function me(): Response
     {
@@ -49,35 +46,32 @@ final class UserController extends ApiController
         /** @var PaginatedResponse $response */
         $response = $this->ask(new UserListQuery(0, 1, [$this->getUserId()]));
 
-        if ([] === $response->getData()) {
+        if ([] === $response->data) {
             throw $this->createNotFoundException();
         }
 
-        return $this->json($response->getData()[0]);
+        return $this->json($response->data[0]);
     }
 
-    /**
-     * @OA\Get(
-     *     path="/api/v1/users/{user-id}",
-     *     tags={"Users"},
-     *     operationId="getUser",
-     *     @OA\Parameter(name="user-id", in="path", required=true, @OA\Schema(ref="#/components/schemas/userId")),
-     *     @OA\Response(
-     *          response=200,
-     *          description="User",
-     *          @OA\JsonContent(ref="#/components/schemas/UserResponse")
-     *     ),
-     *     @OA\Response(response=400, description="Bad Request", @OA\JsonContent(ref="#/components/schemas/error")),
-     *     @OA\Response(response=401, description="Unauthorized", @OA\JsonContent(ref="#/components/schemas/error")),
-     *     @OA\Response(response=403, description="Forbidden", @OA\JsonContent(ref="#/components/schemas/error")),
-     *     @OA\Response(response=404, description="Not Found", @OA\JsonContent(ref="#/components/schemas/error")),
-     *     @OA\Response(response=500, description="Internal Server Error", @OA\JsonContent(ref="#/components/schemas/error")),
-     *     security={
-     *         {"bearerAuth": {}}
-     *     }
-     * )
-     *
-     */
+    #[Get(
+        path: '/api/v1/users/{user-id}',
+        operationId: 'getUser',
+        security: [['Bearer' => []]],
+        tags: ['Users'],
+        parameters: [new Parameter(ref: '#/components/parameters/userId')],
+        responses: [
+            new OAResponse(
+                response: 200,
+                description: 'User',
+                content: new JsonContent(ref: '#/components/schemas/UserResponse'),
+            ),
+            new OAResponse(ref: '#/components/responses/BadRequest', response: 400),
+            new OAResponse(ref: '#/components/responses/Unauthorized', response: 401),
+            new OAResponse(ref: '#/components/responses/Forbidden', response: 403),
+            new OAResponse(ref: '#/components/responses/NotFound', response: 404),
+            new OAResponse(ref: '#/components/responses/InternalServer', response: 500),
+        ],
+    )]
     #[Route('/{userId}', 'user', ['userId' => self::UUID_REGEX], methods: 'GET')]
     public function get(string $userId): Response
     {
@@ -86,42 +80,45 @@ final class UserController extends ApiController
         /** @var PaginatedResponse $response */
         $response = $this->ask(new UserListQuery(0, 1, [$userId]));
 
-        if ([] === $response->getData()) {
+        if ([] === $response->data) {
             throw $this->createNotFoundException();
         }
 
-        return $this->json($response->getData()[0]);
+        return $this->json($response->data[0]);
     }
 
-    /**
-     * @OA\Get(
-     *     path="/api/v1/users",
-     *     tags={"Users"},
-     *     operationId="userList",
-     *     @OA\Parameter(name="page-index", in="query", @OA\Schema(ref="#/components/schemas/pageIndex")),
-     *     @OA\Parameter(name="page-size", in="query", @OA\Schema(ref="#/components/schemas/pageSize")),
-     *     @OA\Parameter(name="users[]", in="query", @OA\Schema(ref="#/components/schemas/users")),
-     *     @OA\Parameter(name="emails[]", in="query", @OA\Schema(ref="#/components/schemas/emails")),
-     *     @OA\Response(
-     *          response=200,
-     *          description="Users",
-     *          @OA\JsonContent(allOf={
-     *              @OA\Schema(ref="#/components/schemas/PaginatedResponse"),
-     *              @OA\Schema(
-     *                  @OA\Property(property="data", type="array", @OA\Items(ref="#/components/schemas/UserResponse"))
-     *              )
-     *          })
-     *     ),
-     *     @OA\Response(response=400, description="Bad Request", @OA\JsonContent(ref="#/components/schemas/error")),
-     *     @OA\Response(response=401, description="Unauthorized", @OA\JsonContent(ref="#/components/schemas/error")),
-     *     @OA\Response(response=403, description="Forbidden", @OA\JsonContent(ref="#/components/schemas/error")),
-     *     @OA\Response(response=500, description="Internal Server Error", @OA\JsonContent(ref="#/components/schemas/error")),
-     *     security={
-     *         {"bearerAuth": {}}
-     *     }
-     * )
-     *
-     */
+    #[Get(
+        path: '/api/v1/users',
+        operationId: 'userList',
+        security: [['Bearer' => []]],
+        tags: ['Users'],
+        parameters: [
+            new Parameter(ref: '#/components/parameters/pageIndex'),
+            new Parameter(ref: '#/components/parameters/pageSize'),
+            new Parameter(ref: '#/components/parameters/users'),
+            new Parameter(ref: '#/components/parameters/emails'),
+        ],
+        responses: [
+            new OAResponse(
+                response: 200,
+                description: 'Users',
+                content: new JsonContent(allOf: [
+                    new Schema(ref: '#/components/schemas/PaginatedResponse'),
+                    new Schema(properties: [
+                        new Property(
+                            property: 'data',
+                            type: 'array',
+                            items: new Items(ref: '#/components/schemas/UserResponse'),
+                        ),
+                    ]),
+                ]),
+            ),
+            new OAResponse(ref: '#/components/responses/BadRequest', response: 400),
+            new OAResponse(ref: '#/components/responses/Unauthorized', response: 401),
+            new OAResponse(ref: '#/components/responses/Forbidden', response: 403),
+            new OAResponse(ref: '#/components/responses/InternalServer', response: 500),
+        ],
+    )]
     #[Route(methods: 'GET')]
     public function list(Request $request): Response
     {

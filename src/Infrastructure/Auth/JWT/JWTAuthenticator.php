@@ -21,7 +21,7 @@ final class JWTAuthenticator extends AbstractAuthenticator
     private const HEADER = 'Authorization';
     private const SCHEME = 'Bearer';
 
-    public function __construct(private JWTManagerInterface $jwtManager)
+    public function __construct(private readonly JWTManagerInterface $jwtManager)
     {
     }
 

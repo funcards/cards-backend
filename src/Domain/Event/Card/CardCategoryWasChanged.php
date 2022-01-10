@@ -8,18 +8,11 @@ use FC\Domain\Event\DomainEvent;
 
 final class CardCategoryWasChanged extends DomainEvent
 {
-    public function __construct(string $aggregateId, private string $boardId, private string $categoryId)
-    {
+    public function __construct(
+        string $aggregateId,
+        public readonly string $boardId,
+        public readonly string $categoryId,
+    ) {
         parent::__construct($aggregateId);
-    }
-
-    public function getBoardId(): string
-    {
-        return $this->boardId;
-    }
-
-    public function getCategoryId(): string
-    {
-        return $this->categoryId;
     }
 }

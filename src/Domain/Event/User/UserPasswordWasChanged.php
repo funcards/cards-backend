@@ -8,13 +8,8 @@ use FC\Domain\Event\DomainEvent;
 
 final class UserPasswordWasChanged extends DomainEvent
 {
-    public function __construct(string $aggregateId, string $occurredOn, private string $password)
+    public function __construct(string $aggregateId, string $occurredOn, public readonly string $password)
     {
         parent::__construct($aggregateId, $occurredOn);
-    }
-
-    public function password(): string
-    {
-        return $this->password;
     }
 }

@@ -22,12 +22,12 @@ final class User implements AggregateRoot
     use EventRecording;
 
     public function __construct(
-        private UserId $id,
+        private readonly UserId $id,
         private UserName $name,
         private UserEmail $email,
         private UserPassword $password,
         private Roles $roles,
-        private CreatedAt $createdAt,
+        private readonly CreatedAt $createdAt,
         private ?UpdatedAt $updatedAt,
     ) {
     }

@@ -11,14 +11,11 @@ services:
     autowire: true      # Automatically injects dependencies in your services.
     autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
 
-  Psr\SimpleCache\CacheInterface: '@road_runner.key_value.psr16'
   Symfony\Component\Serializer\Normalizer\DenormalizerInterface: '@Symfony\Component\Serializer\SerializerInterface'
 
   Symfony\Component\PasswordHasher\PasswordHasherInterface:
     class: Symfony\Component\PasswordHasher\Hasher\NativePasswordHasher
 
-  # makes classes in src/ available to be used as services
-  # this creates a service per class whose id is the fully-qualified class name
   FC\UI\Http\Web\Controller\:
     resource: '../src/UI/Http/Web/Controller/'
     tags: [ 'controller.service_arguments' ]
@@ -42,6 +39,3 @@ services:
   FC\UI\Cli\Command\GenerateTokenCommand:
     tags:
       - { name: 'console.command', command: 'jwt:generate-token' }
-
-  # add more service definitions when explicit configuration is needed
-  # please note that last definitions always *replace* previous ones

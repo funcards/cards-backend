@@ -5,7 +5,7 @@
                           https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
 
   <embeddable name="FC\Domain\ValueObject\Roles">
-    <field name="roles" type="json" column="roles"/>
+    <field name="items" type="json" column="roles"/>
   </embeddable>
 
 </doctrine-mapping>

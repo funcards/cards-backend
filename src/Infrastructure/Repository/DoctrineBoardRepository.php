@@ -18,17 +18,11 @@ final class DoctrineBoardRepository extends DoctrineRepository implements BoardR
         return $this->find(Board::class, $id);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function save(Board $board): void
     {
         $this->persist($board);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function remove(Board $board): void
     {
         $this->delete($board);

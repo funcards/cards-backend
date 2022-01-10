@@ -13,7 +13,7 @@ final class BoardListQueryHandler implements QueryHandler
 {
     private const SEPARATOR = '<|>';
 
-    public function __construct(private Connection $connection)
+    public function __construct(private readonly Connection $connection)
     {
     }
 
@@ -35,14 +35,14 @@ final class BoardListQueryHandler implements QueryHandler
             ->leftJoin('b', 'users', 'u', 'u.id = m.user_id')
             ->where('m.user_id = :userId')
             ->groupBy('b.id')
-            ->setFirstResult($query->getPageIndex())
-            ->setMaxResults($query->getPageSize())
-            ->setParameter('userId', $query->getUserId());
+            ->setFirstResult($query->pageIndex)
+            ->setMaxResults($query->pageSize)
+            ->setParameter('userId', $query->userId);
 
-        if ([] !== $query->getBoards()) {
+        if ([] !== $query->boards) {
             $qb
                 ->andWhere('b.id IN(:boards)')
-                ->setParameter('boards', $query->getBoards(), Connection::PARAM_STR_ARRAY);
+                ->setParameter('boards', $query->boards, Connection::PARAM_STR_ARRAY);
         }
 
         $data = [];
@@ -71,10 +71,10 @@ final class BoardListQueryHandler implements QueryHandler
 
         $count = \count($data);
 
-        if ($query->getPageSize() > 1) {
+        if ($query->pageSize > 1) {
             $count = (int)$qb->select('COUNT(b.id)')->fetchOne();
         }
 
-        return new PaginatedResponse($query->getPageIndex(), $query->getPageSize(), $count, $data);
+        return new PaginatedResponse($query->pageIndex, $query->pageSize, $count, $data);
     }
 }

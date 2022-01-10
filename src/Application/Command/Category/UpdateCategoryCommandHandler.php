@@ -19,29 +19,29 @@ use FC\Domain\ValueObject\Role;
 final class UpdateCategoryCommandHandler implements CommandHandler
 {
     public function __construct(
-        private CategoryRepository $categoryRepository,
-        private AuthorizationCheckerInterface $authorizationChecker,
-        private EventBus $eventBus,
+        private readonly CategoryRepository $categoryRepository,
+        private readonly AuthorizationCheckerInterface $authorizationChecker,
+        private readonly EventBus $eventBus,
     ) {
     }
 
     public function __invoke(UpdateCategoryCommand $command): void
     {
-        $boardId = BoardId::fromString($command->getBoardId());
-        $userId = UserId::fromString($command->getUserId());
+        $boardId = BoardId::fromString($command->boardId);
+        $userId = UserId::fromString($command->userId);
 
-        if (!$this->authorizationChecker->isGranted($boardId, $userId, Role::categoryEdit())) {
+        if (!$this->authorizationChecker->isGranted($boardId, $userId, Role::CategoryEdit)) {
             throw AccessDeniedException::new();
         }
 
-        $category = $this->categoryRepository->get(CategoryId::fromString($command->getCategoryId()));
+        $category = $this->categoryRepository->get(CategoryId::fromString($command->categoryId));
 
-        if (null !== $command->getName()) {
-            $category->changeName(CategoryName::fromString($command->getName()));
+        if (null !== $command->name) {
+            $category->changeName(CategoryName::fromString($command->name));
         }
 
-        if (null !== $command->getPosition()) {
-            $category->changePosition(CategoryPosition::fromInt($command->getPosition()));
+        if (null !== $command->position) {
+            $category->changePosition(CategoryPosition::fromInt($command->position));
         }
 
         $this->categoryRepository->save($category);

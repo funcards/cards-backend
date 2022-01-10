@@ -9,42 +9,43 @@ use FC\Application\Command\Board\CreateBoardCommand;
 use FC\Application\Command\Board\RemoveBoardCommand;
 use FC\Application\Command\Board\UpdateBoardCommand;
 use FC\Application\Query\Board\BoardListQuery;
+use FC\UI\Http\Rest\OpenApi\OAResponse;
+use OpenApi\Attributes\Delete;
+use OpenApi\Attributes\Get;
+use OpenApi\Attributes\Items;
+use OpenApi\Attributes\JsonContent;
+use OpenApi\Attributes\Parameter;
+use OpenApi\Attributes\Patch;
+use OpenApi\Attributes\Post;
+use OpenApi\Attributes\Property;
+use OpenApi\Attributes\RequestBody;
+use OpenApi\Attributes\Schema;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use OpenApi\Annotations as OA;
 
-/**
- * @OA\Tag(
- *     name="Boards",
- *     description="Boards API"
- * )
- */
 #[Route('/api/v1/boards')]
 final class BoardController extends ApiController
 {
-    /**
-     * @OA\Get(
-     *     path="/api/v1/boards/{board-id}",
-     *     tags={"Boards"},
-     *     operationId="getBoard",
-     *     @OA\Parameter(name="board-id", in="path", required=true, @OA\Schema(ref="#/components/schemas/boardId")),
-     *     @OA\Response(
-     *          response=200,
-     *          description="Board",
-     *          @OA\JsonContent(ref="#/components/schemas/BoardResponse")
-     *     ),
-     *     @OA\Response(response=400, description="Bad Request", @OA\JsonContent(ref="#/components/schemas/error")),
-     *     @OA\Response(response=401, description="Unauthorized", @OA\JsonContent(ref="#/components/schemas/error")),
-     *     @OA\Response(response=403, description="Forbidden", @OA\JsonContent(ref="#/components/schemas/error")),
-     *     @OA\Response(response=404, description="Not Found", @OA\JsonContent(ref="#/components/schemas/error")),
-     *     @OA\Response(response=500, description="Internal Server Error", @OA\JsonContent(ref="#/components/schemas/error")),
-     *     security={
-     *         {"bearerAuth": {}}
-     *     }
-     * )
-     *
-     */
+    #[Get(
+        path: '/api/v1/boards/{board-id}',
+        operationId: 'getBoard',
+        security: [['Bearer' => []]],
+        tags: ['Boards'],
+        parameters: [new Parameter(ref: '#/components/parameters/boardId')],
+        responses: [
+            new OAResponse(
+                response: 200,
+                description: 'Board',
+                content: new JsonContent(ref: '#/components/schemas/BoardResponse'),
+            ),
+            new OAResponse(ref: '#/components/responses/BadRequest', response: 400),
+            new OAResponse(ref: '#/components/responses/Unauthorized', response: 401),
+            new OAResponse(ref: '#/components/responses/Forbidden', response: 403),
+            new OAResponse(ref: '#/components/responses/NotFound', response: 404),
+            new OAResponse(ref: '#/components/responses/InternalServer', response: 500),
+        ],
+    )]
     #[Route('/{boardId}', 'board', ['boardId' => self::UUID_REGEX], methods: 'GET')]
     public function get(string $boardId): Response
     {
@@ -53,40 +54,43 @@ final class BoardController extends ApiController
         /** @var PaginatedResponse $response */
         $response = $this->ask(new BoardListQuery($this->getUserId(), 0, 1, $boardId));
 
-        if ([] === $response->getData()) {
+        if ([] === $response->data) {
             throw $this->createNotFoundException();
         }
 
-        return $this->json($response->getData()[0]);
+        return $this->json($response->data[0]);
     }
 
-    /**
-     * @OA\Get(
-     *     path="/api/v1/boards",
-     *     tags={"Boards"},
-     *     operationId="boardList",
-     *     @OA\Parameter(name="page-index", in="query", @OA\Schema(ref="#/components/schemas/pageIndex")),
-     *     @OA\Parameter(name="page-size", in="query", @OA\Schema(ref="#/components/schemas/pageSize")),
-     *     @OA\Response(
-     *          response=200,
-     *          description="Boards",
-     *          @OA\JsonContent(allOf={
-     *              @OA\Schema(ref="#/components/schemas/PaginatedResponse"),
-     *              @OA\Schema(
-     *                  @OA\Property(property="data", type="array", @OA\Items(ref="#/components/schemas/BoardResponse"))
-     *              )
-     *          })
-     *     ),
-     *     @OA\Response(response=400, description="Bad Request", @OA\JsonContent(ref="#/components/schemas/error")),
-     *     @OA\Response(response=401, description="Unauthorized", @OA\JsonContent(ref="#/components/schemas/error")),
-     *     @OA\Response(response=403, description="Forbidden", @OA\JsonContent(ref="#/components/schemas/error")),
-     *     @OA\Response(response=500, description="Internal Server Error", @OA\JsonContent(ref="#/components/schemas/error")),
-     *     security={
-     *         {"bearerAuth": {}}
-     *     }
-     * )
-     *
-     */
+    #[Get(
+        path: '/api/v1/boards',
+        operationId: 'boardList',
+        security: [['Bearer' => []]],
+        tags: ['Boards'],
+        parameters: [
+            new Parameter(ref: '#/components/parameters/pageIndex'),
+            new Parameter(ref: '#/components/parameters/pageSize'),
+        ],
+        responses: [
+            new OAResponse(
+                response: 200,
+                description: 'Boards',
+                content: new JsonContent(allOf: [
+                    new Schema(ref: '#/components/schemas/PaginatedResponse'),
+                    new Schema(properties: [
+                        new Property(
+                            property: 'data',
+                            type: 'array',
+                            items: new Items(ref: '#/components/schemas/BoardResponse'),
+                        ),
+                    ]),
+                ]),
+            ),
+            new OAResponse(ref: '#/components/responses/BadRequest', response: 400),
+            new OAResponse(ref: '#/components/responses/Unauthorized', response: 401),
+            new OAResponse(ref: '#/components/responses/Forbidden', response: 403),
+            new OAResponse(ref: '#/components/responses/InternalServer', response: 500),
+        ],
+    )]
     #[Route(methods: 'GET')]
     public function list(Request $request): Response
     {
@@ -103,32 +107,24 @@ final class BoardController extends ApiController
         return $this->json($response);
     }
 
-    /**
-     * @OA\Post(
-     *     path="/api/v1/boards",
-     *     tags={"Boards"},
-     *     operationId="createBoard",
-     *     @OA\RequestBody(
-     *          request="CreateBoard",
-     *          required=true,
-     *          @OA\JsonContent(ref="#/components/schemas/CreateBoard")
-     *     ),
-     *     @OA\Response(
-     *          response=201,
-     *          description="Board added successfully",
-     *          @OA\Header(header="Location", description="Board URL", @OA\Schema(type="string", format="uri"))
-     *     ),
-     *     @OA\Response(response=400, description="Bad Request", @OA\JsonContent(ref="#/components/schemas/error")),
-     *     @OA\Response(response=401, description="Unauthorized", @OA\JsonContent(ref="#/components/schemas/error")),
-     *     @OA\Response(response=403, description="Forbidden", @OA\JsonContent(ref="#/components/schemas/error")),
-     *     @OA\Response(response=422, description="Unprocessable Entity", @OA\JsonContent(ref="#/components/schemas/validationError")),
-     *     @OA\Response(response=500, description="Internal Server Error", @OA\JsonContent(ref="#/components/schemas/error")),
-     *     security={
-     *         {"bearerAuth": {}}
-     *     }
-     * )
-     *
-     */
+    #[Post(
+        path: '/api/v1/boards',
+        operationId: 'createBoard',
+        security: [['Bearer' => []]],
+        requestBody: new RequestBody(
+            required: true,
+            content: new JsonContent(ref: '#/components/schemas/CreateBoard'),
+        ),
+        tags: ['Boards'],
+        responses: [
+            new OAResponse(ref: '#/components/responses/Created', response: 201),
+            new OAResponse(ref: '#/components/responses/BadRequest', response: 400),
+            new OAResponse(ref: '#/components/responses/Unauthorized', response: 401),
+            new OAResponse(ref: '#/components/responses/Forbidden', response: 403),
+            new OAResponse(ref: '#/components/responses/UnprocessableEntity', response: 422),
+            new OAResponse(ref: '#/components/responses/InternalServer', response: 500),
+        ],
+    )]
     #[Route(methods: 'POST')]
     public function create(Request $request): Response
     {
@@ -141,30 +137,26 @@ final class BoardController extends ApiController
         return $this->created('board', ['boardId' => $data['board_id']]);
     }
 
-    /**
-     * @OA\Patch(
-     *     path="/api/v1/boards/{board-id}",
-     *     tags={"Boards"},
-     *     operationId="updateBoard",
-     *     @OA\Parameter(name="board-id", in="path", required=true, @OA\Schema(ref="#/components/schemas/boardId")),
-     *     @OA\RequestBody(
-     *          request="UpdateBoard",
-     *          required=true,
-     *          @OA\JsonContent(ref="#/components/schemas/UpdateBoard")
-     *     ),
-     *     @OA\Response(response=204, description="Board updated successfully"),
-     *     @OA\Response(response=400, description="Bad Request", @OA\JsonContent(ref="#/components/schemas/error")),
-     *     @OA\Response(response=401, description="Unauthorized", @OA\JsonContent(ref="#/components/schemas/error")),
-     *     @OA\Response(response=403, description="Forbidden", @OA\JsonContent(ref="#/components/schemas/error")),
-     *     @OA\Response(response=404, description="Not Found", @OA\JsonContent(ref="#/components/schemas/error")),
-     *     @OA\Response(response=422, description="Unprocessable Entity", @OA\JsonContent(ref="#/components/schemas/validationError")),
-     *     @OA\Response(response=500, description="Internal Server Error", @OA\JsonContent(ref="#/components/schemas/error")),
-     *     security={
-     *         {"bearerAuth": {}}
-     *     }
-     * )
-     *
-     */
+    #[Patch(
+        path: '/api/v1/boards/{board-id}',
+        operationId: 'updateBoard',
+        security: [['Bearer' => []]],
+        requestBody: new RequestBody(
+            required: true,
+            content: new JsonContent(ref: '#/components/schemas/UpdateBoard'),
+        ),
+        tags: ['Boards'],
+        parameters: [new Parameter(ref: '#/components/parameters/boardId')],
+        responses: [
+            new OAResponse(ref: '#/components/responses/NoContent', response: 204),
+            new OAResponse(ref: '#/components/responses/BadRequest', response: 400),
+            new OAResponse(ref: '#/components/responses/Unauthorized', response: 401),
+            new OAResponse(ref: '#/components/responses/Forbidden', response: 403),
+            new OAResponse(ref: '#/components/responses/NotFound', response: 404),
+            new OAResponse(ref: '#/components/responses/UnprocessableEntity', response: 422),
+            new OAResponse(ref: '#/components/responses/InternalServer', response: 500),
+        ],
+    )]
     #[Route('/{boardId}', requirements: ['boardId' => self::UUID_REGEX], methods: 'PATCH')]
     public function update(Request $request, string $boardId): Response
     {
@@ -177,24 +169,21 @@ final class BoardController extends ApiController
         return $this->noContent();
     }
 
-    /**
-     * @OA\Delete(
-     *     path="/api/v1/boards/{board-id}",
-     *     tags={"Boards"},
-     *     operationId="removeBoard",
-     *     @OA\Parameter(name="board-id", in="path", required=true, @OA\Schema(ref="#/components/schemas/boardId")),
-     *     @OA\Response(response=204, description="Board removed successfully"),
-     *     @OA\Response(response=400, description="Bad Request", @OA\JsonContent(ref="#/components/schemas/error")),
-     *     @OA\Response(response=401, description="Unauthorized", @OA\JsonContent(ref="#/components/schemas/error")),
-     *     @OA\Response(response=403, description="Forbidden", @OA\JsonContent(ref="#/components/schemas/error")),
-     *     @OA\Response(response=404, description="Not Found", @OA\JsonContent(ref="#/components/schemas/error")),
-     *     @OA\Response(response=500, description="Internal Server Error", @OA\JsonContent(ref="#/components/schemas/error")),
-     *     security={
-     *         {"bearerAuth": {}}
-     *     }
-     * )
-     *
-     */
+    #[Delete(
+        path: '/api/v1/boards/{board-id}',
+        operationId: 'removeBoard',
+        security: [['Bearer' => []]],
+        tags: ['Boards'],
+        parameters: [new Parameter(ref: '#/components/parameters/boardId')],
+        responses: [
+            new OAResponse(ref: '#/components/responses/NoContent', response: 204),
+            new OAResponse(ref: '#/components/responses/BadRequest', response: 400),
+            new OAResponse(ref: '#/components/responses/Unauthorized', response: 401),
+            new OAResponse(ref: '#/components/responses/Forbidden', response: 403),
+            new OAResponse(ref: '#/components/responses/NotFound', response: 404),
+            new OAResponse(ref: '#/components/responses/InternalServer', response: 500),
+        ],
+    )]
     #[Route('/{boardId}', requirements: ['boardId' => self::UUID_REGEX], methods: 'DELETE')]
     public function remove(string $boardId): Response
     {

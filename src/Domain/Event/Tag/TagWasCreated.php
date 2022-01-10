@@ -10,25 +10,10 @@ final class TagWasCreated extends DomainEvent
 {
     public function __construct(
         string $aggregateId,
-        private string $boardId,
-        private string $name,
-        private string $color,
+        public readonly string $boardId,
+        public readonly string $name,
+        public readonly string $color,
     ) {
         parent::__construct($aggregateId);
-    }
-
-    public function getBoardId(): string
-    {
-        return $this->boardId;
-    }
-
-    public function getName(): string
-    {
-        return $this->name;
-    }
-
-    public function getColor(): string
-    {
-        return $this->color;
     }
 }

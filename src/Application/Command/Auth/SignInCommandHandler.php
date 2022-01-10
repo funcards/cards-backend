@@ -15,9 +15,9 @@ use Symfony\Component\PasswordHasher\PasswordHasherInterface;
 final class SignInCommandHandler implements CommandHandler
 {
     public function __construct(
-        private UserRepository $userRepository,
-        private PasswordHasherInterface $passwordHasher,
-        private AuthSessionServiceInterface $authSessionService,
+        private readonly UserRepository $userRepository,
+        private readonly PasswordHasherInterface $passwordHasher,
+        private readonly AuthSessionServiceInterface $authSessionService,
     ) {
     }
 
@@ -26,12 +26,12 @@ final class SignInCommandHandler implements CommandHandler
      */
     public function __invoke(SignInCommand $command): Tokens
     {
-        $email = UserEmail::fromString($command->getEmail());
+        $email = UserEmail::fromString($command->email);
 
         try {
             $user = $this->userRepository->get($email);
 
-            if (!$this->passwordHasher->verify($user->password()->asString(), $command->getPassword())) {
+            if (!$this->passwordHasher->verify($user->password()->asString(), $command->password)) {
                 throw BadCredentialsException::new('Invalid password.');
             }
         } catch (\Throwable $e) {

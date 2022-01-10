@@ -11,7 +11,7 @@ use FC\Application\Bus\Query\QueryHandler;
 
 final class UserListQueryHandler implements QueryHandler
 {
-    public function __construct(private Connection $connection)
+    public function __construct(private readonly Connection $connection)
     {
     }
 
@@ -24,19 +24,19 @@ final class UserListQueryHandler implements QueryHandler
             ->createQueryBuilder()
             ->select('u.id', 'u.name', 'u.email')
             ->from('users', 'u')
-            ->setFirstResult($query->getPageIndex())
-            ->setMaxResults($query->getPageSize());
+            ->setFirstResult($query->pageIndex)
+            ->setMaxResults($query->pageSize);
 
-        if ([] !== $query->getUsers()) {
+        if ([] !== $query->users) {
             $qb
                 ->andWhere('u.id IN(:users)')
-                ->setParameter('users', $query->getUsers(), Connection::PARAM_STR_ARRAY);
+                ->setParameter('users', $query->users, Connection::PARAM_STR_ARRAY);
         }
 
-        if ([] !== $query->getEmails()) {
+        if ([] !== $query->emails) {
             $qb
                 ->andWhere('u.email IN(:emails)')
-                ->setParameter('emails', \array_map('strtolower', $query->getEmails()), Connection::PARAM_STR_ARRAY);
+                ->setParameter('emails', \array_map('strtolower', $query->emails), Connection::PARAM_STR_ARRAY);
         }
 
         $data = [];
@@ -47,10 +47,10 @@ final class UserListQueryHandler implements QueryHandler
 
         $count = \count($data);
 
-        if ($query->getPageSize() > 1) {
+        if ($query->pageSize > 1) {
             $count = (int)$qb->select('COUNT(u.id)')->fetchOne();
         }
 
-        return new PaginatedResponse($query->getPageIndex(), $query->getPageSize(), $count, $data);
+        return new PaginatedResponse($query->pageIndex, $query->pageSize, $count, $data);
     }
 }

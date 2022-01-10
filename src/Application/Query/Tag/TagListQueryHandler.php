@@ -15,8 +15,8 @@ use FC\Domain\ValueObject\Role;
 final class TagListQueryHandler implements QueryHandler
 {
     public function __construct(
-        private Connection $connection,
-        private AuthorizationCheckerInterface $authorizationChecker,
+        private readonly Connection $connection,
+        private readonly AuthorizationCheckerInterface $authorizationChecker,
     ) {
     }
 
@@ -25,7 +25,7 @@ final class TagListQueryHandler implements QueryHandler
      */
     public function __invoke(TagListQuery $query): PaginatedResponse
     {
-        if (!$this->authorizationChecker->isGranted($query->getBoardId(), $query->getUserId(), Role::tagView())) {
+        if (!$this->authorizationChecker->isGranted($query->boardId, $query->userId, Role::TagView)) {
             throw AccessDeniedException::new();
         }
 
@@ -33,14 +33,14 @@ final class TagListQueryHandler implements QueryHandler
             ->select('t.*')
             ->from('tags', 't')
             ->where('t.board_id = :boardId')
-            ->setFirstResult($query->getPageIndex())
-            ->setMaxResults($query->getPageSize())
-            ->setParameter('boardId', $query->getBoardId());
+            ->setFirstResult($query->pageIndex)
+            ->setMaxResults($query->pageSize)
+            ->setParameter('boardId', $query->boardId);
 
-        if ([] !== $query->getTags()) {
+        if ([] !== $query->tags) {
             $qb
                 ->andWhere('t.id IN(:tags)')
-                ->setParameter('tags', $query->getTags(), Connection::PARAM_STR_ARRAY);
+                ->setParameter('tags', $query->tags, Connection::PARAM_STR_ARRAY);
         }
 
         $data = [];
@@ -51,10 +51,10 @@ final class TagListQueryHandler implements QueryHandler
 
         $count = \count($data);
 
-        if ($query->getPageSize() > 1) {
+        if ($query->pageSize > 1) {
             $count = (int)$qb->select('COUNT(t.id)')->fetchOne();
         }
 
-        return new PaginatedResponse($query->getPageIndex(), $query->getPageSize(), $count, $data);
+        return new PaginatedResponse($query->pageIndex, $query->pageSize, $count, $data);
     }
 }

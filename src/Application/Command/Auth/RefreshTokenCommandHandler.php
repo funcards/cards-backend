@@ -10,7 +10,7 @@ use FC\Application\Bus\Command\CommandHandler;
 
 final class RefreshTokenCommandHandler implements CommandHandler
 {
-    public function __construct(private AuthSessionServiceInterface $authSessionService)
+    public function __construct(private readonly AuthSessionServiceInterface $authSessionService)
     {
     }
 
@@ -19,6 +19,6 @@ final class RefreshTokenCommandHandler implements CommandHandler
      */
     public function __invoke(RefreshTokenCommand $command): Tokens
     {
-        return $this->authSessionService->refreshSession($command->getToken());
+        return $this->authSessionService->refreshSession($command->token);
     }
 }

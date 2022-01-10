@@ -20,26 +20,26 @@ use FC\Domain\ValueObject\Role;
 final class CreateTagCommandHandler implements CommandHandler
 {
     public function __construct(
-        private TagRepository $tagRepository,
-        private AuthorizationCheckerInterface $authorizationChecker,
-        private EventBus $eventBus,
+        private readonly TagRepository $tagRepository,
+        private readonly AuthorizationCheckerInterface $authorizationChecker,
+        private readonly EventBus $eventBus,
     ) {
     }
 
     public function __invoke(CreateTagCommand $command): void
     {
-        $boardId = BoardId::fromString($command->getBoardId());
-        $userId = UserId::fromString($command->getUserId());
+        $boardId = BoardId::fromString($command->boardId);
+        $userId = UserId::fromString($command->userId);
 
-        if (!$this->authorizationChecker->isGranted($boardId, $userId, Role::tagAdd())) {
+        if (!$this->authorizationChecker->isGranted($boardId, $userId, Role::TagAdd)) {
             throw AccessDeniedException::new();
         }
 
         $tag = Tag::create(
-            TagId::fromString($command->getTagId()),
+            TagId::fromString($command->tagId),
             $boardId,
-            TagName::fromString($command->getName()),
-            TagColor::fromString($command->getColor()),
+            TagName::fromString($command->name),
+            TagColor::fromString($command->color),
         );
 
         $this->tagRepository->save($tag);

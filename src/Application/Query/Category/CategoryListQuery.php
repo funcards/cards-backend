@@ -11,11 +11,11 @@ final class CategoryListQuery extends PaginatedQuery
     /**
      * @var array<string>
      */
-    private array $categories;
+    public readonly array $categories;
 
     public function __construct(
-        private string $boardId,
-        private string $userId,
+        public readonly string $boardId,
+        public readonly string $userId,
         int $pageIndex = 0,
         int $pageSize = 0,
         string ...$categories,
@@ -23,23 +23,5 @@ final class CategoryListQuery extends PaginatedQuery
         parent::__construct($pageIndex, $pageSize);
 
         $this->categories = $categories;
-    }
-
-    public function getBoardId(): string
-    {
-        return $this->boardId;
-    }
-
-    public function getUserId(): string
-    {
-        return $this->userId;
-    }
-
-    /**
-     * @return string[]
-     */
-    public function getCategories(): array
-    {
-        return $this->categories;
     }
 }

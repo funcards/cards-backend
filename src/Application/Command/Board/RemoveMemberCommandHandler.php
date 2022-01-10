@@ -16,24 +16,24 @@ use FC\Domain\ValueObject\Role;
 final class RemoveMemberCommandHandler implements CommandHandler
 {
     public function __construct(
-        private BoardRepository $boardRepository,
-        private AuthorizationCheckerInterface $authorizationChecker,
-        private EventBus $eventBus,
+        private readonly BoardRepository $boardRepository,
+        private readonly AuthorizationCheckerInterface $authorizationChecker,
+        private readonly EventBus $eventBus,
     ) {
     }
 
     public function __invoke(RemoveMemberCommand $command): void
     {
-        $boardId = BoardId::fromString($command->getBoardId());
-        $userId = UserId::fromString($command->getUserId());
+        $boardId = BoardId::fromString($command->boardId);
+        $userId = UserId::fromString($command->userId);
 
-        if (!$this->authorizationChecker->isGranted($boardId, $userId, Role::boardRemoveMember())
-            || 0 === \strcasecmp($command->getUserId(), $command->getMemberId())) {
+        if (!$this->authorizationChecker->isGranted($boardId, $userId, Role::BoardRemoveMember)
+            || 0 === \strcasecmp($command->userId, $command->memberId)) {
             throw AccessDeniedException::new();
         }
 
         $board = $this->boardRepository->get($boardId);
-        $board->removeMember(UserId::fromString($command->getMemberId()));
+        $board->removeMember(UserId::fromString($command->memberId));
 
         $this->boardRepository->save($board);
         $this->eventBus->publish(...$board->releaseEvents());

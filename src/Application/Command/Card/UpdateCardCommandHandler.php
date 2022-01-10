@@ -22,41 +22,41 @@ use FC\Domain\ValueObject\Role;
 final class UpdateCardCommandHandler implements CommandHandler
 {
     public function __construct(
-        private CardRepository $cardRepository,
-        private AuthorizationCheckerInterface $authorizationChecker,
-        private EventBus $eventBus,
+        private readonly CardRepository $cardRepository,
+        private readonly AuthorizationCheckerInterface $authorizationChecker,
+        private readonly EventBus $eventBus,
     ) {
     }
 
     public function __invoke(UpdateCardCommand $command): void
     {
-        $boardId = BoardId::fromString($command->getBoardId());
-        $userId = UserId::fromString($command->getUserId());
+        $boardId = BoardId::fromString($command->boardId);
+        $userId = UserId::fromString($command->userId);
 
-        if (!$this->authorizationChecker->isGranted($boardId, $userId, Role::cardEdit())) {
+        if (!$this->authorizationChecker->isGranted($boardId, $userId, Role::CardEdit)) {
             throw AccessDeniedException::new();
         }
 
-        $card = $this->cardRepository->get(CardId::fromString($command->getCardId()));
+        $card = $this->cardRepository->get(CardId::fromString($command->cardId));
 
-        if (null !== $command->getCategoryId()) {
-            $card->changeCategory(CategoryId::fromString($command->getCategoryId()));
+        if (null !== $command->categoryId) {
+            $card->changeCategory(CategoryId::fromString($command->categoryId));
         }
 
-        if (null !== $command->getName()) {
-            $card->changeName(CardName::fromString($command->getName()));
+        if (null !== $command->name) {
+            $card->changeName(CardName::fromString($command->name));
         }
 
-        if (null !== $command->getContent()) {
-            $card->changeContent(CardContent::fromString($command->getContent()));
+        if (null !== $command->content) {
+            $card->changeContent(CardContent::fromString($command->content));
         }
 
-        if (null !== $command->getPosition()) {
-            $card->changePosition(CardPosition::fromInt($command->getPosition()));
+        if (null !== $command->position) {
+            $card->changePosition(CardPosition::fromInt($command->position));
         }
 
-        if (null !== $command->getTags()) {
-            $card->changeTags(CardTags::from(...$command->getTags()));
+        if (null !== $command->tags) {
+            $card->changeTags(CardTags::from(...$command->tags));
         }
 
         $this->cardRepository->save($card);

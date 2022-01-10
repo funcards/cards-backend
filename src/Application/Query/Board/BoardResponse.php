@@ -5,58 +5,26 @@ declare(strict_types=1);
 namespace FC\Application\Query\Board;
 
 use FC\Application\Bus\Query\Response;
-use OpenApi\Annotations as OA;
+use FC\UI\Http\Rest\OpenApi\OAProperty;
+use OpenApi\Attributes\AdditionalProperties;
+use OpenApi\Attributes\Property;
+use OpenApi\Attributes\Schema;
 use Symfony\Component\Serializer\Annotation\SerializedName;
 
-/**
- * @OA\Schema(schema="BoardResponse", required={"board_id", "name", "description"})
- */
+#[Schema(schema: 'BoardResponse', required: ['board_id', 'name', 'description'])]
 final class BoardResponse implements Response
 {
     /**
      * @param array<string, MemberResponse> $members
      */
     public function __construct(
-        /** @OA\Property(property="board_id", format="uuid") */ #[SerializedName('board_id')] private string $boardId,
-        /** @OA\Property() */ private string $name,
-        /** @OA\Property() */ private string $color,
-        /** @OA\Property() */ private string $description,
-        /** @OA\Property(property="created_at") */ #[SerializedName('created_at')] private string $createdAt,
-        /** @OA\Property(type="object", @OA\AdditionalProperties(ref="#/components/schemas/MemberResponse")) */
-        private array $members,
+        #[Property(property: 'board_id', format: 'uuid'), SerializedName('board_id')] public readonly string $boardId,
+        #[Property] public readonly string $name,
+        #[Property] public readonly string $color,
+        #[Property] public readonly string $description,
+        #[Property(property: 'created_at'), SerializedName('created_at')] public readonly string $createdAt,
+        #[OAProperty(type: 'object', additionalProperties: new AdditionalProperties(ref: '#/components/schemas/MemberResponse'))]
+        public readonly array $members,
     ) {
-    }
-
-    public function getBoardId(): string
-    {
-        return $this->boardId;
-    }
-
-    public function getName(): string
-    {
-        return $this->name;
-    }
-
-    public function getColor(): string
-    {
-        return $this->color;
-    }
-
-    public function getDescription(): string
-    {
-        return $this->description;
-    }
-
-    public function getCreatedAt(): string
-    {
-        return $this->createdAt;
-    }
-
-    /**
-     * @return array<string, MemberResponse>
-     */
-    public function getMembers(): array
-    {
-        return $this->members;
     }
 }

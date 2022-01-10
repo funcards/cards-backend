@@ -11,16 +11,8 @@ final class UserRolesWasChanged extends DomainEvent
     /**
      * @param array<string> $roles
      */
-    public function __construct(string $aggregateId, string $occurredOn, private array $roles)
+    public function __construct(string $aggregateId, string $occurredOn, public readonly array $roles)
     {
         parent::__construct($aggregateId, $occurredOn);
-    }
-
-    /**
-     * @return string[]
-     */
-    public function getRoles(): array
-    {
-        return $this->roles;
     }
 }

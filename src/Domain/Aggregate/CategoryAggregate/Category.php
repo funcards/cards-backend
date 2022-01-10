@@ -16,8 +16,8 @@ final class Category implements AggregateRoot
     use EventRecording;
 
     public function __construct(
-        private CategoryId $id,
-        private BoardId $boardId,
+        private readonly CategoryId $id,
+        private readonly BoardId $boardId,
         private CategoryName $name,
         private CategoryPosition $position,
     ) {

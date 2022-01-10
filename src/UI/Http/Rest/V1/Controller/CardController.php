@@ -10,43 +10,46 @@ use FC\Application\Command\Card\CreateCardCommand;
 use FC\Application\Command\Card\RemoveCardCommand;
 use FC\Application\Command\Card\UpdateCardCommand;
 use FC\Application\Query\Card\CardListQuery;
+use FC\UI\Http\Rest\OpenApi\OAResponse;
+use OpenApi\Attributes\Delete;
+use OpenApi\Attributes\Get;
+use OpenApi\Attributes\Items;
+use OpenApi\Attributes\JsonContent;
+use OpenApi\Attributes\Parameter;
+use OpenApi\Attributes\Patch;
+use OpenApi\Attributes\Post;
+use OpenApi\Attributes\Property;
+use OpenApi\Attributes\RequestBody;
+use OpenApi\Attributes\Schema;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use OpenApi\Annotations as OA;
 
-/**
- * @OA\Tag(
- *     name="Cards",
- *     description="Cards API"
- * )
- */
 #[Route('/api/v1/boards/{boardId}/cards', requirements: ['boardId' => self::UUID_REGEX])]
 final class CardController extends ApiController
 {
-    /**
-     * @OA\Get(
-     *     path="/api/v1/boards/{board-id}/cards/{card-id}",
-     *     tags={"Cards"},
-     *     operationId="getCard",
-     *     @OA\Parameter(name="board-id", in="path", required=true, @OA\Schema(ref="#/components/schemas/boardId")),
-     *     @OA\Parameter(name="card-id", in="path", required=true, @OA\Schema(ref="#/components/schemas/cardId")),
-     *     @OA\Response(
-     *          response=200,
-     *          description="Card",
-     *          @OA\JsonContent(ref="#/components/schemas/CardResponse")
-     *     ),
-     *     @OA\Response(response=400, description="Bad Request", @OA\JsonContent(ref="#/components/schemas/error")),
-     *     @OA\Response(response=401, description="Unauthorized", @OA\JsonContent(ref="#/components/schemas/error")),
-     *     @OA\Response(response=403, description="Forbidden", @OA\JsonContent(ref="#/components/schemas/error")),
-     *     @OA\Response(response=404, description="Not Found", @OA\JsonContent(ref="#/components/schemas/error")),
-     *     @OA\Response(response=500, description="Internal Server Error", @OA\JsonContent(ref="#/components/schemas/error")),
-     *     security={
-     *         {"bearerAuth": {}}
-     *     }
-     * )
-     *
-     */
+    #[Get(
+        path: '/api/v1/boards/{board-id}/cards/{card-id}',
+        operationId: 'getCard',
+        security: [['Bearer' => []]],
+        tags: ['Cards'],
+        parameters: [
+            new Parameter(ref: '#/components/parameters/boardId'),
+            new Parameter(ref: '#/components/parameters/cardId'),
+        ],
+        responses: [
+            new OAResponse(
+                response: 200,
+                description: 'Card',
+                content: new JsonContent(ref: '#/components/schemas/CardResponse'),
+            ),
+            new OAResponse(ref: '#/components/responses/BadRequest', response: 400),
+            new OAResponse(ref: '#/components/responses/Unauthorized', response: 401),
+            new OAResponse(ref: '#/components/responses/Forbidden', response: 403),
+            new OAResponse(ref: '#/components/responses/NotFound', response: 404),
+            new OAResponse(ref: '#/components/responses/InternalServer', response: 500),
+        ],
+    )]
     #[Route('/{cardId}', 'card', ['cardId' => self::UUID_REGEX], methods: 'GET')]
     public function get(string $boardId, string $cardId): Response
     {
@@ -55,42 +58,45 @@ final class CardController extends ApiController
         /** @var PaginatedResponse $response */
         $response = $this->ask(new CardListQuery($boardId, $this->getUserId(), 0, 1, [], $cardId));
 
-        if ([] === $response->getData()) {
+        if ([] === $response->data) {
             throw $this->createNotFoundException();
         }
 
-        return $this->json($response->getData()[0]);
+        return $this->json($response->data[0]);
     }
 
-    /**
-     * @OA\Get(
-     *     path="/api/v1/boards/{board-id}/cards",
-     *     tags={"Cards"},
-     *     operationId="cardList",
-     *     @OA\Parameter(name="board-id", in="path", required=true, @OA\Schema(ref="#/components/schemas/boardId")),
-     *     @OA\Parameter(name="page-index", in="query", @OA\Schema(ref="#/components/schemas/pageIndex")),
-     *     @OA\Parameter(name="page-size", in="query", @OA\Schema(ref="#/components/schemas/pageSize")),
-     *     @OA\Parameter(name="categories[]", in="query", @OA\Schema(ref="#/components/schemas/categories")),
-     *     @OA\Response(
-     *          response=200,
-     *          description="Cards",
-     *          @OA\JsonContent(allOf={
-     *              @OA\Schema(ref="#/components/schemas/PaginatedResponse"),
-     *              @OA\Schema(
-     *                  @OA\Property(property="data", type="array", @OA\Items(ref="#/components/schemas/CardResponse"))
-     *              )
-     *          })
-     *     ),
-     *     @OA\Response(response=400, description="Bad Request", @OA\JsonContent(ref="#/components/schemas/error")),
-     *     @OA\Response(response=401, description="Unauthorized", @OA\JsonContent(ref="#/components/schemas/error")),
-     *     @OA\Response(response=403, description="Forbidden", @OA\JsonContent(ref="#/components/schemas/error")),
-     *     @OA\Response(response=500, description="Internal Server Error", @OA\JsonContent(ref="#/components/schemas/error")),
-     *     security={
-     *         {"bearerAuth": {}}
-     *     }
-     * )
-     *
-     */
+    #[Get(
+        path: '/api/v1/boards/{board-id}/cards',
+        operationId: 'cardList',
+        security: [['Bearer' => []]],
+        tags: ['Cards'],
+        parameters: [
+            new Parameter(ref: '#/components/parameters/boardId'),
+            new Parameter(ref: '#/components/parameters/pageIndex'),
+            new Parameter(ref: '#/components/parameters/pageSize'),
+            new Parameter(ref: '#/components/parameters/categories'),
+        ],
+        responses: [
+            new OAResponse(
+                response: 200,
+                description: 'Cards',
+                content: new JsonContent(allOf: [
+                    new Schema(ref: '#/components/schemas/PaginatedResponse'),
+                    new Schema(required: ['data'], properties: [
+                        new Property(
+                            property: 'data',
+                            type: 'array',
+                            items: new Items(ref: '#/components/schemas/CardResponse'),
+                        ),
+                    ]),
+                ]),
+            ),
+            new OAResponse(ref: '#/components/responses/BadRequest', response: 400),
+            new OAResponse(ref: '#/components/responses/Unauthorized', response: 401),
+            new OAResponse(ref: '#/components/responses/Forbidden', response: 403),
+            new OAResponse(ref: '#/components/responses/InternalServer', response: 500),
+        ],
+    )]
     #[Route(methods: 'GET')]
     public function list(Request $request, string $boardId): Response
     {
@@ -109,33 +115,25 @@ final class CardController extends ApiController
         return $this->json($response);
     }
 
-    /**
-     * @OA\Post(
-     *     path="/api/v1/boards/{board-id}/cards",
-     *     tags={"Cards"},
-     *     operationId="createCard",
-     *     @OA\Parameter(name="board-id", in="path", required=true, @OA\Schema(ref="#/components/schemas/boardId")),
-     *     @OA\RequestBody(
-     *          request="CreateCard",
-     *          required=true,
-     *          @OA\JsonContent(ref="#/components/schemas/CreateCard")
-     *     ),
-     *     @OA\Response(
-     *          response=201,
-     *          description="Board card added successfully",
-     *          @OA\Header(header="Location", description="Card URL", @OA\Schema(type="string", format="uri"))
-     *     ),
-     *     @OA\Response(response=400, description="Bad Request", @OA\JsonContent(ref="#/components/schemas/error")),
-     *     @OA\Response(response=401, description="Unauthorized", @OA\JsonContent(ref="#/components/schemas/error")),
-     *     @OA\Response(response=403, description="Forbidden", @OA\JsonContent(ref="#/components/schemas/error")),
-     *     @OA\Response(response=422, description="Unprocessable Entity", @OA\JsonContent(ref="#/components/schemas/validationError")),
-     *     @OA\Response(response=500, description="Internal Server Error", @OA\JsonContent(ref="#/components/schemas/error")),
-     *     security={
-     *         {"bearerAuth": {}}
-     *     }
-     * )
-     *
-     */
+    #[Post(
+        path: '/api/v1/boards/{board-id}/cards',
+        operationId: 'createCard',
+        security: [['Bearer' => []]],
+        requestBody: new RequestBody(
+            required: true,
+            content: new JsonContent(ref: '#/components/schemas/CreateCard'),
+        ),
+        tags: ['Cards'],
+        parameters: [new Parameter(ref: '#/components/parameters/boardId')],
+        responses: [
+            new OAResponse(ref: '#/components/responses/Created', response: 201),
+            new OAResponse(ref: '#/components/responses/BadRequest', response: 400),
+            new OAResponse(ref: '#/components/responses/Unauthorized', response: 401),
+            new OAResponse(ref: '#/components/responses/Forbidden', response: 403),
+            new OAResponse(ref: '#/components/responses/UnprocessableEntity', response: 422),
+            new OAResponse(ref: '#/components/responses/InternalServer', response: 500),
+        ],
+    )]
     #[Route(methods: 'POST')]
     public function create(Request $request, string $boardId): Response
     {
@@ -149,35 +147,29 @@ final class CardController extends ApiController
         return $this->created('card', ['boardId' => $boardId, 'cardId' => $data['card_id']]);
     }
 
-    /**
-     * @OA\Patch(
-     *     path="/api/v1/boards/{board-id}/cards",
-     *     tags={"Cards"},
-     *     operationId="batchUpdateCards",
-     *     @OA\Parameter(name="board-id", in="path", required=true, @OA\Schema(ref="#/components/schemas/boardId")),
-     *     @OA\RequestBody(
-     *          request="BatchUpdateCards",
-     *          required=true,
-     *          @OA\JsonContent(@OA\Items(allOf={
-     *              @OA\Schema(
-     *                  @OA\Property(property="card_id", type="string", format="uuid")
-     *              ),
-     *              @OA\Schema(ref="#/components/schemas/UpdateCard")
-     *          }))
-     *     ),
-     *     @OA\Response(response=204, description="Board cards updated successfully"),
-     *     @OA\Response(response=400, description="Bad Request", @OA\JsonContent(ref="#/components/schemas/error")),
-     *     @OA\Response(response=401, description="Unauthorized", @OA\JsonContent(ref="#/components/schemas/error")),
-     *     @OA\Response(response=403, description="Forbidden", @OA\JsonContent(ref="#/components/schemas/error")),
-     *     @OA\Response(response=404, description="Not Found", @OA\JsonContent(ref="#/components/schemas/error")),
-     *     @OA\Response(response=422, description="Unprocessable Entity", @OA\JsonContent(ref="#/components/schemas/validationError")),
-     *     @OA\Response(response=500, description="Internal Server Error", @OA\JsonContent(ref="#/components/schemas/error")),
-     *     security={
-     *         {"bearerAuth": {}}
-     *     }
-     * )
-     *
-     */
+    #[Patch(
+        path: '/api/v1/boards/{board-id}/cards',
+        operationId: 'batchUpdateCards',
+        security: [['Bearer' => []]],
+        requestBody: new RequestBody(
+            required: true,
+            content: new JsonContent(items: new Items(allOf: [
+                new Schema(properties: [new Property(property: 'card_id', type: 'string', format: 'uuid')]),
+                new Schema(ref: '#/components/schemas/UpdateCard')
+            ])),
+        ),
+        tags: ['Cards'],
+        parameters: [new Parameter(ref: '#/components/parameters/boardId')],
+        responses: [
+            new OAResponse(ref: '#/components/responses/NoContent', response: 204),
+            new OAResponse(ref: '#/components/responses/BadRequest', response: 400),
+            new OAResponse(ref: '#/components/responses/Unauthorized', response: 401),
+            new OAResponse(ref: '#/components/responses/Forbidden', response: 403),
+            new OAResponse(ref: '#/components/responses/NotFound', response: 404),
+            new OAResponse(ref: '#/components/responses/UnprocessableEntity', response: 422),
+            new OAResponse(ref: '#/components/responses/InternalServer', response: 500),
+        ],
+    )]
     #[Route(methods: 'PATCH')]
     public function batchUpdate(Request $request, string $boardId): Response
     {
@@ -188,7 +180,7 @@ final class CardController extends ApiController
 
         foreach ($request->toArray() as $data) {
             $commands[] = $this->command(
-                ['board_id' => $boardId, 'user_id' => $userId] + (array)$data,
+                ['board_id' => $boardId, 'user_id' => $userId] + (array)$data + ['card_id' => ''],
                 UpdateCardCommand::class
             );
         }
@@ -198,31 +190,29 @@ final class CardController extends ApiController
         return $this->noContent();
     }
 
-    /**
-     * @OA\Patch(
-     *     path="/api/v1/boards/{board-id}/cards/{card-id}",
-     *     tags={"Cards"},
-     *     operationId="updateCard",
-     *     @OA\Parameter(name="board-id", in="path", required=true, @OA\Schema(ref="#/components/schemas/boardId")),
-     *     @OA\Parameter(name="card-id", in="path", required=true, @OA\Schema(ref="#/components/schemas/cardId")),
-     *     @OA\RequestBody(
-     *          request="UpdateCard",
-     *          required=true,
-     *          @OA\JsonContent(ref="#/components/schemas/UpdateCard")
-     *     ),
-     *     @OA\Response(response=204, description="Board card updated successfully"),
-     *     @OA\Response(response=400, description="Bad Request", @OA\JsonContent(ref="#/components/schemas/error")),
-     *     @OA\Response(response=401, description="Unauthorized", @OA\JsonContent(ref="#/components/schemas/error")),
-     *     @OA\Response(response=403, description="Forbidden", @OA\JsonContent(ref="#/components/schemas/error")),
-     *     @OA\Response(response=404, description="Not Found", @OA\JsonContent(ref="#/components/schemas/error")),
-     *     @OA\Response(response=422, description="Unprocessable Entity", @OA\JsonContent(ref="#/components/schemas/validationError")),
-     *     @OA\Response(response=500, description="Internal Server Error", @OA\JsonContent(ref="#/components/schemas/error")),
-     *     security={
-     *         {"bearerAuth": {}}
-     *     }
-     * )
-     *
-     */
+    #[Patch(
+        path: '/api/v1/boards/{board-id}/cards/{card-id}',
+        operationId: 'updateCard',
+        security: [['Bearer' => []]],
+        requestBody: new RequestBody(
+            required: true,
+            content: new JsonContent(ref: '#/components/schemas/UpdateCard'),
+        ),
+        tags: ['Cards'],
+        parameters: [
+            new Parameter(ref: '#/components/parameters/boardId'),
+            new Parameter(ref: '#/components/parameters/cardId'),
+        ],
+        responses: [
+            new OAResponse(ref: '#/components/responses/NoContent', response: 204),
+            new OAResponse(ref: '#/components/responses/BadRequest', response: 400),
+            new OAResponse(ref: '#/components/responses/Unauthorized', response: 401),
+            new OAResponse(ref: '#/components/responses/Forbidden', response: 403),
+            new OAResponse(ref: '#/components/responses/NotFound', response: 404),
+            new OAResponse(ref: '#/components/responses/UnprocessableEntity', response: 422),
+            new OAResponse(ref: '#/components/responses/InternalServer', response: 500),
+        ],
+    )]
     #[Route('/{cardId}', requirements: ['cardId' => self::UUID_REGEX], methods: 'PATCH')]
     public function update(Request $request, string $boardId, string $cardId): Response
     {
@@ -236,25 +226,24 @@ final class CardController extends ApiController
         return $this->noContent();
     }
 
-    /**
-     * @OA\Delete(
-     *     path="/api/v1/boards/{board-id}/cards/{card-id}",
-     *     tags={"Cards"},
-     *     operationId="removeCard",
-     *     @OA\Parameter(name="board-id", in="path", required=true, @OA\Schema(ref="#/components/schemas/boardId")),
-     *     @OA\Parameter(name="card-id", in="path", required=true, @OA\Schema(ref="#/components/schemas/cardId")),
-     *     @OA\Response(response=204, description="Board card removed successfully"),
-     *     @OA\Response(response=400, description="Bad Request", @OA\JsonContent(ref="#/components/schemas/error")),
-     *     @OA\Response(response=401, description="Unauthorized", @OA\JsonContent(ref="#/components/schemas/error")),
-     *     @OA\Response(response=403, description="Forbidden", @OA\JsonContent(ref="#/components/schemas/error")),
-     *     @OA\Response(response=404, description="Not Found", @OA\JsonContent(ref="#/components/schemas/error")),
-     *     @OA\Response(response=500, description="Internal Server Error", @OA\JsonContent(ref="#/components/schemas/error")),
-     *     security={
-     *         {"bearerAuth": {}}
-     *     }
-     * )
-     *
-     */
+    #[Delete(
+        path: '/api/v1/boards/{board-id}/cards/{card-id}',
+        operationId: 'removeCard',
+        security: [['Bearer' => []]],
+        tags: ['Cards'],
+        parameters: [
+            new Parameter(ref: '#/components/parameters/boardId'),
+            new Parameter(ref: '#/components/parameters/cardId'),
+        ],
+        responses: [
+            new OAResponse(ref: '#/components/responses/NoContent', response: 204),
+            new OAResponse(ref: '#/components/responses/BadRequest', response: 400),
+            new OAResponse(ref: '#/components/responses/Unauthorized', response: 401),
+            new OAResponse(ref: '#/components/responses/Forbidden', response: 403),
+            new OAResponse(ref: '#/components/responses/NotFound', response: 404),
+            new OAResponse(ref: '#/components/responses/InternalServer', response: 500),
+        ],
+    )]
     #[Route('/{cardId}', requirements: ['cardId' => self::UUID_REGEX], methods: 'DELETE')]
     public function remove(string $boardId, string $cardId): Response
     {
